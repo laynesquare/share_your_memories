@@ -1,5 +1,4 @@
 import React from 'react';
-import useStyles from './styles';
 import {
   Card,
   CardActions,
@@ -16,7 +15,6 @@ import { useDispatch } from 'react-redux';
 import { deletePost, likePost } from '../../../actions/posts';
 
 const Post = ({ post, setCurrentId }) => {
-  // const classes = useStyles();
   const dispatch = useDispatch();
 
   return (
@@ -29,7 +27,7 @@ const Post = ({ post, setCurrentId }) => {
       <div className="overlay">
         <Typography variant="h6">{post.creator}</Typography>
         <Typography variant="body2">
-          {/* {moment(post.createdAt).fromNow()} */}
+          {moment(post.createdAt).fromNow()}
         </Typography>
       </div>
       <div className="overlay2">

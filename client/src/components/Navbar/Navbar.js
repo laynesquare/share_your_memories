@@ -1,5 +1,12 @@
 import React from 'react';
-import { AppBar, Typography, Box, Button, Avatar } from '@mui/material';
+import {
+  AppBar,
+  Typography,
+  Box,
+  Button,
+  Avatar,
+  Container,
+} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,7 +23,7 @@ const Navbar = () => {
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
-    navigate('/auth');
+    // navigate('/auth');
 
     setUser(null);
   };
@@ -39,7 +46,11 @@ const Navbar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="inherit">
+      <AppBar
+        position="static"
+        color="inherit"
+        sx={{ backgroundColor: 'purple' }}
+      >
         <Toolbar>
           <IconButton
             size="large"
@@ -55,20 +66,22 @@ const Navbar = () => {
             component={Link}
             to="/"
             color="secondary"
-            sx={{ flexGrow: 1, textDecoration: 'none' }}
+            sx={{ flexGrow: 1, textDecoration: 'none', color: 'white' }}
           >
-            GAY
+            Share Your Memories!
           </Typography>
           {user?.result ? ( //does user has result?
-            <div>
+            <Box sx={{ display: 'flex' }}>
               <Avatar alt={user.result.name} src={user.result.imgUrl}>
                 {user.result.name.charAt[0]}
               </Avatar>
+
               <Typography variant="h6">{user?.result.name}</Typography>
+
               <Button variant="contained" color="secondary" onClick={logout}>
                 logout
               </Button>
-            </div>
+            </Box>
           ) : (
             <Button
               component={Link}
