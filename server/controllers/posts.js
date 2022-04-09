@@ -27,12 +27,22 @@ export const createPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   const { id } = req.params;
-  const { title, message, creator, selectedFile, tags, _id } = req.body;
+  const { title, message, creator, selectedFile, tags, likes, name, _id } =
+    req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No post with id: ${id}`);
 
-  const updatedPost = { creator, title, message, tags, selectedFile, _id: id };
+  const updatedPost = {
+    creator,
+    title,
+    message,
+    tags,
+    selectedFile,
+    likes,
+    name,
+    _id: id,
+  };
 
   await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
 
@@ -61,8 +71,6 @@ export const likePost = async (req, res) => {
   const alreadyLiked = post.likes.find((user) => {
     return user === req.userId;
   });
-
-  console.log(alreadyLiked);
 
   if (alreadyLiked) {
     console.log('executed');
