@@ -6,6 +6,8 @@ import {
   Typography,
   Grid,
   Button,
+  Checkbox,
+  Grow,
 } from '@mui/material';
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -25,9 +27,10 @@ const initialState = {
 };
 
 const Auth = () => {
-  const [showPassword, setShowPassword] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -47,6 +50,7 @@ const Auth = () => {
   };
   const handleShowPassword = () =>
     setShowPassword((preShowPassword) => !preShowPassword);
+
   const switchMode = () => {
     setIsSignup((prevIsSignup) => !prevIsSignup);
     setShowPassword(false);
@@ -69,89 +73,91 @@ const Auth = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper>
-        <Avatar>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography variant="h5">
-          {isSignup ? 'sign up' : 'sign out'}
-        </Typography>
-        <form autoComplete="off" onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            {isSignup && (
-              <>
-                <Input
-                  name="firstName"
-                  label="First Name"
-                  handleChange={handleChange}
-                  autoFocus={true}
-                  half
-                />
-
-                <Input
-                  name="lastName"
-                  label="Last Name"
-                  handleChange={handleChange}
-                  half
-                />
-              </>
-            )}
-            <Input
-              name="email"
-              label="Email Address"
-              handleChange={handleChange}
-              type="email"
-            />
-            <Input
-              name="password"
-              label="password"
-              handleChange={handleChange}
-              type={showPassword ? 'text' : 'password'}
-              handleShowPassword={handleShowPassword}
-            />
-            {isSignup && (
-              <Input
-                name="confirmPassword"
-                label="Repeat Password"
-                handleChange={handleChange}
-                type="password"
-              />
-            )}
-          </Grid>{' '}
-          <Button type="submit" fullWidth variant="contained" color="primary">
+    <Grow in>
+      <Container component="main" maxWidth="xs">
+        <Paper>
+          <Avatar>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography variant="h5">
             {isSignup ? 'sign up' : 'sign in'}
-          </Button>
-          <GoogleLogin
-            clientId="71023974194-h70p89fm4b3mvqsf9jbc6bateg7mbm9l.apps.googleusercontent.com"
-            render={(renderProps) => (
-              <Button
-                color="primary"
-                fullWidth
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-                startIcon={<Icon />}
-                variant="contained"
-              >
-                goole sign in
-              </Button>
-            )}
-            onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy="single_host_origin"
-          />
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Button onClick={switchMode}>
-                {isSignup
-                  ? 'already have an account? sign in'
-                  : 'dont have an account? sign in'}
-              </Button>
+          </Typography>
+          <form autoComplete="off" onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              {isSignup && (
+                <>
+                  <Input
+                    name="firstName"
+                    label="First Name"
+                    handleChange={handleChange}
+                    autoFocus={true}
+                    half
+                  />
+
+                  <Input
+                    name="lastName"
+                    label="Last Name"
+                    handleChange={handleChange}
+                    half
+                  />
+                </>
+              )}
+              <Input
+                name="email"
+                label="Email Address"
+                handleChange={handleChange}
+                type="email"
+              />
+              <Input
+                name="password"
+                label="password"
+                handleChange={handleChange}
+                type={showPassword ? 'text' : 'password'}
+                handleShowPassword={handleShowPassword}
+              />
+              {isSignup && (
+                <Input
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  handleChange={handleChange}
+                  type={showPassword ? 'text' : 'password'}
+                />
+              )}
             </Grid>
-          </Grid>
-        </form>
-      </Paper>
-    </Container>
+            <Button type="submit" fullWidth variant="contained" color="primary">
+              {isSignup ? 'sign in' : 'sign up'}
+            </Button>
+            <GoogleLogin
+              clientId="71023974194-dh2gfs56pj3r57lepmlbditonpuplqgg.apps.googleusercontent.com"
+              render={(renderProps) => (
+                <Button
+                  color="primary"
+                  fullWidth
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                  startIcon={<Icon />}
+                  variant="contained"
+                >
+                  goole sign in
+                </Button>
+              )}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy="single_host_origin"
+            />
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Button onClick={switchMode}>
+                  {isSignup
+                    ? 'already have an account? sign in'
+                    : 'dont have an account? sign in'}
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Paper>
+      </Container>
+    </Grow>
   );
 };
 

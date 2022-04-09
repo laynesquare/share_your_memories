@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getPosts } from '../../actions/posts';
-
 import { Container, Grow, Grid } from '@mui/material';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import Form from '../Form/Form';
 import Posts from '../Posts/Posts';
 
@@ -13,9 +10,10 @@ const Home = () => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(getPosts());
-  // }, [currentId, dispatch]);
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [currentId, dispatch]);
+
   return (
     <div>
       <Container maxWidth="lg">

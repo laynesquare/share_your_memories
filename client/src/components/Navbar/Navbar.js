@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  AppBar,
-  Typography,
-  Box,
-  Button,
-  Avatar,
-  Container,
-} from '@mui/material';
+import { AppBar, Typography, Box, Button, Avatar } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
@@ -22,8 +15,9 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const logout = () => {
+    console.log('glogout');
     dispatch({ type: 'LOGOUT' });
-    // navigate('/auth');
+    navigate('/auth');
 
     setUser(null);
   };

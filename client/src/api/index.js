@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const url = `http://localhost:5000/movies`;
-
-const API = axios.create({ baseURL: 'http://localhost:5000' });
+const API = axios.create({ baseURL: 'http://localhost:8080' });
 
 API.interceptors.request.use(
   (req) => {
@@ -19,24 +17,22 @@ API.interceptors.request.use(
 );
 
 export const fetchPosts = () => {
-  return API.get(url);
+  return API.get('/posts');
 };
 export const createPost = (newPost) => {
-  return API.post(url, newPost);
-  //on the left, it's the url youre making requests to.
-  //on the right, its the data sent
+  return API.post('/posts', newPost);
 };
 
 export const updatePost = (id, updatedPost) => {
-  return API.patch(`${url}/${id}`, updatedPost);
+  return API.patch(`posts/${id}`, updatedPost);
 };
 
 export const deletePost = (id) => {
-  return API.delete(`${url}/${id}`);
+  return API.delete(`posts/${id}`);
 };
 
 export const likePost = (id) => {
-  return API.patch(`${url}/${id}/likePost`);
+  return API.patch(`posts/${id}/likePost`);
 };
 
 export const signin = (formData) => {

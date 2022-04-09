@@ -9,6 +9,7 @@ import {
 export const posts = (posts = [], action) => {
   switch (action.type) {
     case FETCH_ALL:
+      console.log(action.payload);
       return action.payload; // now the posts updated to posts = action.payload(remember data has array bracket)
     case CREATE:
       return [...posts, action.payload];
