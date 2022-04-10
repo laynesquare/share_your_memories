@@ -15,7 +15,6 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const logout = () => {
-    console.log('glogout');
     dispatch({ type: 'LOGOUT' });
     navigate('/auth');
 
@@ -34,8 +33,6 @@ const Navbar = () => {
     }
 
     setUser(JSON.parse(localStorage.getItem('profile')));
-
-    console.log('login!!!');
   }, [location]);
 
   return (

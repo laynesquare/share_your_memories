@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Container,
   Paper,
@@ -11,12 +11,16 @@ import {
 } from '@mui/material';
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Input from './Input';
 import { useState } from 'react';
-import Icon from './icon';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 import { signin, signup } from '../../actions/auth';
+import { LOGIN_ALERT_CLEAR } from '../../constants/actionTypes';
+
+import Input from './Input';
+import Icon from './icon';
 
 const initialState = {
   firstName: '',
@@ -30,6 +34,8 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState(false);
+  const authFailedAlert = useSelector((state) => state.alert);
+  const location = useLocation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,6 +58,7 @@ const Auth = () => {
     setShowPassword((preShowPassword) => !preShowPassword);
 
   const switchMode = () => {
+    dispatch({ type: LOGIN_ALERT_CLEAR });
     setIsSignup((prevIsSignup) => !prevIsSignup);
     setShowPassword(false);
   };
@@ -72,9 +79,15 @@ const Auth = () => {
     console.log('google sign in was unseccessful try again later');
   };
 
+  useEffect(() => {
+    dispatch({ type: LOGIN_ALERT_CLEAR });
+  }, [location]);
+
   return (
     <Grow in>
       <Container component="main" maxWidth="xs">
+        {authFailedAlert?.state === true && <>{authFailedAlert.msg}</>}
+
         <Paper>
           <Avatar>
             <LockOutlinedIcon />
@@ -125,7 +138,7 @@ const Auth = () => {
               )}
             </Grid>
             <Button type="submit" fullWidth variant="contained" color="primary">
-              {isSignup ? 'sign in' : 'sign up'}
+              {isSignup ? 'sign up' : 'sign in'}
             </Button>
             <GoogleLogin
               clientId="71023974194-dh2gfs56pj3r57lepmlbditonpuplqgg.apps.googleusercontent.com"
@@ -138,7 +151,7 @@ const Auth = () => {
                   startIcon={<Icon />}
                   variant="contained"
                 >
-                  goole sign in
+                  google sign in
                 </Button>
               )}
               onSuccess={googleSuccess}
@@ -149,8 +162,8 @@ const Auth = () => {
               <Grid item>
                 <Button onClick={switchMode}>
                   {isSignup
-                    ? 'already have an account? sign in'
-                    : 'dont have an account? sign in'}
+                    ? 'Already have an account? Sign In'
+                    : `Don't have an account? Sign up`}
                 </Button>
               </Grid>
             </Grid>

@@ -29,7 +29,9 @@ const Form = ({ currentId, setCurrentId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (currentId) {
-      dispatch(updatePost(currentId, postData));
+      dispatch(
+        updatePost(currentId, { ...postData, name: user?.result?.name })
+      );
     } else {
       console.log(user?.result?.name);
 
@@ -48,6 +50,17 @@ const Form = ({ currentId, setCurrentId }) => {
       selectedFile: '',
     });
   };
+
+  if (!user?.result?._id && !user?.result?.googleId) {
+    return (
+      <Grow in>
+        <Paper className="paper">
+          Sign in to share your memories with the world and give a thumb up to
+          your favorite memories.
+        </Paper>
+      </Grow>
+    );
+  }
 
   return (
     <Grow in>

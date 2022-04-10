@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 const Posts = ({ setCurrentId }) => {
   const posts = useSelector((state) => {
-    return state.posts;
+    return state.posts.reverse();
   });
 
   return !posts.length ? (

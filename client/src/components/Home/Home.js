@@ -4,6 +4,7 @@ import { getPosts } from '../../actions/posts';
 import { Container, Grow, Grid } from '@mui/material';
 import Form from '../Form/Form';
 import Posts from '../Posts/Posts';
+import Pagination123 from '../Pagination';
 
 const Home = () => {
   const [currentId, setCurrentId] = useState(null);
@@ -37,6 +38,7 @@ const Home = () => {
           </Container>
         </Grow>
       </Container>
+      <Pagination123 />
     </div>
   );
 };

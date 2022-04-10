@@ -16,7 +16,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { deletePost, likePost } from '../../../actions/posts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
@@ -24,29 +25,42 @@ const Post = ({ post, setCurrentId }) => {
   const user = JSON.parse(localStorage.getItem('profile'));
   const [fadeThePostIn, setFadethePostIn] = useState(true);
 
-  //Check whether the img comes in or not, if not, then creates a skeleton
-
   // Check if the post is liked by the user
+
   const Likes = () => {
-    if (post.likes.length > 1) {
-      return (
+    const lengthOfLikes = post?.likes?.length;
+
+    if (lengthOfLikes > 0) {
+      return post.likes.includes(
+        user?.result?._id || user?.result?.googleId
+      ) ? (
         <>
-          <ThumbUpAltIcon fontSize="small" /> &nbsp;
-          {post.likes.length > 1
-            ? `${post.likes.length} likes`
-            : `${post.likes.length} like`}
+          <ThumbUpAltIcon fontSize="small" />
+          &nbsp;
+          {lengthOfLikes > 2
+            ? `You, and ${lengthOfLikes - 1} others`
+            : //only ONE or TWO people liked the post
+              //ONE: the user (only showing you)
+              //TWO: the user and one other person (showing you and one other person)
+              `You${lengthOfLikes - 1 === 0 ? '' : ', and 1 other'}`}
         </>
-      );
-    } else {
-      return (
+      ) : (
         <>
-          <ThumbUpAltOutlinedIcon fontSize="small" /> &nbsp;
-          {post.likes.length > 1
-            ? `${post.likes.length} likes`
-            : `${post.likes.length} like`}
+          <ThumbUpAltOutlinedIcon fontSize="small" />
+          &nbsp;
+          {lengthOfLikes === 1
+            ? `${lengthOfLikes} Like`
+            : `${lengthOfLikes} Likes`}
         </>
       );
     }
+
+    return (
+      <>
+        <ThumbUpAltOutlinedIcon fontSize="small" /> &nbsp;
+        {lengthOfLikes} Like
+      </>
+    );
   };
 
   return (
@@ -126,12 +140,12 @@ const Post = ({ post, setCurrentId }) => {
           >
             <Likes />
           </Button>
-          {user?.result?.name === post.name && (
+          {(user?.result?.googleId === post.creator ||
+            user?.result?._id === post.creator) && (
             <Button
               size="small"
               color="primary"
               onClick={() => dispatch(deletePost(post._id))}
-              disabled={user?.result?.name !== post.name}
             >
               <DeleteIcon fontSize="small" /> Delete
             </Button>
