@@ -3,9 +3,28 @@ import mongoose from 'mongoose';
 import PostMessage from '../models/postMessage.js';
 
 export const getPosts = async (req, res) => {
+  const { page } = req.query; //It's a string.
+
   try {
-    const postMessage = await PostMessage.find();
-    res.status(200).json(postMessage);
+    const LIMIT = 8;
+    // Get the start index of the page:
+    // The very first index of all the posts is 0 (because of the ARRAY indexing).
+    const startIndex = (Number(page) - 1) * LIMIT;
+    //Count all the posts in the database.
+    const total = await PostMessage.countDocuments();
+
+    console.log(total);
+    const posts = await PostMessage.find()
+      .sort({ _id: -1 })
+      .limit(LIMIT)
+      .skip(startIndex);
+
+    res.status(200).json({
+      data: posts,
+      currentPage: page,
+      //Unconditional roundup.
+      numberOfPages: Math.ceil(total / LIMIT),
+    });
   } catch (error) {
     res.status(404).json({ msg: error.message });
   }

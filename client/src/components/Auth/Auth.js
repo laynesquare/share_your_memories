@@ -85,7 +85,7 @@ const Auth = () => {
 
   return (
     <Grow in>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm">
         {authFailedAlert?.state === true && <>{authFailedAlert.msg}</>}
 
         <Paper>

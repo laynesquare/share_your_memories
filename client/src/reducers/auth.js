@@ -9,8 +9,7 @@ export const auth = (state = { authData: null }, action) => {
 
     case LOGOUT:
       console.log('logout');
-      localStorage.setItem('profile', JSON.stringify({ ...action?.data })); //does action has data?
-      //   console.log(action?.data);
+      localStorage.clear();
       return { ...state, authData: null };
 
     default:

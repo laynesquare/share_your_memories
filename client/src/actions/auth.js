@@ -5,8 +5,6 @@ import {
   SIGNUP_ALERT_FAILED,
 } from '../constants/actionTypes';
 
-const nice = '123';
-
 export const signin = (formData, navigate) => async (dispatch) => {
   try {
     // sign in the user

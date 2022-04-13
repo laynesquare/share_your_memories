@@ -16,8 +16,8 @@ const Navbar = () => {
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
+    console.log('123');
     navigate('/auth');
-
     setUser(null);
   };
 
