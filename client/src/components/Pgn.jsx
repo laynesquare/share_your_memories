@@ -11,7 +11,7 @@ const Pgn = ({ page }) => {
 
   useEffect(() => {
     if (page) {
-      dispatch(getPosts(page));
+      dispatch(getPosts(page)); //! Main method by which we get the posts and of the correct sequence.
     }
   }, [page]);
 
@@ -24,25 +24,19 @@ const Pgn = ({ page }) => {
         color="primary"
         //Create
         renderItem={(item) => {
-          console.log(item, 'all the item');
           return (
             <PaginationItem
               //Pass the props to the PaginationItem
               {...item}
               component={Link}
+              //The url is not specifed from react router. It is formed from the pagiantion item,
+              //and the useQuery hook is used to get the page number from the url, triggering the useEffect hook
+              //and so the getPosts action is dispatched (the BE later sending the data to the reducer).
               to={`/posts?page=${item.page}`}
             />
           );
         }}
       />
-
-      <Button
-        onClick={() => {
-          dispatch(getPosts(1));
-        }}
-      >
-        send
-      </Button>
     </>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { getPosts } from '../../actions/posts';
+
+import { useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grow, Grid, Paper } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
 import Form from '../Form/Form';
 import Posts from '../Posts/Posts';
 import Pagination from '../Pgn';
@@ -14,18 +14,13 @@ function useQuery() {
 }
 
 const Home = () => {
+  const { isLoading } = useSelector((state) => state.posts);
   const [currentId, setCurrentId] = useState(null);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
+  console.log(isLoading);
   //Get the url query params regarding the page number.
   const query = useQuery();
   const page = query.get('page') || 1;
-
-  //! The automatic fetching is moved into the pagination component.
-  // useEffect(() => {
-  //   dispatch(getPosts());
-  // }, [currentId, dispatch]);
 
   return (
     <div>

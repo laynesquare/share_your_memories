@@ -15,7 +15,6 @@ const App = () => {
   let user;
 
   useEffect(() => {
-    console.log('hook useEffect');
     user = JSON.parse(localStorage.getItem('profile'));
   }, [user]);
 
@@ -28,6 +27,10 @@ const App = () => {
         <Route
           path="/auth"
           element={!user ? <Auth /> : <Navigate to="/posts" replace />}
+        ></Route>
+        <Route
+          path="posts/deleteRedirect"
+          element={<Navigate to={-1} replace />}
         ></Route>
       </Routes>
     </BrowserRouter>

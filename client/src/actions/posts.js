@@ -22,12 +22,12 @@ export const getPosts = (page) => async (dispatch) => {
   }
 };
 
-export const createPost = (post) => async (dispatch) => {
+export const createPost = (post, navigate) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.createPost(post);
     dispatch({ type: CREATE, payload: data }); //data has array bracket
-    dispatch({ type: END_LOADING });
+    navigate('/');
   } catch (error) {
     console.log(error.message);
   }
@@ -45,12 +45,12 @@ export const updatePost = (id, post) => async (dispatch) => {
   }
 };
 
-export const deletePost = (id) => async (dispatch) => {
+export const deletePost = (id, navigate) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     await api.deletePost(id);
     dispatch({ type: DELETE, payload: id });
-    dispatch({ type: END_LOADING });
+    navigate('/posts/deleteRedirect');
   } catch (error) {
     console.log(error);
   }
@@ -58,11 +58,11 @@ export const deletePost = (id) => async (dispatch) => {
 
 export const likePost = (id) => async (dispatch) => {
   try {
-    dispatch({ type: START_LOADING });
+    // dispatch({ type: START_LOADING });
     const { data } = await api.likePost(id);
     console.log(data);
     dispatch({ type: LIKEPOST, payload: data });
-    dispatch({ type: END_LOADING });
+    // dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }

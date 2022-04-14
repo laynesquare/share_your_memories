@@ -2,13 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextField, Button, Typography, Paper, Grow } from '@mui/material';
 import FileBase from 'react-file-base64';
-import { createPost, updatePost } from '../../actions/posts';
+import { createPost, updatePost, getPosts } from '../../actions/posts';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Form = ({ currentId, setCurrentId }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const user = JSON.parse(localStorage.getItem('profile'));
+
   const post = useSelector((state) => {
-    return currentId ? state.posts.find((p) => p._id === currentId) : null;
+    return currentId
+      ? state.posts.posts.find((p) => p._id === currentId)
+      : null;
   });
 
   useEffect(() => {
@@ -32,12 +38,10 @@ const Form = ({ currentId, setCurrentId }) => {
       dispatch(
         updatePost(currentId, { ...postData, name: user?.result?.name })
       );
+      clear();
     } else {
-      console.log(user?.result?.name);
-
-      dispatch(createPost({ ...postData, name: user?.result?.name }));
+      dispatch(createPost({ ...postData, name: user?.result?.name }, navigate));
     }
-    clear();
   };
 
   const clear = () => {
@@ -75,6 +79,7 @@ const Form = ({ currentId, setCurrentId }) => {
             {currentId ? 'Edit' : 'Create'} a memory
           </Typography>
           <TextField
+            required
             name="title"
             variant="outlined"
             label="Title"

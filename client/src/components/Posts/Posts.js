@@ -2,15 +2,21 @@ import React from 'react';
 import { Grid, CircularProgress } from '@mui/material';
 import Post from './Post/Post';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const Posts = ({ setCurrentId }) => {
-  const { posts, isLoding } = useSelector((state) => {
+const Posts = ({ setCurrentId, page }) => {
+  const navigate = useNavigate();
+  const { posts, isLoading } = useSelector((state) => {
     return state.posts;
   });
 
-  if (!posts.length && !isLoding) return <h1>No Posts</h1>;
+  if (!posts.length && !isLoading && Number(page) !== 1) {
+    navigate(`/posts?page=${Number(page) - 1}`);
+  }
 
-  return isLoding ? (
+  if (!posts.length && !isLoading) return <h1>No Posts</h1>;
+
+  return isLoading ? (
     <CircularProgress />
   ) : (
     <Grid className="container" container alignItems="stretch" spacing={3}>
