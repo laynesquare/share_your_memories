@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { Container, Grow, Grid, Paper } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { Container, Grow, Grid, Box } from '@mui/material';
 import Form from '../Form/Form';
 import Posts from '../Posts/Posts';
 import Pagination from '../Pgn';
@@ -14,39 +13,40 @@ function useQuery() {
 }
 
 const Home = () => {
-  const { isLoading } = useSelector((state) => state.posts);
   const [currentId, setCurrentId] = useState(null);
 
-  console.log(isLoading);
   //Get the url query params regarding the page number.
   const query = useQuery();
   const page = query.get('page') || 1;
 
+  console.log(query.get('page'));
+
   return (
-    <div>
-      <Grow in>
-        <Container maxWidth="xl">
+    <Container maxWidth="xl">
+      <div>
+        <Grow in>
           <Grid
             container
             justifyContent="space-between"
             alignItems="stretch"
             spacing={3}
-            className="mainContainer"
           >
             <Grid item xs={12} sm={6} md={9}>
-              <Posts setCurrentId={setCurrentId} />
+              <Posts setCurrentId={setCurrentId} page={page} />
             </Grid>
 
             <Grid item xs={12} sm={6} md={3}>
-              <Form currentId={currentId} setCurrentId={setCurrentId} />
-              <Paper elevation={6}>
+              <Box sx={{ mb: '2rem' }}>
+                <Form currentId={currentId} setCurrentId={setCurrentId} />
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Pagination page={page} />
-              </Paper>
+              </Box>
             </Grid>
           </Grid>
-        </Container>
-      </Grow>
-    </div>
+        </Grow>
+      </div>
+    </Container>
   );
 };
 

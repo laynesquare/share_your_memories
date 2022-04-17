@@ -5,22 +5,23 @@ import {
   SIGNUP_ALERT_CLEAR,
 } from '../constants/actionTypes';
 
-const initialState = { state: false, msg: 'everthing is fine' };
-
-export const alert = (state = initialState, action) => {
+export const alert = (
+  state = { state: false, msg: 'everthing is fine' },
+  action
+) => {
   switch (action.type) {
     case LOGIN_ALERT_FAILED:
       return {
         state: true,
-        msg: 'Either e-mail or passsword is incorrect.',
+        msg: 'Either e-mail or password is incorrect.',
       };
     case LOGIN_ALERT_CLEAR:
-      return initialState;
+      return { ...state, state: false };
 
     case SIGNUP_ALERT_FAILED:
       return {
         state: true,
-        msg: `Either e-mail already exists or password don't match confirm password.`,
+        msg: `Either e-mail already exists or password doesn't match confirm password.`,
       };
     default:
       return state;

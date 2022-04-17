@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TextField, Button, Typography, Paper, Grow } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Grow,
+  Divider,
+} from '@mui/material';
 import FileBase from 'react-file-base64';
-import { createPost, updatePost, getPosts } from '../../actions/posts';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { createPost, updatePost } from '../../actions/posts';
+import { useNavigate } from 'react-router-dom';
+import LoginIcon from './LoginIcon.js';
+import { Box } from '@mui/system';
 
 const Form = ({ currentId, setCurrentId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const user = JSON.parse(localStorage.getItem('profile'));
 
   const post = useSelector((state) => {
@@ -30,7 +38,6 @@ const Form = ({ currentId, setCurrentId }) => {
     tags: '',
     selectedFile: '',
   });
-  // const classes = useStyles();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,9 +65,33 @@ const Form = ({ currentId, setCurrentId }) => {
   if (!user?.result?._id && !user?.result?.googleId) {
     return (
       <Grow in>
-        <Paper className="paper">
-          Sign in to share your memories with the world and give a thumb up to
-          your favorite memories.
+        <Paper sx={{ p: '1rem', borderRadius: '1rem' }}>
+          <Box
+            sx={{
+              justifyContent: 'center',
+              width: '100%',
+              p: '20%',
+            }}
+          >
+            <LoginIcon />
+          </Box>
+          <Typography
+            variant="h4"
+            color="primary"
+            sx={{
+              textAlign: 'center',
+              letterSpacing: '0.1rem',
+              fontWeight: 'bold',
+              mb: '1rem',
+            }}
+          >
+            START BY LOGIN
+          </Typography>
+          <Divider sx={{ mb: '1rem' }} />
+          <Typography sx={{ textAlign: 'justify' }}>
+            Log in to share your memories with the world and give a thumb up to
+            your favorite memories.
+          </Typography>
         </Paper>
       </Grow>
     );
@@ -68,48 +99,49 @@ const Form = ({ currentId, setCurrentId }) => {
 
   return (
     <Grow in>
-      <Paper className="paper">
-        <form
-          autoComplete="off"
-          noValidate
-          className="root form"
-          onSubmit={handleSubmit}
-        >
-          <Typography varian="h6">
+      <Paper sx={{ p: '1.5rem', borderRadius: '1rem' }}>
+        <form autoComplete="off" onSubmit={handleSubmit}>
+          <Typography variant="h4" gutterBottom sx={{ textAlign: 'center' }}>
             {currentId ? 'Edit' : 'Create'} a memory
           </Typography>
           <TextField
             required
             name="title"
-            variant="outlined"
+            variant="standard"
             label="Title"
             fullWidth
             value={postData.title}
+            sx={{ mb: '1rem', border: 'none' }}
             onChange={(e) => {
               setPostData({ ...postData, title: e.target.value });
             }}
           ></TextField>
           <TextField
+            required
             name="message"
-            variant="outlined"
+            variant="standard"
             label="Message"
             fullWidth
             value={postData.message}
+            sx={{ mb: '1rem' }}
             onChange={(e) => {
               setPostData({ ...postData, message: e.target.value });
             }}
           ></TextField>
           <TextField
+            required
             name="tags"
-            variant="outlined"
+            variant="standard"
             label="Tags"
             fullWidth
             value={postData.tags}
+            helperText="Note: Separate tags with commas without spaces. E.g.: tag1,tag2,tag3"
+            sx={{ mb: '2rem' }}
             onChange={(e) => {
               setPostData({ ...postData, tags: e.target.value.split(',') });
             }}
           ></TextField>
-          <div className="fileInput">
+          <div>
             <FileBase
               type="file"
               multiple={false}
@@ -118,18 +150,17 @@ const Form = ({ currentId, setCurrentId }) => {
               }}
             ></FileBase>
           </div>
-          <Typography sx={{ fontSize: '0.5rem' }}>
-            Note: <br />
-            The system will automatically select an img for you if not
+          <Typography sx={{ fontSize: '0.5rem', mb: '1rem' }}>
+            Note: The system will automatically select an img for you if not
             specified.
           </Typography>
           <Button
-            className="buttonSubmit"
             variant="contained"
             color="primary"
             size="large"
             type="submit"
             fullWidth
+            sx={{ mb: '1rem' }}
           >
             Submit
           </Button>

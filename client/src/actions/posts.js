@@ -9,8 +9,6 @@ import {
   END_LOADING,
 } from '../constants/actionTypes';
 
-//action creator
-
 export const getPosts = (page) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
@@ -50,6 +48,7 @@ export const deletePost = (id, navigate) => async (dispatch) => {
     dispatch({ type: START_LOADING });
     await api.deletePost(id);
     dispatch({ type: DELETE, payload: id });
+    dispatch({ type: END_LOADING });
     navigate('/posts/deleteRedirect');
   } catch (error) {
     console.log(error);
@@ -58,11 +57,9 @@ export const deletePost = (id, navigate) => async (dispatch) => {
 
 export const likePost = (id) => async (dispatch) => {
   try {
-    // dispatch({ type: START_LOADING });
     const { data } = await api.likePost(id);
     console.log(data);
     dispatch({ type: LIKEPOST, payload: data });
-    // dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
