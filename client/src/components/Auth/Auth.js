@@ -1,17 +1,13 @@
 import React, { useEffect } from 'react';
 import {
   Container,
-  Paper,
-  Avatar,
   Typography,
   Grid,
   Button,
-  Checkbox,
   Grow,
   Box,
   Snackbar,
   Alert,
-  Slide,
 } from '@mui/material';
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -19,10 +15,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-
 import { signin, signup } from '../../actions/auth';
 import { LOGIN_ALERT_CLEAR } from '../../constants/actionTypes';
-
 import Input from './Input';
 import Icon from './icon';
 
@@ -54,9 +48,13 @@ const Auth = () => {
       dispatch(signin(formData, navigate));
     }
   };
+  const handleLazyLogin = () => {
+    dispatch(
+      signin({ email: 'johndoe@gmail.com', password: 'johndoe123' }, navigate)
+    );
+  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
   };
   const handleShowPassword = () =>
     setShowPassword((preShowPassword) => !preShowPassword);
@@ -90,11 +88,7 @@ const Auth = () => {
   return (
     <Grow in>
       <Container component="main" maxWidth="xs">
-        <Snackbar
-          open={authFailedAlert?.state}
-          // anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          // TransitionComponent={(props) => <Slide {...props} />}
-        >
+        <Snackbar open={authFailedAlert?.state}>
           <Alert severity="error" sx={{ width: '100%' }}>
             {authFailedAlert.msg}
           </Alert>
@@ -151,6 +145,18 @@ const Auth = () => {
               />
             )}
           </Grid>
+
+          {!isSignup && (
+            <Button
+              onClick={handleLazyLogin}
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mb: '1rem', fontSize: '1.5rem' }}
+            >
+              I'm kinda busy, so just log me in to a test account.
+            </Button>
+          )}
 
           <Button
             type="submit"

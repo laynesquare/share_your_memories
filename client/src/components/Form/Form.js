@@ -150,9 +150,14 @@ const Form = ({ currentId, setCurrentId }) => {
               }}
             ></FileBase>
           </div>
-          <Typography sx={{ fontSize: '0.5rem', mb: '1rem' }}>
-            Note: The system will automatically select an img for you if not
-            specified.
+          <Typography sx={{ fontSize: '0.5rem', mb: '1rem', mt: '0.2rem' }}>
+            Note:
+            <br />
+            <li>
+              The system will automatically select an img for you if not
+              specified via the unsplash API.
+            </li>
+            <li>The max. size is 30MB.</li>
           </Typography>
           <Button
             variant="contained"

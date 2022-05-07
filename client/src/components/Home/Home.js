@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { Container, Grow, Grid, Box } from '@mui/material';
 import Form from '../Form/Form';
 import Posts from '../Posts/Posts';
@@ -22,7 +21,7 @@ const Home = () => {
   console.log(query.get('page'));
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" sx={{ mb: '2rem' }}>
       <div>
         <Grow in>
           <Grid

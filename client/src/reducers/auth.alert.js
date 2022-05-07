@@ -2,7 +2,6 @@ import {
   LOGIN_ALERT_FAILED,
   LOGIN_ALERT_CLEAR,
   SIGNUP_ALERT_FAILED,
-  SIGNUP_ALERT_CLEAR,
 } from '../constants/actionTypes';
 
 export const alert = (

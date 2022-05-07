@@ -15,7 +15,6 @@ export const posts = (state = { isLoading: true, posts: [] }, action) => {
     case END_LOADING:
       return { ...state, isLoading: false };
     case FETCH_ALL:
-      console.log(action.payload);
       return {
         ...state,
         posts: action.payload.data,

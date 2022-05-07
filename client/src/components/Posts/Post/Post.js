@@ -8,7 +8,6 @@ import {
   Grow,
   Skeleton,
   Avatar,
-  Divider,
 } from '@mui/material';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';

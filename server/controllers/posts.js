@@ -13,7 +13,6 @@ export const getPosts = async (req, res) => {
     //Count all the posts in the database.
     const total = await PostMessage.countDocuments();
 
-    console.log(total);
     const posts = await PostMessage.find()
       .sort({ _id: -1 })
       .limit(LIMIT)
@@ -32,7 +31,7 @@ export const getPosts = async (req, res) => {
 
 export const createPost = async (req, res) => {
   const body = req.body; //req equals to "newpost" sent from front-end
-  console.log(body);
+
   const newPost = new PostMessage({ ...body, creator: req.userId });
 
   //body per se is an object.
@@ -92,11 +91,9 @@ export const likePost = async (req, res) => {
   });
 
   if (alreadyLiked) {
-    console.log('executed');
     post.likes = post.likes.filter((user) => {
       return user !== req.userId;
     });
-    console.log(post);
   } else {
     post.likes.push(req.userId);
   }
