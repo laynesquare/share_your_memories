@@ -15,7 +15,7 @@ app.use(express.urlencoded({ limit: '30mb', extended: true })); //allow access t
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('hello to Share your memories API');
+  res.send('Share Your Memories API');
 });
 
 app.use(logger);
