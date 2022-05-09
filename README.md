@@ -16,11 +16,11 @@
   
 ## Overview
 
-#### Purpose of Project
+#### Project Purpose
 - Create a platform where people could share treasured memories in their lives with anyone out there throughout the globe.
 
 
-#### Features Highlight
+#### Feature Highlight
 - Each user can register a whole new account to enable full functionality coming with the application, or just simply log in via Google Oauth 2.0 to enjoy the full access.
 
 - With the account, you can not only create, delete, and edit your posts but also give a thumbs up to other users' posts.
@@ -86,7 +86,7 @@
 
  - ####  Clone the project
 ```
-git clone https://github.com/2009-fsa-cs-ashes-archers/JobMapApp
+git clone https://github.com/laynesquare/share_your_memories.git
 ```
 
  - #### Register a MongoDB database and set the connection URL to the process environment variable
@@ -101,7 +101,7 @@ process.env.CONNECTION_URL
   
  </div>  
 
- - #### Set your jwt secret to the process environment variable
+ - #### Set your JWT secret to the process environment variable
 
 ```
 process.env.JWT_SECRET
