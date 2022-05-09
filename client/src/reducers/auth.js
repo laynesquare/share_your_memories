@@ -8,7 +8,6 @@ export const auth = (state = { authData: null }, action) => {
       return { ...state, authData: action?.data };
 
     case LOGOUT:
-      console.log('logout');
       localStorage.clear();
       return { ...state, authData: null };
 

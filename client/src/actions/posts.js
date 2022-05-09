@@ -23,7 +23,9 @@ export const getPosts = (page) => async (dispatch) => {
 export const createPost = (post, navigate) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
+
     const { data } = await api.createPost(post);
+
     dispatch({ type: CREATE, payload: data }); //data has array bracket
     navigate('/');
   } catch (error) {

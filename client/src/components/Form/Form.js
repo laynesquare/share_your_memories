@@ -89,7 +89,7 @@ const Form = ({ currentId, setCurrentId }) => {
           </Typography>
           <Divider sx={{ mb: '1rem' }} />
           <Typography sx={{ textAlign: 'justify' }}>
-            Log in to share your memories with the world and give a thumb up to
+            Log in to share your memories with the world and give a thumbs up to
             your favorite memories.
           </Typography>
         </Paper>
@@ -154,8 +154,8 @@ const Form = ({ currentId, setCurrentId }) => {
             Note:
             <br />
             <li>
-              The system will automatically select an img for you if not
-              specified via the unsplash API.
+              If not specified, the system will automatically select an img for
+              you via Unsplash API {`(subject to change upon page refreshed)`}.
             </li>
             <li>The max. size is 30MB.</li>
           </Typography>

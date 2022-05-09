@@ -1,14 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Navigate, useLocation, Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Container } from '@mui/material';
+import { Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
-//Components
 import Navbar from './components/Navbar/Navbar';
 import Home from './components/Home/Home';
 import Auth from './components/Auth/Auth';
-
-//main css
 import './index.css';
 
 const App = () => {

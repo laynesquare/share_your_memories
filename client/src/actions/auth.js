@@ -9,7 +9,7 @@ export const signin = (formData, navigate) => async (dispatch) => {
   try {
     // sign in the user
     const { data } = await api.signin(formData);
-    console.log(data);
+
     dispatch({ type: AUTH, data });
     navigate('/');
   } catch (error) {

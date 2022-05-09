@@ -18,8 +18,6 @@ const Home = () => {
   const query = useQuery();
   const page = query.get('page') || 1;
 
-  console.log(query.get('page'));
-
   return (
     <Container maxWidth="xl" sx={{ mb: '2rem' }}>
       <div>
