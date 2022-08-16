@@ -2,6 +2,17 @@ import mongoose from 'mongoose';
 
 import PostMessage from '../models/postMessage.js';
 
+export const getPost = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await PostMessage.findById(id);
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(404).send(`no post with id: ${id}`);
+  }
+};
+
 export const getPosts = async (req, res) => {
   const { page } = req.query; //It's a string.
 

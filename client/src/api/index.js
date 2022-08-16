@@ -18,6 +18,10 @@ API.interceptors.request.use(
   }
 );
 
+export const fetchPost = (id) => {
+  return API.get(`/posts/${id}`);
+};
+
 export const fetchPosts = (page) => {
   return API.get(`/posts?page=${page}`);
 };

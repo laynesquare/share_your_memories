@@ -8,6 +8,7 @@ import {
   Grow,
   Skeleton,
   Avatar,
+  ButtonBase,
 } from '@mui/material';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
@@ -24,6 +25,9 @@ const Post = ({ post, setCurrentId }) => {
   const navigate = useNavigate();
   const [isImgLoaded, setisImgLoaded] = useState(false);
   const user = JSON.parse(localStorage.getItem('profile'));
+  const goToPostDetails = () => {
+    navigate(`/posts/${post._id}`);
+  };
 
   // Check if the post is liked by the user
 
@@ -66,82 +70,97 @@ const Post = ({ post, setCurrentId }) => {
     <div>
       <Grow in={true}>
         <Card sx={{ position: 'relative' }}>
-          <CardMedia component="img" />
-          {isImgLoaded ? null : (
-            <>
-              {/* If the img is not loaded, show the skeleton */}
-              <Skeleton variant="rectangular" height={200} />
-            </>
-          )}
-
-          <Avatar
-            alt="memory_img"
-            src={post?.selectedFile || 'https://source.unsplash.com/random'}
-            onLoad={() => {
-              setisImgLoaded((pre) => !pre);
-            }}
+          <ButtonBase
+            onClick={goToPostDetails}
             sx={{
-              width: '100%',
-              height: '200px',
-              borderRadius: '0%',
-              pointerEvents: 'none',
-              filter: 'brightness(0.5)',
-              // If the img is loaded, then remove the skeleton
-              display: isImgLoaded ? '' : 'none',
-            }}
-          ></Avatar>
+              display: 'block',
 
-          <div>
-            <Typography
-              variant="h6"
-              sx={{ position: 'absolute', top: '0.5rem', left: '1rem' }}
-            >
-              {post.name}
-            </Typography>
-            <Typography
-              sx={{
-                position: 'absolute',
-                top: '2.5rem',
-                left: '1rem',
-                fontSize: '0.8rem',
+              width: '100%',
+              '&:hover': {
+                backgroundColor: 'rgba(4, 0, 0, 0.08)',
+              },
+            }}
+          >
+            <CardMedia component="img" />
+            {isImgLoaded ? null : (
+              <>
+                {/* If the img is not loaded, show the skeleton */}
+                <Skeleton variant="rectangular" height={200} />
+              </>
+            )}
+
+            <Avatar
+              alt="memory_img"
+              src={post?.selectedFile || 'https://source.unsplash.com/random'}
+              onLoad={() => {
+                setisImgLoaded((pre) => !pre);
               }}
-            >
-              {moment(post.createdAt).fromNow()}
-            </Typography>
-          </div>
-          <div>
-            {user?.result?._id === post.creator && (
-              <Button
-                color="primary"
+              sx={{
+                width: '100%',
+                height: '200px',
+                borderRadius: '0%',
+                pointerEvents: 'none',
+                filter: 'brightness(0.5)',
+                // If the img is loaded, then remove the skeleton
+                display: isImgLoaded ? '' : 'none',
+              }}
+            ></Avatar>
+            <div>
+              <Typography
+                variant="h6"
+                sx={{ position: 'absolute', top: '0.5rem', left: '1rem' }}
+              >
+                {post.name}
+              </Typography>
+              <Typography
                 sx={{
                   position: 'absolute',
-                  top: '0.7rem',
-                  right: '0rem',
-                  transition: 'all 0.3s',
-                  '&:hover': {
-                    backgroundColor: 'transparent',
-                    transform: 'translate(0, -0.25em)',
-                  },
-                }}
-                onClick={() => {
-                  setCurrentId(post._id);
+                  top: '2.5rem',
+                  left: '1rem',
+                  fontSize: '0.8rem',
                 }}
               >
-                <MoreHorizIcon fontSize="medium" />
-              </Button>
-            )}
-          </div>
-          <CardContent>
-            <Typography color="textSecondary" sx={{ fontSize: '0.8rem' }}>
-              {Array.isArray(post.tags) && post.tags.map((tag) => `#${tag} `)}
-            </Typography>
+                {moment(post.createdAt).fromNow()}
+              </Typography>
+            </div>
+            <div>
+              {user?.result?._id === post.creator && (
+                <Button
+                  color="primary"
+                  sx={{
+                    position: 'absolute',
+                    top: '0.7rem',
+                    right: '0rem',
+                    transition: 'all 0.3s',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                      transform: 'translate(0, -0.25em)',
+                    },
+                  }}
+                  onClick={() => {
+                    setCurrentId(post._id);
+                  }}
+                >
+                  <MoreHorizIcon fontSize="medium" />
+                </Button>
+              )}
+            </div>
+            <CardContent>
+              <Typography
+                color="textSecondary"
+                sx={{ fontSize: '0.8rem', textAlign: 'left' }}
+              >
+                {Array.isArray(post.tags) && post.tags.map((tag) => `#${tag} `)}
+              </Typography>
+              <Typography gutterBottom variant="h5" sx={{ textAlign: 'left' }}>
+                {post.title}
+              </Typography>
+              <Typography color="textSecondary" sx={{ textAlign: 'left' }}>
+                {post.message}
+              </Typography>
+            </CardContent>
+          </ButtonBase>
 
-            <Typography gutterBottom variant="h5">
-              {post.title}
-            </Typography>
-
-            <Typography color="textSecondary">{post.message}</Typography>
-          </CardContent>
           <CardActions>
             <Button
               size="small"

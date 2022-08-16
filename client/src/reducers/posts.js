@@ -1,5 +1,6 @@
 import {
   FETCH_ALL,
+  FETCH_ONE,
   CREATE,
   DELETE,
   LIKEPOST,
@@ -14,6 +15,8 @@ export const posts = (state = { isLoading: true, posts: [] }, action) => {
       return { ...state, isLoading: true };
     case END_LOADING:
       return { ...state, isLoading: false };
+    case FETCH_ONE:
+      return { ...state, post: action.payload.data };
     case FETCH_ALL:
       return {
         ...state,

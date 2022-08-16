@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Pagination, PaginationItem, Button } from '@mui/material';
+import { Pagination, PaginationItem } from '@mui/material';
 
 import { getPosts } from '../actions/posts';
 
