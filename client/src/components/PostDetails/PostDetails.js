@@ -13,8 +13,10 @@ const PostDetails = () => {
   const { post, isLoading } = useSelector((state) => {
     return { ...state.posts };
   });
+  const { comments } = post;
 
   useEffect(() => {
+    console.log('fetch!!');
     dispatch(getPost(postId, navigate));
   }, [postId]);
 
@@ -50,6 +52,7 @@ const PostDetails = () => {
       <div>{name}</div>
       <div>{_id}</div>
       <Typography variant="h3">Comment Section</Typography>
+      <Comment postId={postId} comments={comments} />
     </>
   );
 };

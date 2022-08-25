@@ -54,6 +54,34 @@ export const createPost = async (req, res) => {
   }
 };
 
+export const createPostComment = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).json({ msg: 'Post cannot be found.' });
+
+  const { body, creator } = req.body;
+  // const holder = await PostMessage.findByIdAndUpdate(id, {comments:})
+
+  const postToBeAddedComment = await PostMessage.findById(id);
+  postToBeAddedComment.comments.push({
+    body,
+    creator: creator.name,
+    date: new Date(),
+  });
+
+  const postUpdatedWithRenewedComments = await PostMessage.findByIdAndUpdate(
+    id,
+    {
+      comments: postToBeAddedComment.comments,
+    },
+    { new: true }
+  );
+
+  console.log(postUpdatedWithRenewedComments);
+  res.json(postUpdatedWithRenewedComments);
+};
+
 export const updatePost = async (req, res) => {
   const { id } = req.params;
   const { title, message, creator, selectedFile, tags, likes, name, _id } =

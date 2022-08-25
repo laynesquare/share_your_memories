@@ -7,6 +7,7 @@ export const FETCH_ALL = 'FETCH_ALL';
 export const FETCH_ONE = 'FETCH_ONE';
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
+export const CREATE_POST_COMMENT = 'CREATE_POST_COMMENT';
 
 //Loading checker actions
 export const START_LOADING = 'START_LOADING';

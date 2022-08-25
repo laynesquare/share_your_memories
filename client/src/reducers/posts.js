@@ -2,6 +2,7 @@ import {
   FETCH_ALL,
   FETCH_ONE,
   CREATE,
+  CREATE_POST_COMMENT,
   DELETE,
   LIKEPOST,
   UPDATE,
@@ -9,14 +10,17 @@ import {
   END_LOADING,
 } from '../constants/actionTypes';
 
-export const posts = (state = { isLoading: true, posts: [] }, action) => {
+export const posts = (
+  state = { isLoading: true, posts: [], post: [] },
+  action
+) => {
   switch (action.type) {
     case START_LOADING:
       return { ...state, isLoading: true };
     case END_LOADING:
       return { ...state, isLoading: false };
     case FETCH_ONE:
-      return { ...state, post: action.payload.data };
+      return { ...state, post: action.payload };
     case FETCH_ALL:
       return {
         ...state,
@@ -26,6 +30,8 @@ export const posts = (state = { isLoading: true, posts: [] }, action) => {
       }; // now the posts updated to posts = action.payload(remember data has array bracket)
     case CREATE:
       return { ...state, posts: [...state.posts, action.payload] };
+    case CREATE_POST_COMMENT:
+      return { ...state, post: action.payload };
     case UPDATE:
       return {
         ...state,

@@ -41,6 +41,14 @@ export const likePost = (id) => {
   return API.patch(`posts/${id}/likePost`);
 };
 
+//creat comment
+
+export const createPostComment = (id, commentPackage) => {
+  return API.patch(`posts/${id}/createPostComment`, commentPackage);
+};
+
+//authentication
+
 export const signin = (formData) => {
   return API.post('/user/signin', formData);
 };
