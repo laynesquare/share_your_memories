@@ -19,12 +19,21 @@ API.interceptors.request.use(
 );
 
 export const fetchPost = (id) => {
-  return API.get(`/posts/${id}`);
+  return API.get(`/posts/detail/${id}`);
 };
 
 export const fetchPosts = (page) => {
   return API.get(`/posts?page=${page}`);
 };
+
+export const fetchPostsBySearch = (keyword, page) => {
+  return API.get(`/posts/search/?keyword=${keyword}&page=${page}&`);
+};
+
+export const fetchPostsByBookmark = () => {
+  return API.get('/posts/bookmark');
+};
+
 export const createPost = (newPost) => {
   return API.post('/posts', newPost);
 };
@@ -39,6 +48,10 @@ export const deletePost = (id) => {
 
 export const likePost = (id) => {
   return API.patch(`posts/${id}/likePost`);
+};
+
+export const bookmarkPost = (id) => {
+  return API.patch(`posts/${id}/bookmark`);
 };
 
 //creat comment

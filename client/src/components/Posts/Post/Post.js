@@ -1,6 +1,5 @@
 import {
   Card,
-  CardActions,
   CardContent,
   CardMedia,
   Button,
@@ -9,14 +8,19 @@ import {
   Skeleton,
   Avatar,
   ButtonBase,
+  Box,
+  Tooltip,
 } from '@mui/material';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import moment from 'moment';
+
 import { useDispatch } from 'react-redux';
-import { deletePost, likePost } from '../../../actions/posts';
+import { deletePost, likePost, bookmarkPost } from '../../../actions/posts';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,8 +29,10 @@ const Post = ({ post, setCurrentId }) => {
   const navigate = useNavigate();
   const [isImgLoaded, setisImgLoaded] = useState(false);
   const user = JSON.parse(localStorage.getItem('profile'));
-  const goToPostDetails = () => {
-    navigate(`/posts/${post._id}`);
+  const goToPostDetails = (postId) => {
+    navigate(`/posts/detail/${post._id}`);
+    // dispatch(getPost(postId, navigate));
+    // navigate(`/posts/${post.title.replace(/ /g, '-')}`);
   };
 
   // Check if the post is liked by the user
@@ -71,10 +77,11 @@ const Post = ({ post, setCurrentId }) => {
       <Grow in={true}>
         <Card sx={{ position: 'relative' }}>
           <ButtonBase
-            onClick={goToPostDetails}
+            onClick={() => {
+              goToPostDetails(post._id);
+            }}
             sx={{
               display: 'block',
-
               width: '100%',
               '&:hover': {
                 backgroundColor: 'rgba(4, 0, 0, 0.08)',
@@ -145,7 +152,7 @@ const Post = ({ post, setCurrentId }) => {
                 </Button>
               )}
             </div>
-            <CardContent>
+            <CardContent sx={{ maxHeight: '300px', overflow: 'hidden' }}>
               <Typography
                 color="textSecondary"
                 sx={{ fontSize: '0.8rem', textAlign: 'left' }}
@@ -161,7 +168,13 @@ const Post = ({ post, setCurrentId }) => {
             </CardContent>
           </ButtonBase>
 
-          <CardActions>
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'nowrap',
+              p: '0.6rem',
+            }}
+          >
             <Button
               size="small"
               color="primary"
@@ -172,17 +185,49 @@ const Post = ({ post, setCurrentId }) => {
             </Button>
             {(user?.result?.googleId === post.creator ||
               user?.result?._id === post.creator) && (
+              <Tooltip title="Delete">
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => {
+                    dispatch(deletePost(post._id, navigate));
+                  }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </Button>
+              </Tooltip>
+            )}
+
+            <Tooltip
+              title={
+                post.bookmark.find(
+                  (bookmarkUser) => bookmarkUser === user?.result?._id
+                )
+                  ? 'Bookmark'
+                  : 'Remove bookmark'
+              }
+            >
               <Button
                 size="small"
                 color="primary"
                 onClick={() => {
-                  dispatch(deletePost(post._id, navigate));
+                  dispatch(bookmarkPost(post._id));
                 }}
               >
-                <DeleteIcon fontSize="small" /> Delete
+                {post.bookmark.find(
+                  (bookmarkUser) => bookmarkUser === user?.result?._id
+                ) ? (
+                  <>
+                    <TurnedInNotIcon fontSize="small" />
+                  </>
+                ) : (
+                  <>
+                    <BookmarkIcon fontSize="small" />
+                  </>
+                )}
               </Button>
-            )}
-          </CardActions>
+            </Tooltip>
+          </Box>
         </Card>
       </Grow>
     </div>

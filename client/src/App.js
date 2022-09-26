@@ -5,7 +5,8 @@ import Navbar from './components/Navbar/Navbar';
 import Home from './components/Home/Home';
 import Auth from './components/Auth/Auth';
 import PostDetails from './components/PostDetails/PostDetails';
-
+import Search from './components/Search/Search';
+import Bookmark from './components/Bookmark/Bookmark';
 import './index.css';
 
 const App = () => {
@@ -20,7 +21,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/posts" replace />}></Route>
         <Route path="/posts" element={<Home />}></Route>
-        <Route path="/posts/:postId" element={<PostDetails />}></Route>
+        <Route path="/posts/detail/:postId" element={<PostDetails />}></Route>
+        <Route path="/posts/search/" element={<Search />}></Route>
+        <Route path="/posts/bookmark/" element={<Bookmark />}></Route>
         <Route
           path="/auth"
           element={!user ? <Auth /> : <Navigate to="/posts" replace />}

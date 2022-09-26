@@ -1,0 +1,1 @@
+export const DRAG_BOOKMARK_POST = 'DRAG_BOOKMARK_POST';

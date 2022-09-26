@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { createPostComment } from '../../actions/posts';
 import { useDispatch, useSelector } from 'react-redux';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Grid, Avatar } from '@mui/material';
 import moment from 'moment';
 
 const Comment = ({ postId, comments }) => {
@@ -36,25 +36,53 @@ const Comment = ({ postId, comments }) => {
   //
   return (
     <>
-      <form autoComplete="off" onSubmit={handleSubmit}>
-        <TextField
-          type="text"
-          variant="filled"
-          label="Say something..."
-          onChange={handleCommentContentChange}
-        />
-        <Button type="submit">Send</Button>
-      </form>
-      {comments.length !== 0 &&
-        comments.map((comment, idx) => {
-          return (
-            <Box key={comment?._id}>
-              <Typography>{comment?.creator || 'Guest'}</Typography>
-              <Typography>{comment?.body}</Typography>
-              <Typography>{`${moment().fromNow(comment.date)} ago`}</Typography>
+      <form
+        autoComplete="off"
+        onSubmit={handleSubmit}
+        // style={{ background: 'blue' }}
+      >
+        <Grid container sx={{ display: 'flex', flexWrap: 'nowrap' }}>
+          <Grid item sx={{ mr: '1rem' }}>
+            <Avatar />
+          </Grid>
+          <Grid item sx={{ flexGrow: 1 }}>
+            <TextField
+              type="text"
+              variant="standard"
+              placeholder="Add a comment"
+              fullWidth
+              onChange={handleCommentContentChange}
+              sx={{ mb: '1rem' }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'right' }}>
+              <Button type="submit" size="large" sx={{ mr: '1rem' }}>
+                CANCEL
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+              >
+                COMMENT
+              </Button>
             </Box>
-          );
-        })}
+          </Grid>
+        </Grid>
+      </form>
+      {comments?.length
+        ? comments.map((comment, idx) => {
+            return (
+              <Box key={comment?._id}>
+                <Typography>{comment?.creator || 'Guest'}</Typography>
+                <Typography>{comment?.body}</Typography>
+                <Typography>{`${moment().fromNow(
+                  comment.date
+                )} ago`}</Typography>
+              </Box>
+            );
+          })
+        : 'There is not any comments yet'}
     </>
   );
 };

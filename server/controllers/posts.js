@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-
 import PostMessage from '../models/postMessage.js';
 
 export const getPost = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
 
   try {
     const post = await PostMessage.findById(id);
@@ -40,11 +40,44 @@ export const getPosts = async (req, res) => {
   }
 };
 
+export const getPostsByBookmark = async (req, res) => {
+  const user = req.userId;
+  try {
+    const postsBookmarkedByTheUser = await PostMessage.find({ bookmark: user });
+
+    console.log(postsBookmarkedByTheUser, 'result');
+    res.status(200).json(postsBookmarkedByTheUser);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getPostsBySearch = async (req, res) => {
+  const { page, keyword } = req.query;
+  const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
+  const keywordInRegExpForm = rgx(keyword);
+
+  try {
+    const matchPosts = await PostMessage.find({
+      $or: [
+        { name: { $regex: keywordInRegExpForm, $options: 'i' } },
+        { title: { $regex: keywordInRegExpForm, $options: 'i' } },
+        { message: { $regex: keywordInRegExpForm, $options: 'i' } },
+        { tags: { $regex: keywordInRegExpForm, $options: 'i' } },
+      ],
+    });
+
+    res.status(200).json(matchPosts);
+
+    // res.status(200).json({ msg: 'reaching BE success' });
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
+  }
+};
+
 export const createPost = async (req, res) => {
   const body = req.body; //req equals to "newpost" sent from front-end
-
   const newPost = new PostMessage({ ...body, creator: req.userId });
-
   //body per se is an object.
   try {
     await newPost.save();
@@ -142,4 +175,32 @@ export const likePost = async (req, res) => {
   });
 
   res.json(updatedPost);
+};
+
+export const bookmarkPost = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.userId;
+
+  try {
+    let { bookmark } = await PostMessage.findById(id);
+    const checkIfBookmarkBefore = bookmark.find((user) => user === userId);
+
+    if (checkIfBookmarkBefore) {
+      bookmark = bookmark.filter((user) => user !== userId);
+    } else {
+      bookmark.push(userId);
+    }
+
+    const postAfterBookmarkHandling = await PostMessage.findByIdAndUpdate(
+      id,
+      {
+        bookmark: bookmark,
+      },
+      { new: true }
+    );
+
+    res.json(postAfterBookmarkHandling);
+  } catch (error) {
+    console.log(error);
+  }
 };

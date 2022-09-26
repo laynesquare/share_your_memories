@@ -2,9 +2,12 @@ import * as api from '../api';
 import {
   FETCH_ALL,
   FETCH_ONE,
+  FETCH_POST_BY_SEARCH,
+  FETCH_POST_BY_BOOKMARK,
   CREATE,
   DELETE,
   LIKEPOST,
+  BOOKMARK_POST,
   UPDATE,
   CREATE_POST_COMMENT,
   START_LOADING,
@@ -15,7 +18,6 @@ export const getPost = (postId, navigate) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.fetchPost(postId);
-
     dispatch({ type: FETCH_ONE, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {
@@ -35,12 +37,32 @@ export const getPosts = (page) => async (dispatch) => {
   }
 };
 
+export const getPostsBySearch = (keyword, page) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING });
+    const { data } = await api.fetchPostsBySearch(keyword, page);
+    console.log(data);
+    dispatch({ type: FETCH_POST_BY_SEARCH, payload: data });
+    dispatch({ type: END_LOADING });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getPostsByBookmark = () => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING });
+    const { data } = await api.fetchPostsByBookmark();
+
+    dispatch({ type: FETCH_POST_BY_BOOKMARK, payload: data });
+    dispatch({ type: END_LOADING });
+  } catch (error) {}
+};
+
 export const createPost = (post, navigate) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
-
     const { data } = await api.createPost(post);
-
     dispatch({ type: CREATE, payload: data }); //data has array bracket
     navigate('/');
   } catch (error) {
@@ -52,7 +74,7 @@ export const updatePost = (id, post) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.updatePost(id, post);
-    console.log(data);
+
     dispatch({ type: UPDATE, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {
@@ -75,8 +97,19 @@ export const deletePost = (id, navigate) => async (dispatch) => {
 export const likePost = (id) => async (dispatch) => {
   try {
     const { data } = await api.likePost(id);
-    console.log(data);
+
     dispatch({ type: LIKEPOST, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const bookmarkPost = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING });
+    const { data } = await api.bookmarkPost(id);
+    dispatch({ type: BOOKMARK_POST, payload: data });
+    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
@@ -86,7 +119,6 @@ export const createPostComment = (id, commentPackage) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     let { data } = await api.createPostComment(id, commentPackage);
-    console.log(data);
     dispatch({ type: CREATE_POST_COMMENT, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {

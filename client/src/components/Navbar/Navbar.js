@@ -6,11 +6,21 @@ import {
   Button,
   Avatar,
   Divider,
+  Tooltip,
 } from '@mui/material';
 import MemoryRoundedIcon from '@mui/icons-material/MemoryRounded';
-
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
 import Toolbar from '@mui/material/Toolbar';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import InputBase from '@mui/material/InputBase';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  createSearchParams,
+} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
@@ -18,23 +28,39 @@ import { customizedButton } from './styles/custmizedButton';
 
 const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const [keywordForPostSearch, setKeywordForPostSearch] = useState(null);
+
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
-
     navigate('/auth');
     setUser(null);
   };
 
+  const handleSearchPostByKeyword = (e) => {
+    if (e.key === 'Enter') {
+      if (!keywordForPostSearch) return alert(keywordForPostSearch);
+      navigate({
+        pathname: 'posts/search/',
+        search: `?${createSearchParams({
+          keyword: keywordForPostSearch,
+          page: 1,
+        })}`,
+      });
+    }
+  };
+
+  const handleGoToFav = () => {
+    navigate('/posts/bookmark');
+  };
+
   useEffect(() => {
     const token = user?.token;
-
     if (token) {
       const decodedToken = decode(token);
-
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         logout();
       }
@@ -75,9 +101,29 @@ const Navbar = () => {
               Share Your Memories
             </Box>
           </Typography>
+          <Box sx={{ display: 'flex' }}>
+            <InputBase
+              size="small"
+              autoComplete="off"
+              placeholder="Search something..."
+              onKeyDown={handleSearchPostByKeyword}
+              onChange={(e) => {
+                setKeywordForPostSearch(e.target.value);
+              }}
+              sx={{
+                borderBottom: '1px solid grey',
+                maxWidth: '10rem',
+              }}
+            />
+            <IconButton size="small" sx={{ mr: '0.5rem' }}>
+              <SearchIcon />
+            </IconButton>
+          </Box>
+
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {user?.result ? ( //does user has result?
               <>
+                <Divider orientation="vertical" flexItem sx={{ mr: '1rem' }} />
                 <Avatar
                   alt={user.result.name}
                   src={user.result.imgUrl}
@@ -95,7 +141,7 @@ const Navbar = () => {
                 <Typography
                   variant="h7"
                   sx={{
-                    mr: '1rem',
+                    mr: '0.5rem',
                     fontWeight: 'bold',
                     whiteSpace: 'nowrap',
                     letterSpacing: '0.1rem',
@@ -103,6 +149,16 @@ const Navbar = () => {
                 >
                   {user?.result.name}
                 </Typography>
+
+                <Tooltip
+                  title="Check your favorite posts"
+                  fontFamily="Montserrat"
+                  sx={{ fontFamily: 'Montserrat', fontWeight: 'lighter' }}
+                >
+                  <IconButton onClick={handleGoToFav} sx={{ mr: '0.5rem' }}>
+                    <BookmarkIcon size="small" />
+                  </IconButton>
+                </Tooltip>
 
                 <Divider orientation="vertical" flexItem sx={{ mr: '1rem' }} />
 

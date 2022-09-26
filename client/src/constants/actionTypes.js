@@ -3,8 +3,12 @@ export const CREATE = 'CREATE';
 export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 export const LIKEPOST = 'LIKEPOST';
+export const BOOKMARK_POST = 'BOOKMARK_POST';
 export const FETCH_ALL = 'FETCH_ALL';
 export const FETCH_ONE = 'FETCH_ONE';
+export const FETCH_POST_BY_SEARCH = 'FETCH_POST_BY_SEARCH';
+export const FETCH_POST_BY_BOOKMARK = 'FETCH_POST_BY_BOOKMARK';
+
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
 export const CREATE_POST_COMMENT = 'CREATE_POST_COMMENT';
