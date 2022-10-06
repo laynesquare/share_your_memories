@@ -1,0 +1,863 @@
+{
+    "kind": "youtube#searchListResponse",
+    "etag": "kOJzpGVICYY49vbhDK4IdH3fQMQ",
+    "nextPageToken": "CBkQAA",
+    "regionCode": "TW",
+    "pageInfo": {
+      "totalResults": 4888,
+      "resultsPerPage": 25
+    },
+    "items": [
+      {
+        "kind": "youtube#searchResult",
+        "etag": "B7aYd9EV8vvoi-yAAueg1h_RvI0",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "FXPhYblftqg"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-09T22:02:41Z",
+          "channelId": "UC9h-s0MA2T6_AG635a5XDbA",
+          "title": "Teenage Fanclub - Every Step Is a Way Through - Manchester Academy  - 07-11-2018",
+          "description": "Written by Gerry Love B Side to Neil Jung.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/FXPhYblftqg/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/FXPhYblftqg/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/FXPhYblftqg/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "k1rk1c",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-09T22:02:41Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "cH8OP5wRgxgfPAx02DmqzLmAREY",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "uaBI3J1ehks"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-09T06:50:32Z",
+          "channelId": "UC-fy3Ng0BJE_DKNogsb7doA",
+          "title": "Teenage Fanclub @ Manchester Academy 3 7th November 2018",
+          "description": "",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/uaBI3J1ehks/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/uaBI3J1ehks/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/uaBI3J1ehks/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "BSV",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-09T06:50:32Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "xl2IH0EGzvwtRTio5bl9bab1NLY",
+        "id": {
+          "kind": "youtube#playlist",
+          "playlistId": "PLcDt1-SzN4xDjRKjw6LiewucmnsH-yG_E"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-08T21:15:10Z",
+          "channelId": "UC9h-s0MA2T6_AG635a5XDbA",
+          "title": "Teenage Fanclub - Manchester Academy (2018)",
+          "description": "",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/F-lwll5cAqI/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/F-lwll5cAqI/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/F-lwll5cAqI/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "k1rk1c",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-08T21:15:10Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "3fuBe6RMN88pSXdkZ_Zeedh_sxI",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "F-lwll5cAqI"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-08T21:52:07Z",
+          "channelId": "UC9h-s0MA2T6_AG635a5XDbA",
+          "title": "Teenage Fanclub - Thaw Me - Manchester Academy - 07-11-2018",
+          "description": "Written by Raymond McGinley B Side to Dumb, Dumb, Dumb (CD)",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/F-lwll5cAqI/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/F-lwll5cAqI/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/F-lwll5cAqI/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "k1rk1c",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-08T21:52:07Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "BcRKbm-ErIHRoBaiI9pTUvcc1Xo",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "3ChweglTujI"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-09T22:02:49Z",
+          "channelId": "UC9h-s0MA2T6_AG635a5XDbA",
+          "title": "Teenage Fanclub - Take the Skinheads Bowling - Manchester Academy  - 07-11-2018",
+          "description": "Camper Van Beethoven track.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/3ChweglTujI/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/3ChweglTujI/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/3ChweglTujI/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "k1rk1c",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-09T22:02:49Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "5hRzDtXxL8vjWIWTDfD7zXoQxkM",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "t_GByELfXW0"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-08T22:52:43Z",
+          "channelId": "UC9h-s0MA2T6_AG635a5XDbA",
+          "title": "Teenage Fanclub - One Thousand Lights - Manchester Academy  - 07-11-2018",
+          "description": "Written by Gerry Love B Side to Dumb, Dumb, Dumb (CD)",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/t_GByELfXW0/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/t_GByELfXW0/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/t_GByELfXW0/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "k1rk1c",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-08T22:52:43Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "b-EeF3lm9zJzLmY4PO0JdLgF9NY",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "Lyly0EKJEP4"
+        },
+        "snippet": {
+          "publishedAt": "2021-09-10T16:06:15Z",
+          "channelId": "UCZ5UCex_dHNQpdyyqncNgiw",
+          "title": "Teenage Fanclub - I&#39;m More Inclined (live -Manchester Academy 2 07/09/21",
+          "description": "",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/Lyly0EKJEP4/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/Lyly0EKJEP4/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/Lyly0EKJEP4/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "Steve Tamburello",
+          "liveBroadcastContent": "none",
+          "publishTime": "2021-09-10T16:06:15Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "GTynfITtLGyGTGG2HhkhXZBm-GY",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "dz6P1hzkLp0"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-09T22:02:46Z",
+          "channelId": "UC9h-s0MA2T6_AG635a5XDbA",
+          "title": "Teenage Fanclub - Long Hair - Manchester Academy  - 07-11-2018",
+          "description": "Written by Gerry Love B Side to The Concept.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/dz6P1hzkLp0/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/dz6P1hzkLp0/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/dz6P1hzkLp0/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "k1rk1c",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-09T22:02:46Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "dgcOh8ofO1GLpwhEuTtl0A_NOPM",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "u8kphEjaWQs"
+        },
+        "snippet": {
+          "publishedAt": "2010-05-28T14:30:33Z",
+          "channelId": "UCZhRa2wL8OB7-RfhSZ_VxHA",
+          "title": "Teenage Fanclub - It&#39;s All In My Mind - Manchester Academy 2",
+          "description": "Teenage Fanclub perform 'It's All In My Mind' at Manchester Academy 2 on Thursday May 27 2010.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/u8kphEjaWQs/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/u8kphEjaWQs/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/u8kphEjaWQs/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "Mike H",
+          "liveBroadcastContent": "none",
+          "publishTime": "2010-05-28T14:30:33Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "G0oXMFcbCKYY_BUopYQcQONW8no",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "bhkh1ncy6aM"
+        },
+        "snippet": {
+          "publishedAt": "2021-09-10T15:43:15Z",
+          "channelId": "UCZ5UCex_dHNQpdyyqncNgiw",
+          "title": "Teenage Fanclub - The Sun Won&#39;t Shine On Me (live Manchester Academy 07/09/21)",
+          "description": "new songs being aired from Endless Arcade. also featuring Euros Childs as the newest member on keys.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/bhkh1ncy6aM/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/bhkh1ncy6aM/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/bhkh1ncy6aM/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "Steve Tamburello",
+          "liveBroadcastContent": "none",
+          "publishTime": "2021-09-10T15:43:15Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "3Q6aG4fTXsUitxlfqvVOiMEADc4",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "tcZSnjKi5j8"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-06T22:46:29Z",
+          "channelId": "UCYiQv6PXXFYq6NnFVA5URRw",
+          "title": "Teenage Fan Club - Song To The Cynic, Manchester Academy 3 5/11/18",
+          "description": "Teenage Fan Club - Song To The Cynic, Manchester Academy 3 5/11/18.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/tcZSnjKi5j8/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/tcZSnjKi5j8/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/tcZSnjKi5j8/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "Michael Jones",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-06T22:46:29Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "OysE-OBRmN_D6diBUnqw7aDzUQs",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "ypssOELCnQg"
+        },
+        "snippet": {
+          "publishedAt": "2021-09-08T08:06:58Z",
+          "channelId": "UCpujo00JAAKdBEBDj0pD3Tw",
+          "title": "The Fall. Teenage Fanclub",
+          "description": "Manchester Academy, 7th September 2021.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/ypssOELCnQg/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/ypssOELCnQg/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/ypssOELCnQg/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "mooseandhobbes",
+          "liveBroadcastContent": "none",
+          "publishTime": "2021-09-08T08:06:58Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "SWeyGctKRCI2qH_ZPa-cE327RaE",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "ds9L8ukMPFI"
+        },
+        "snippet": {
+          "publishedAt": "2021-09-08T07:54:44Z",
+          "channelId": "UCpujo00JAAKdBEBDj0pD3Tw",
+          "title": "I&#39;m More Inclined. Teenage Fanclub",
+          "description": "Manchester Academy, 7th September 2021.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/ds9L8ukMPFI/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/ds9L8ukMPFI/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/ds9L8ukMPFI/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "mooseandhobbes",
+          "liveBroadcastContent": "none",
+          "publishTime": "2021-09-08T07:54:44Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "tiCpgc2xc-gNqyhEshahTc8k8Fs",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "o3hOUshC3KE"
+        },
+        "snippet": {
+          "publishedAt": "2010-05-28T09:05:23Z",
+          "channelId": "UCz19-wkWXHCwlJX8RS4hOBw",
+          "title": "Teenage Fanclub - Don&#39;t Look Back - Manchester Academy May 2010",
+          "description": "Live in Manchester - First night of the tour.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/o3hOUshC3KE/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/o3hOUshC3KE/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/o3hOUshC3KE/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "nikav8",
+          "liveBroadcastContent": "none",
+          "publishTime": "2010-05-28T09:05:23Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "a0T77QUp2oOo8C9IXw9QYyqRQuY",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "_c561OZZecs"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-06T23:14:36Z",
+          "channelId": "UCYiQv6PXXFYq6NnFVA5URRw",
+          "title": "Teenage Fan Club - Gene Clark Manchester Academy 3 5/11/18",
+          "description": "Teenage Fan Club - Gene Clark Manchester Academy 3 5/11/18.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/_c561OZZecs/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/_c561OZZecs/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/_c561OZZecs/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "Michael Jones",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-06T23:14:36Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "uq-QKxt9Xi-3lD-8MkyKabxU_2g",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "Ou0XnJ7fpmY"
+        },
+        "snippet": {
+          "publishedAt": "2021-09-08T08:07:26Z",
+          "channelId": "UCpujo00JAAKdBEBDj0pD3Tw",
+          "title": "Home. Teenage Fanclub",
+          "description": "Manchester Academy, 7th September 2021.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/Ou0XnJ7fpmY/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/Ou0XnJ7fpmY/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/Ou0XnJ7fpmY/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "mooseandhobbes",
+          "liveBroadcastContent": "none",
+          "publishTime": "2021-09-08T08:07:26Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "xYWMo0UUm_UW1eDyEH12vcDk928",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "-436G1_hCGA"
+        },
+        "snippet": {
+          "publishedAt": "2018-11-12T11:02:41Z",
+          "channelId": "UCGoaFS-BYZo9Nq6_ouuNvBA",
+          "title": "Teenage Fanclub - Like a Virgin",
+          "description": "Sunday November 11th 2018, at the O2 Institute Birmingham. Night 3 of the Creation Years Tour.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/-436G1_hCGA/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/-436G1_hCGA/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/-436G1_hCGA/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "IGetSpellbound",
+          "liveBroadcastContent": "none",
+          "publishTime": "2018-11-12T11:02:41Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "bn4yJTfracZOWri67qTCjX5sDAI",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "aBulSJ7KNFM"
+        },
+        "snippet": {
+          "publishedAt": "2022-09-16T16:37:28Z",
+          "channelId": "UC1tjKWx3zoo6wnJVPO03kSw",
+          "title": "Teenage Fanclub - Live at Manchester International July 12th, 1991",
+          "description": "Live bootleg, courtesy of Shaun Hampton.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/aBulSJ7KNFM/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/aBulSJ7KNFM/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/aBulSJ7KNFM/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "Mr. Mingo",
+          "liveBroadcastContent": "none",
+          "publishTime": "2022-09-16T16:37:28Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "sponZGvkYsE46DWhhTSnK6PMatA",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "MrjfvghWR4o"
+        },
+        "snippet": {
+          "publishedAt": "2021-09-08T08:07:15Z",
+          "channelId": "UCpujo00JAAKdBEBDj0pD3Tw",
+          "title": "Everything Is Falling Apart. Teenage Fanclub",
+          "description": "Manchester Academy, 7th September 2021.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/MrjfvghWR4o/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/MrjfvghWR4o/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/MrjfvghWR4o/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "mooseandhobbes",
+          "liveBroadcastContent": "none",
+          "publishTime": "2021-09-08T08:07:15Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "zsNZLj4dGyF0FZCCNKGRx3wECXI",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "gcW0EHH0CyQ"
+        },
+        "snippet": {
+          "publishedAt": "2021-09-08T07:47:12Z",
+          "channelId": "UCpujo00JAAKdBEBDj0pD3Tw",
+          "title": "Warm Embrace. Teenage Fanclub",
+          "description": "Manchester Academy, 7th September 2021.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/gcW0EHH0CyQ/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/gcW0EHH0CyQ/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/gcW0EHH0CyQ/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "mooseandhobbes",
+          "liveBroadcastContent": "none",
+          "publishTime": "2021-09-08T07:47:12Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "DIeq1JkeMYBuNq8e3W9Y4c-VEQk",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "HxKEAJUJdUQ"
+        },
+        "snippet": {
+          "publishedAt": "2010-05-28T09:47:59Z",
+          "channelId": "UCz19-wkWXHCwlJX8RS4hOBw",
+          "title": "Teenage Fanclub - Verisimilitude - Manchester Academy May 2010",
+          "description": "Live in Manchester - First night of the tour.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/HxKEAJUJdUQ/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/HxKEAJUJdUQ/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/HxKEAJUJdUQ/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "nikav8",
+          "liveBroadcastContent": "none",
+          "publishTime": "2010-05-28T09:47:59Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "iD6D7e5YQpvZl9eh5LLbqkK2CwY",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "VD_WMlIZzPg"
+        },
+        "snippet": {
+          "publishedAt": "2010-05-28T13:50:56Z",
+          "channelId": "UCz19-wkWXHCwlJX8RS4hOBw",
+          "title": "Teenage Fanclub - Star Sign - Manchester Academy - May 2010",
+          "description": "Live in Manchester - First night of the tour.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/VD_WMlIZzPg/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/VD_WMlIZzPg/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/VD_WMlIZzPg/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "nikav8",
+          "liveBroadcastContent": "none",
+          "publishTime": "2010-05-28T13:50:56Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "l-iuul-GxuOh9QBT7YuLaXoJgrc",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "FnfwCRrgDBY"
+        },
+        "snippet": {
+          "publishedAt": "2010-05-28T12:50:09Z",
+          "channelId": "UCz19-wkWXHCwlJX8RS4hOBw",
+          "title": "Teenage Fanclub - The Concept - Manchester Academy - May 2010",
+          "description": "Live in Manchester.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/FnfwCRrgDBY/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/FnfwCRrgDBY/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/FnfwCRrgDBY/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "nikav8",
+          "liveBroadcastContent": "none",
+          "publishTime": "2010-05-28T12:50:09Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "rf0yksPm7TzKT_yWzTKrAZkG9tU",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "3KR-km5EF7I"
+        },
+        "snippet": {
+          "publishedAt": "2021-09-08T08:18:10Z",
+          "channelId": "UCpujo00JAAKdBEBDj0pD3Tw",
+          "title": "The Sun Won&#39;t Shine On Me (including Norman fuckup) Teenage Fanclub",
+          "description": "Manchester Academy, 7th September 2021.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/3KR-km5EF7I/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/3KR-km5EF7I/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/3KR-km5EF7I/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "mooseandhobbes",
+          "liveBroadcastContent": "none",
+          "publishTime": "2021-09-08T08:18:10Z"
+        }
+      },
+      {
+        "kind": "youtube#searchResult",
+        "etag": "Cr1WqyA8hQPg4xet4b8Jjpv5wgc",
+        "id": {
+          "kind": "youtube#video",
+          "videoId": "V2LP91VEsy4"
+        },
+        "snippet": {
+          "publishedAt": "2016-11-30T01:57:08Z",
+          "channelId": "UC7DmScblaBDdMlBuH3VTKEw",
+          "title": "Teenage Fanclub - Everything Flows - Live Manchester - 18/11/16",
+          "description": "Teenage Fanclub playing Everything Flows. Academy 2 Manchester.",
+          "thumbnails": {
+            "default": {
+              "url": "https://i.ytimg.com/vi/V2LP91VEsy4/default.jpg",
+              "width": 120,
+              "height": 90
+            },
+            "medium": {
+              "url": "https://i.ytimg.com/vi/V2LP91VEsy4/mqdefault.jpg",
+              "width": 320,
+              "height": 180
+            },
+            "high": {
+              "url": "https://i.ytimg.com/vi/V2LP91VEsy4/hqdefault.jpg",
+              "width": 480,
+              "height": 360
+            }
+          },
+          "channelTitle": "Wibblybob Bibblywob",
+          "liveBroadcastContent": "none",
+          "publishTime": "2016-11-30T01:57:08Z"
+        }
+      }
+    ]
+  }
+  
