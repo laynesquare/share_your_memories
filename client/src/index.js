@@ -1,16 +1,13 @@
-import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import reducers from './reducers';
-
-import App from './App';
-
 import { mainTheme } from './themes/mainTheme.js';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import ReactDOM from 'react-dom/client';
+import thunk from 'redux-thunk';
+import reducers from './reducers';
+import App from './App';
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
 const root = ReactDOM.createRoot(document.getElementById('root'));

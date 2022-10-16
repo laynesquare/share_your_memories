@@ -3,7 +3,7 @@ import axios from 'axios';
 const youtubeUrlForSearchByTag = {
   base: 'https://youtube.googleapis.com/youtube/v3/search?part=snippet',
   maxResult: '&maxResults=25',
-  order: '&order=viewCount',
+  order: '&order=relevance',
   query: '&q=',
   apiKey: `&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
 };

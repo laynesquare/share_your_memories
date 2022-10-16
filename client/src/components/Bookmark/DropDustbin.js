@@ -1,10 +1,19 @@
 import { useDrop } from 'react-dnd';
 import { Box } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const DropDustbin = ({ posts }) => {
-  const dispatch = useDispatch();
-  const [{ canDrop, isOver, which }, drop] = useDrop(() => ({
+const outerBoxStyle = {
+  width: '100%',
+  height: '100%',
+  icon: {
+    width: '100%',
+    height: '100%',
+  },
+};
+
+const DropDustbin = ({ posts, isLoading }) => {
+  const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: posts.map((post) => post._id),
     collect: (monitor) => ({
       canDrop: !!monitor.canDrop(),
@@ -13,15 +22,16 @@ const DropDustbin = ({ posts }) => {
   }));
 
   return (
-    <Box
-      ref={drop}
-      sx={{
-        width: '100px',
-        height: '100px',
-        backgroundColor: isOver ? 'red' : 'yellow',
-      }}
-    >
-      DropDustbin
+    <Box ref={drop} sx={{ ...outerBoxStyle }}>
+      {canDrop ? (
+        <DeleteOutlineIcon
+          sx={{ ...outerBoxStyle.icon, color: isOver ? 'primary.main' : '' }}
+        />
+      ) : (
+        <DeleteIcon
+          sx={{ ...outerBoxStyle.icon, color: isOver ? 'primary.main' : '' }}
+        />
+      )}
     </Box>
   );
 };

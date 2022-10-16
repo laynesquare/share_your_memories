@@ -13,9 +13,7 @@ API.interceptors.request.use(
     }
     return req;
   },
-  (error) => {
-    return console.log(error);
-  }
+  (error) => console.log(error)
 );
 
 export const fetchPost = (id) => {
@@ -54,13 +52,9 @@ export const bookmarkPost = (id) => {
   return API.patch(`posts/${id}/bookmark`);
 };
 
-//creat comment
-
 export const createPostComment = (id, commentPackage) => {
   return API.patch(`posts/${id}/createPostComment`, commentPackage);
 };
-
-//authentication
 
 export const signin = (formData) => {
   return API.post('/user/signin', formData);

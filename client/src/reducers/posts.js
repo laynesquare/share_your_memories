@@ -11,10 +11,19 @@ import {
   BOOKMARK_POST,
   START_LOADING,
   END_LOADING,
+  START_LOADING_COMMENTS,
+  END_LOADING_COMMENTS,
+  CLEANUP_FETCH_ONE,
 } from '../constants/actionTypes';
 
 export const posts = (
-  state = { isLoading: true, posts: [], post: [] },
+  state = {
+    isLoading: true,
+    isLoadingComments: false,
+    posts: [],
+    post: {},
+    bookmarks: [],
+  },
   action
 ) => {
   switch (action.type) {
@@ -22,8 +31,19 @@ export const posts = (
       return { ...state, isLoading: true };
     case END_LOADING:
       return { ...state, isLoading: false };
+
+    case START_LOADING_COMMENTS:
+      return { ...state, isLoadingComments: true };
+    case END_LOADING_COMMENTS:
+      return { ...state, isLoadingComments: false };
+
+    // =======================================================================
+    // =======================================================================
+    // =======================================================================
+    // =======================================================================
+
     case FETCH_ONE:
-      return { ...state, posts: action.payload };
+      return { ...state, post: { ...action.payload } };
     case FETCH_ALL:
       return {
         ...state,
@@ -35,10 +55,16 @@ export const posts = (
       return { ...state, posts: [...action.payload] };
     case FETCH_POST_BY_BOOKMARK:
       return { ...state, posts: [...action.payload] };
+
+    // =======================================================================
+    // =======================================================================
+    // =======================================================================
+    // =======================================================================
+
     case CREATE:
       return { ...state, posts: [...state.posts, action.payload] };
     case CREATE_POST_COMMENT:
-      return { ...state, posts: action.payload };
+      return { ...state, post: { ...action.payload } };
     case UPDATE:
       return {
         ...state,
@@ -65,6 +91,14 @@ export const posts = (
           post._id === action.payload._id ? action.payload : post
         ),
       };
+
+    // =======================================================================
+    // =======================================================================
+    // =======================================================================
+    // =======================================================================
+
+    case CLEANUP_FETCH_ONE:
+      return { ...state, isLoading: true, post: {} };
 
     default:
       return state;

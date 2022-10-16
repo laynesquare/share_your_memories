@@ -7,9 +7,7 @@ import {
 
 export const signin = (formData, navigate) => async (dispatch) => {
   try {
-    // sign in the user
     const { data } = await api.signin(formData);
-
     dispatch({ type: AUTH, data });
     navigate('/');
   } catch (error) {
@@ -20,11 +18,8 @@ export const signin = (formData, navigate) => async (dispatch) => {
 
 export const signup = (formData, navigate) => async (dispatch) => {
   try {
-    // sign up the user
     const { data } = await api.signup(formData);
-
     dispatch({ type: AUTH, data });
-
     navigate('/');
   } catch (error) {
     dispatch({ type: SIGNUP_ALERT_FAILED });

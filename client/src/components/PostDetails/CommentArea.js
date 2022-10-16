@@ -1,21 +1,38 @@
 import { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 import { createPostComment } from '../../actions/posts';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Typography, Box, Grid, Avatar } from '@mui/material';
+import Loading from '../Loading';
 import ForumIcon from '@mui/icons-material/Forum';
-
 import moment from 'moment';
 
-const Comment = ({ postId, comments }) => {
-  const dispatch = useDispatch();
-  const commentCreator = localStorage?.getItem('profile')
-    ? JSON.parse(localStorage.getItem('profile'))?.result
-    : { name: 'Guest', email: 'Guest@gmail.com' };
+const commentStyle = {
+  title: {
+    display: 'flex',
+    alignItems: 'center',
+    fontWeight: 'bold',
+    mb: '1rem',
+  },
 
+  perCommentBox: {
+    display: 'flex',
+    mt: '1rem',
+    flexDirection: 'revert',
+  },
+};
+
+const Comment = ({ postId, comments, isLoadingComments }) => {
+  const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem('profile'));
   const [commentPackage, setCommentPackage] = useState({
     body: '',
   });
+
+  console.log(isLoadingComments);
+  const commentCreator = localStorage?.getItem('profile')
+    ? JSON.parse(localStorage.getItem('profile'))?.result
+    : { name: 'Guest', email: 'Guest@gmail.com' };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,6 +43,9 @@ const Comment = ({ postId, comments }) => {
         creator: commentCreator,
       })
     );
+    setCommentPackage({
+      body: '',
+    });
   };
 
   const handleCommentContentChange = (e) => {
@@ -40,15 +60,7 @@ const Comment = ({ postId, comments }) => {
   return (
     <>
       <Box>
-        <Typography
-          variant="h5"
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            fontWeight: 'bold',
-            mb: '1rem',
-          }}
-        >
+        <Typography variant="h5" sx={{ ...commentStyle.title }}>
           <ForumIcon fontSize="large" /> &nbsp;
           {comments && comments.length > 1 ? (
             <>{comments.length}&nbsp;Comments</>
@@ -57,11 +69,7 @@ const Comment = ({ postId, comments }) => {
           )}
         </Typography>
 
-        <form
-          autoComplete="off"
-          onSubmit={handleSubmit}
-          // style={{ background: 'blue' }}
-        >
+        <form autoComplete="off" onSubmit={handleSubmit}>
           <Grid container sx={{ display: 'flex', flexWrap: 'nowrap' }}>
             <Grid item sx={{ mr: '1rem' }}>
               <Avatar />
@@ -80,9 +88,7 @@ const Comment = ({ postId, comments }) => {
                 <Button
                   size="large"
                   sx={{ mr: '1rem' }}
-                  onClick={() => {
-                    setCommentPackage({ body: '' });
-                  }}
+                  onClick={() => setCommentPackage({ body: '' })}
                 >
                   CANCEL
                 </Button>
@@ -91,6 +97,7 @@ const Comment = ({ postId, comments }) => {
                   variant="contained"
                   color="primary"
                   size="large"
+                  disabled={!user?.result}
                 >
                   COMMENT
                 </Button>
@@ -98,38 +105,45 @@ const Comment = ({ postId, comments }) => {
             </Grid>
           </Grid>
         </form>
-        <Box sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
-          {comments?.length
-            ? comments.map((comment, idx) => {
-                return (
-                  <Box
-                    key={comment?._id}
-                    sx={{
-                      display: 'flex',
-                      mt: '1rem',
-                      flexDirection: 'revert',
-                    }}
-                  >
-                    <Box sx={{ flexBasis: '50px', flexShrink: '0' }}>
-                      <Avatar>{comment?.creator[0]}</Avatar>
-                    </Box>
-                    <Box sx={{ flexGrow: '1', flexShrink: '0' }}>
-                      <Box sx={{ display: 'flex', flexWrap: 'nowrap' }}>
-                        <Typography sx={{ fontWeight: 'bold' }}>
-                          {comment?.creator || 'Guest'}
-                        </Typography>
-                        &nbsp; &nbsp;
-                        <Typography>{`${moment().fromNow(
-                          comment.date
-                        )} ago`}</Typography>
+
+        {isLoadingComments ? (
+          <Loading type="small" slightTopMargin />
+        ) : (
+          <>
+            <Box sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
+              {comments?.length ? (
+                comments.map((comment, idx) => {
+                  return (
+                    <Box
+                      key={comment?._id}
+                      sx={{ ...commentStyle.perCommentBox }}
+                    >
+                      <Box sx={{ flexBasis: '50px', flexShrink: '0' }}>
+                        <Avatar>{comment?.creator[0]}</Avatar>
                       </Box>
-                      <Typography>{comment?.body}</Typography>
+                      <Box sx={{ flexGrow: '1' }}>
+                        <Box sx={{ display: 'flex', flexWrap: 'nowrap' }}>
+                          <Typography sx={{ fontWeight: 'bold' }}>
+                            {comment?.creator || 'Guest'}
+                          </Typography>
+                          &nbsp; &nbsp;
+                          <Typography variant="h8">{`${moment(
+                            comment?.date
+                          ).fromNow()}`}</Typography>
+                        </Box>
+                        <Typography sx={{ maxWidth: '100%' }}>
+                          {comment?.body}
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
-                );
-              })
-            : 'Be the first one to comment.'}
-        </Box>
+                  );
+                })
+              ) : (
+                <></>
+              )}
+            </Box>
+          </>
+        )}
       </Box>
     </>
   );

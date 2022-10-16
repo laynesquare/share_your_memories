@@ -1,47 +1,75 @@
-import { useEffect, useState, createElement, useRef } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
 import {
   Box,
-  CircularProgress,
   Typography,
   Grid,
   Container,
   Avatar,
   Divider,
   Button,
-  Backdrop,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getPost } from '../../actions/posts';
-import { likePost } from '../../actions/posts';
+import { getPost, likePost, deletePost } from '../../actions/posts';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { CLEANUP_FETCH_ONE } from '../../constants/actionTypes';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Comment from './CommentArea';
 import Recommendations from './Recommendations';
+import Loading from '../Loading';
+import ImgOrSkeleton from '../ImgOrSkeleton';
 import moment from 'moment';
+
+const postDetailStyle = {
+  imgSkeleton: {
+    borderRadius: '1rem',
+    height: '100%',
+    width: '100%',
+    aspectRatio: '1/1',
+  },
+
+  imgAvatar: {
+    width: '100%',
+    borderRadius: '1rem',
+    height: '100%',
+  },
+
+  creatorCard: {
+    display: 'flex',
+    alignItems: 'center',
+    mr: '1rem',
+    border: '0.5px solid #DDDEE2',
+    borderRadius: '5px',
+    p: '1rem',
+  },
+};
 
 const PostDetails = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { postId } = useParams();
-  const { posts, isLoading } = useSelector((state) => {
-    return { ...state.posts };
+  let {
+    title,
+    message,
+    selectedFile,
+    tags,
+    likes,
+    name,
+    _id,
+    createdAt,
+    comments,
+    isLoading,
+    isLoadingComments,
+  } = useSelector((state) => {
+    const { post, isLoading, isLoadingComments } = { ...state.posts };
+    return { isLoading, ...post, isLoadingComments };
   });
-  const { comments } = posts;
 
-  const [viewWholeImg, setViewWholeImg] = useState(false);
-
-  const handleClose = () => {
-    setViewWholeImg(false);
-  };
-
-  const handleToggle = () => {
-    setViewWholeImg(!viewWholeImg);
-  };
+  const [isImgLoaded, setIsImgLoaded] = useState(false);
 
   const downloadImg = () => {
     let downloadLink = document.createElement('a');
@@ -52,24 +80,10 @@ const PostDetails = () => {
 
   useEffect(() => {
     dispatch(getPost(postId, navigate));
+    return () => dispatch({ type: CLEANUP_FETCH_ONE });
   }, [postId]);
-  console.log(posts);
 
-  if (!posts) return null;
-
-  const {
-    title,
-    message,
-    creator,
-    selectedFile,
-    tags,
-    likes,
-    name,
-    _id,
-    createdAt,
-  } = posts;
-
-  console.log(posts);
+  if (!_id) return null;
 
   const Likes = () => {
     const lengthOfLikes = likes?.length;
@@ -105,61 +119,57 @@ const PostDetails = () => {
   };
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-        }}
-      >
-        <CircularProgress size="2rem" />
-      </Box>
-    );
+    return <Loading type="big" />;
   }
+
+  const PostDetailActions = () => {
+    return (
+      <>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => dispatch(likePost(_id))}
+          disabled={!user?.result}
+          sx={{ fontWeight: 'bold' }}
+        >
+          <Likes />
+        </Button>
+
+        <Button onClick={() => downloadImg()} sx={{ fontWeight: 'bold' }}>
+          <FileDownloadOutlinedIcon fontSize="medium" /> &nbsp; Download
+        </Button>
+
+        <Button
+          size="small"
+          color="primary"
+          sx={{ fontWeight: 'bold' }}
+          onClick={() => dispatch(deletePost(_id, navigate))}
+        >
+          <DeleteIcon fontSize="medium" /> &nbsp;Delete
+        </Button>
+      </>
+    );
+  };
 
   return (
     <>
-      <Container sx={{}} maxWidth="xl">
+      <Container maxWidth="xl">
         <Grid container rowSpacing={3} columnSpacing={5}>
-          <Grid
-            item
-            xs={12}
-            sx={{
-              overflow: 'hidden',
-            }}
-          >
-            <Avatar
-              src={selectedFile}
-              sx={{
-                width: '100%',
-                borderRadius: '1rem',
-
-                height: '100%',
+          <Grid item xs={12}>
+            <ImgOrSkeleton
+              isImgLoaded={isImgLoaded}
+              setIsImgLoaded={setIsImgLoaded}
+              selectedFile={selectedFile}
+              skeletonStyle={{ ...postDetailStyle.imgSkeleton }}
+              imgStyle={{
+                ...postDetailStyle.imgAvatar,
+                display: isImgLoaded ? '' : 'none',
               }}
-            ></Avatar>
-
-            <Backdrop
-              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={viewWholeImg}
-              onClick={handleClose}
-            >
-              <Avatar
-                src={selectedFile}
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '1rem',
-                  // height: '800px',
-                }}
-              ></Avatar>
-            </Backdrop>
-            <Button onClick={handleToggle}>Show backdrop</Button>
+            />
           </Grid>
 
           <Grid item xs={8}>
-            <Grid container spacing={2} sx={{}}>
+            <Grid container spacing={2}>
               <Grid item xs={12}>
                 {Array.isArray(tags) > 0 && (
                   <Typography>{tags.map((tag) => `#${tag} `)}</Typography>
@@ -179,37 +189,11 @@ const PostDetails = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <Button
-                  size="small"
-                  color="primary"
-                  onClick={() => dispatch(likePost(_id))}
-                  disabled={!user?.result}
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  <Likes />
-                </Button>
-                <Button
-                  onClick={() => {
-                    downloadImg();
-                  }}
-                  sx={{ fontWeight: 'bold' }}
-                >
-                  <FileDownloadOutlinedIcon fontSize="medium" /> &nbsp; Download
-                </Button>
-                <Button>Paid</Button>
+                <PostDetailActions />
               </Grid>
 
               <Grid item>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    mr: '1rem',
-                    border: '0.5px solid #DDDEE2',
-                    borderRadius: '5px',
-                    p: '1rem',
-                  }}
-                >
+                <Box sx={{ ...postDetailStyle.creatorCard }}>
                   <Box sx={{ mr: '1rem' }}>
                     <Avatar>{name && name[0]}</Avatar>
                   </Box>
@@ -218,18 +202,23 @@ const PostDetails = () => {
                     <Typography
                       sx={{ fontWeight: 'bold', display: 'inline-block' }}
                     >
-                      {name && name}
+                      Created by {name && name}
                     </Typography>
                   </Box>
                 </Box>
               </Grid>
+
               <Grid item xs={12} sx={{ mt: '1rem' }}>
-                <Comment postId={postId} comments={comments} />
+                <Comment
+                  postId={postId}
+                  comments={comments}
+                  isLoadingComments={isLoadingComments}
+                />
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={4} sx={{}}>
+          <Grid item xs={4}>
             <Recommendations tags={tags} title={title} />
           </Grid>
         </Grid>

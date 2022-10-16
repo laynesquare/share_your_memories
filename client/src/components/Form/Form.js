@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   TextField,
   Button,
@@ -8,27 +6,47 @@ import {
   Grow,
   Divider,
 } from '@mui/material';
-import FileBase from 'react-file-base64';
 import { createPost, updatePost } from '../../actions/posts';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import LoginIcon from './LoginIcon.js';
 import { Box } from '@mui/system';
+import LoginIcon from './LoginIcon.js';
+import FileBase from 'react-file-base64';
+
+const formStyle = {
+  notLogged: {
+    paper: {
+      p: '1rem',
+      borderRadius: '1rem',
+    },
+
+    outerBox: {
+      justifyContent: 'center',
+      width: '100%',
+      p: '20%',
+    },
+
+    logginPrompt: {
+      textAlign: 'center',
+      letterSpacing: '0.1rem',
+      fontWeight: 'bold',
+      mb: '1rem',
+    },
+  },
+};
 
 const Form = ({ currentId, setCurrentId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('profile'));
 
-  const post = useSelector((state) => {
-    return currentId
-      ? state.posts.posts.find((p) => p._id === currentId)
-      : null;
-  });
+  const post = useSelector((state) =>
+    currentId ? state.posts.posts.find((p) => p._id === currentId) : null
+  );
 
   useEffect(() => {
-    if (post) {
-      setPostData(post);
-    }
+    if (post) setPostData(post);
   }, [post]);
 
   const [postData, setPostData] = useState({
@@ -43,7 +61,11 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
     if (currentId) {
       dispatch(
-        updatePost(currentId, { ...postData, name: user?.result?.name })
+        updatePost(currentId, {
+          ...postData,
+          name: user?.result?.name,
+          bookmark: post.bookmark,
+        })
       );
       clear();
     } else {
@@ -65,25 +87,14 @@ const Form = ({ currentId, setCurrentId }) => {
   if (!user?.result?._id && !user?.result?.googleId) {
     return (
       <Grow in>
-        <Paper sx={{ p: '1rem', borderRadius: '1rem' }}>
-          <Box
-            sx={{
-              justifyContent: 'center',
-              width: '100%',
-              p: '20%',
-            }}
-          >
+        <Paper sx={{ ...formStyle.notLogged.paper }}>
+          <Box sx={{ ...formStyle.notLogged.outerBox }}>
             <LoginIcon />
           </Box>
           <Typography
             variant="h4"
             color="primary"
-            sx={{
-              textAlign: 'center',
-              letterSpacing: '0.1rem',
-              fontWeight: 'bold',
-              mb: '1rem',
-            }}
+            sx={{ ...formStyle.notLogged.logginPrompt }}
           >
             START BY LOGIN
           </Typography>
@@ -112,9 +123,9 @@ const Form = ({ currentId, setCurrentId }) => {
             fullWidth
             value={postData.title}
             sx={{ mb: '1rem', border: 'none' }}
-            onChange={(e) => {
-              setPostData({ ...postData, title: e.target.value });
-            }}
+            onChange={(e) =>
+              setPostData({ ...postData, title: e.target.value })
+            }
           ></TextField>
           <TextField
             required
@@ -124,9 +135,9 @@ const Form = ({ currentId, setCurrentId }) => {
             fullWidth
             value={postData.message}
             sx={{ mb: '1rem' }}
-            onChange={(e) => {
-              setPostData({ ...postData, message: e.target.value });
-            }}
+            onChange={(e) =>
+              setPostData({ ...postData, message: e.target.value })
+            }
           ></TextField>
           <TextField
             required
@@ -137,17 +148,17 @@ const Form = ({ currentId, setCurrentId }) => {
             value={postData.tags}
             helperText="Note: Separate tags with commas without spaces. E.g.: tag1,tag2,tag3"
             sx={{ mb: '2rem' }}
-            onChange={(e) => {
-              setPostData({ ...postData, tags: e.target.value.split(',') });
-            }}
+            onChange={(e) =>
+              setPostData({ ...postData, tags: e.target.value.split(',') })
+            }
           ></TextField>
           <div>
             <FileBase
               type="file"
               multiple={false}
-              onDone={({ base64 }) => {
-                setPostData({ ...postData, selectedFile: base64 });
-              }}
+              onDone={({ base64 }) =>
+                setPostData({ ...postData, selectedFile: base64 })
+              }
             ></FileBase>
           </div>
           <Typography sx={{ fontSize: '0.5rem', mb: '1rem', mt: '0.2rem' }}>

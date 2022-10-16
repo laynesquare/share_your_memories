@@ -1,30 +1,13 @@
-import { useDrag } from 'react-dnd';
-import { Typography, Box, Paper } from '@mui/material';
+import { Typography, Box, Avatar, Paper } from '@mui/material';
 import { useState } from 'react';
 import { bookmarkPost } from '../../actions/posts';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import ImgOrSkeleton from '../ImgOrSkeleton';
+import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
-const DragItem = ({ post, idx }) => {
-  const dispatch = useDispatch();
+const Item = ({ post, idx }) => {
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
-  const [isImgLoaded, setIsImgLoaded] = useState(false);
-  const handleRemoveBookmark = (whatItem) => dispatch(bookmarkPost(whatItem));
-
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: post._id,
-    end: (item, monitor) => {
-      const itemDropped = monitor.didDrop();
-      const whatItem = monitor.getItemType();
-      if (itemDropped) handleRemoveBookmark(whatItem);
-    },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
 
   const overallLayout = {
     theMostOuterBox: {
@@ -80,12 +63,7 @@ const DragItem = ({ post, idx }) => {
           fontWeight: 'bold',
         },
 
-        imgSkeleton: {
-          width: '100%',
-          height: '100%',
-        },
-
-        imgAvatar: {
+        avatarImg: {
           borderRadius: '0',
           width: '100%',
           height: '100%',
@@ -107,7 +85,6 @@ const DragItem = ({ post, idx }) => {
   return (
     <Paper sx={{ ...overallLayout.itemPaper }}>
       <Box
-        ref={drag}
         sx={{ ...overallLayout.theMostOuterBox }}
         onMouseEnter={() => setIsHover(post?._id)}
         onMouseLeave={() => setIsHover(false)}
@@ -119,25 +96,19 @@ const DragItem = ({ post, idx }) => {
           </Typography>
         </Box>
         <Box sx={{ ...overallLayout.item.leftColumn }}>
-          <ImgOrSkeleton
-            isImgLoaded={isImgLoaded}
-            setIsImgLoaded={setIsImgLoaded}
-            selectedFile={post?.selectedFile}
-            skeletonStyle={{ ...overallLayout.item.leftColumn.imgSkeleton }}
-            imgStyle={{
-              ...overallLayout.item.leftColumn.imgAvatar,
-              display: isImgLoaded ? '' : 'none',
-            }}
-          />
+          <Avatar
+            src={post?.selectedFile}
+            sx={{ ...overallLayout.item.leftColumn.avatarImg }}
+          ></Avatar>
         </Box>
         <Box sx={{ ...overallLayout.item.rightColumn }}>
           <Typography fontWeight="bold">{post?.title}</Typography>
           <Typography>{post?.name}</Typography>
-          <Typography>{moment(post?.createdAt).fromNow()}</Typography>
+          <Typography sx={{}}>{moment(post?.createdAt).fromNow()}</Typography>
         </Box>
       </Box>
     </Paper>
   );
 };
 
-export default DragItem;
+export default Item;

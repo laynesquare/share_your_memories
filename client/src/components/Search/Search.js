@@ -2,7 +2,10 @@ import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostsBySearch } from '../../actions/posts';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Typography, Container, Divider } from '@mui/material';
+import Item from './Item';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import Loading from '../Loading';
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -10,42 +13,42 @@ const Search = () => {
   const [searchParams] = useSearchParams();
   const { keyword, page } = Object.fromEntries(searchParams); // transform an iterator to an object
 
-  // console.log(searchParams.entries());
-  // checking whether the object has been properly formed, which contain the search params
-
   useEffect(() => {
     dispatch(getPostsBySearch(keyword, page));
   }, [searchParams]);
 
+  const searchStyle = {
+    noSearchResultIcon: {
+      fontSize: '20rem',
+    },
+  };
+
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-        }}
-      >
-        <CircularProgress size="2rem" />
-      </Box>
-    );
+    return <Loading type="big" />;
   }
 
   return (
     <>
-      {posts.length ? (
-        posts.map((post, idx) => {
-          return (
-            <>
-              <Typography>{post.title}</Typography>
-            </>
-          );
-        })
-      ) : (
-        <Typography>No posts can be found, use another keyword.</Typography>
-      )}
-      ;
+      <Container maxWidth="md">
+        {posts.length ? (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <Typography variant="h4" fontWeight="bold">
+              Search Results
+            </Typography>
+            <Divider />
+            {posts.map((post, idx) => {
+              return <Item post={post} idx={idx} />;
+            })}
+          </Box>
+        ) : (
+          <Box textAlign="center">
+            <SentimentVeryDissatisfiedIcon
+              sx={{ ...searchStyle.noSearchResultIcon }}
+            />
+            <Typography variant="h4">No posts can be found.</Typography>
+          </Box>
+        )}
+      </Container>
     </>
   );
 };
