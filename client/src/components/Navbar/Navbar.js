@@ -21,12 +21,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+
 import decode from 'jwt-decode';
 
 const navBarStyle = {
   mostOuterBox: {
     flexGrow: 1,
     mb: '2rem',
+    minWidth: { xs: 375 },
   },
 
   toolbar: {
@@ -41,47 +43,45 @@ const navBarStyle = {
     letterSpacing: '0.1rem',
     display: 'flex',
     alignItems: 'center',
-
-    fontBox: {
-      display: { xs: 'none', sm: 'block' },
-    },
-
-    icon: {
-      mr: '1rem',
-    },
+    icon: { mr: '1rem' },
+    fontBox: { display: { xs: 'none', md: 'block' } },
   },
 
   textField: {
-    borderBottom: '1px solid grey',
-    maxWidth: '10rem',
+    transition: 'all 0.5s',
+    borderWidth: '1px 0px 1px 1px',
+    borderStyle: 'solid',
+    borderColor: '#757575',
+    borderRadius: '10px 0px 0px 10px',
+    fontSize: '0.8rem',
+    p: '0 10px',
   },
 
   userAvatar: {
-    mr: '1rem',
     width: '1.5rem',
     height: '1.5rem',
-    display: { xs: 'none', sm: 'flex' },
     fontSize: '0.8rem',
+    display: { xs: 'none', md: 'flex' },
   },
 
   userName: {
-    mr: '0.5rem',
     fontWeight: 'bold',
     whiteSpace: 'nowrap',
     letterSpacing: '0.1rem',
+    display: { xs: 'none', md: 'flex' },
   },
 
   logInLogOutBtn: {
-    backgroundImage: 'linear-gradient(45deg, #D38312 , #A83279 )',
-    border: 0,
-    borderRadius: 10,
+    backgroundImage: 'linear-gradient(45deg, #D38312 , #A83279)',
+    // bgcolor: '#365bc9',
+    flexShrink: '0',
+    borderRadius: '16px',
     color: '#DDDEE2',
     fontSize: '0.8rem',
-    textTransform: 'none',
     transition: 'all 0.3s',
     letterSpacing: '0.1rem',
     fontWeight: 'bold',
-    padding: '0.4rem 0.7rem',
+    // padding: '0.4rem 0.7rem',
     whiteSpace: 'nowrap',
 
     '&:hover': {
@@ -93,6 +93,7 @@ const navBarStyle = {
 const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const [keywordForPostSearch, setKeywordForPostSearch] = useState('');
+  const [searchInputShow, setSearchInputShow] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -140,36 +141,83 @@ const Navbar = () => {
             color="textPrimary"
             sx={{ ...navBarStyle.siteNameWithLogo }}
           >
-            <MemoryRoundedIcon sx={{ ...navBarStyle.siteNameWithLogo.icon }} />
+            <MemoryRoundedIcon
+              sx={{
+                ...navBarStyle.siteNameWithLogo.icon,
+              }}
+            />
             <Box sx={{ ...navBarStyle.siteNameWithLogo.fontBox }}>
               Share Your Memories
             </Box>
           </Typography>
-          <Box sx={{ display: 'flex' }}>
-            <InputBase
-              size="small"
-              autoComplete="off"
-              placeholder="Search something..."
-              onKeyDown={handleSearchPostByKeyword}
-              value={keywordForPostSearch}
-              onChange={(e) => setKeywordForPostSearch(e.target.value)}
-              sx={{ ...navBarStyle.textField }}
-            />
-            <Tooltip title="Search">
-              <IconButton
+
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              columnGap: '10px',
+            }}
+          >
+            <Box
+              onMouseEnter={() => setSearchInputShow(true)}
+              onMouseLeave={() => {
+                if (keywordForPostSearch) return;
+                setSearchInputShow(false);
+              }}
+              sx={{
+                display: 'flex',
+                borderRadius: '10px',
+              }}
+            >
+              <InputBase
                 size="small"
-                sx={{ mr: '0.5rem' }}
-                onClick={handleSearchPostByKeyword}
+                autoComplete="off"
+                placeholder="Search something..."
+                onKeyDown={handleSearchPostByKeyword}
+                value={keywordForPostSearch}
+                onChange={(e) => setKeywordForPostSearch(e.target.value)}
+                sx={{
+                  ...navBarStyle.textField,
+                  opacity: searchInputShow ? '1' : '0',
+                  transform: searchInputShow ? '0' : 'translateX(20%)',
+                }}
+              />
+              <Tooltip title="Search">
+                <IconButton
+                  onClick={handleSearchPostByKeyword}
+                  sx={{
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                    borderColor: '#757575',
+                    borderRadius: searchInputShow ? '0px 10px 10px 0' : '10px',
+                    transition: 'all 0.5s',
+                  }}
+                >
+                  <SearchIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+
+            <Tooltip title="Check your favorite posts">
+              <IconButton
+                onClick={handleGoToFav}
+                sx={{
+                  border: '1px solid #757575',
+                  borderRadius: '10px',
+                }}
               >
-                <SearchIcon />
+                <BookmarkIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-          </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ display: { xs: 'none', md: 'block' } }}
+            />
+
             {user?.result ? ( //does user has result?
               <>
-                <Divider orientation="vertical" flexItem sx={{ mr: '1rem' }} />
                 <Avatar
                   alt={user.result.name}
                   src={user.result.imgUrl}
@@ -182,17 +230,7 @@ const Navbar = () => {
                   {user?.result.name}
                 </Typography>
 
-                <Tooltip
-                  title="Check your favorite posts"
-                  fontFamily="Montserrat"
-                  sx={{ fontFamily: 'Montserrat', fontWeight: 'lighter' }}
-                >
-                  <IconButton onClick={handleGoToFav} sx={{ mr: '0.5rem' }}>
-                    <BookmarkIcon size="small" />
-                  </IconButton>
-                </Tooltip>
-
-                <Divider orientation="vertical" flexItem sx={{ mr: '1rem' }} />
+                <Divider orientation="vertical" flexItem sx={{}} />
 
                 <Button
                   variant="contained"
@@ -204,7 +242,7 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Divider orientation="vertical" flexItem sx={{ mr: '1rem' }} />
+                {/* <Divider orientation="vertical" flexItem sx={{}} /> */}
 
                 <Button
                   component={Link}

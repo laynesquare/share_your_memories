@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid } from '@mui/material';
 import Loading from '../Loading';
 import Post from './Post/Post';
 import NotFound from '../NotFound';

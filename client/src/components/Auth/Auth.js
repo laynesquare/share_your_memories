@@ -86,7 +86,7 @@ const Auth = () => {
 
   return (
     <Grow in>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" sx={{ minWidth: { xs: 375 } }}>
         <Snackbar open={authFailedAlert?.state}>
           <Alert severity="error" sx={{ width: '100%' }}>
             {authFailedAlert.msg}

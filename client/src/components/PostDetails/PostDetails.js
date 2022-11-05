@@ -54,6 +54,7 @@ const PostDetails = () => {
   const { postId } = useParams();
   let {
     title,
+    creator,
     message,
     selectedFile,
     tags,
@@ -80,17 +81,18 @@ const PostDetails = () => {
 
   useEffect(() => {
     dispatch(getPost(postId, navigate));
-    return () => dispatch({ type: CLEANUP_FETCH_ONE });
-  }, [postId]);
 
-  if (!_id) return null;
+    return () => {
+      dispatch({ type: CLEANUP_FETCH_ONE });
+    };
+  }, [postId]);
 
   const Likes = () => {
     const lengthOfLikes = likes?.length;
     if (lengthOfLikes > 0) {
       return likes.includes(user?.result?._id || user?.result?.googleId) ? (
         <>
-          <ThumbUpAltIcon fontSize="medium" />
+          <ThumbUpAltIcon fontSize="small" />
           &nbsp;
           {lengthOfLikes > 2
             ? `You, and ${lengthOfLikes - 1} others`
@@ -101,7 +103,7 @@ const PostDetails = () => {
         </>
       ) : (
         <>
-          <ThumbUpAltOutlinedIcon fontSize="medium" />
+          <ThumbUpAltOutlinedIcon fontSize="small" />
           &nbsp;
           {lengthOfLikes === 1
             ? `${lengthOfLikes} Like`
@@ -112,21 +114,20 @@ const PostDetails = () => {
 
     return (
       <>
-        <ThumbUpAltOutlinedIcon fontSize="medium" />
+        <ThumbUpAltOutlinedIcon fontSize="small" />
         &nbsp; {lengthOfLikes} Like
       </>
     );
   };
 
-  if (isLoading) {
-    return <Loading type="big" />;
-  }
+  if (isLoading) return <Loading type="big" />;
+
+  if (!_id) return navigate('/posts', { replace: true });
 
   const PostDetailActions = () => {
     return (
       <>
         <Button
-          size="small"
           color="primary"
           onClick={() => dispatch(likePost(_id))}
           disabled={!user?.result}
@@ -136,25 +137,26 @@ const PostDetails = () => {
         </Button>
 
         <Button onClick={() => downloadImg()} sx={{ fontWeight: 'bold' }}>
-          <FileDownloadOutlinedIcon fontSize="medium" /> &nbsp; Download
+          <FileDownloadOutlinedIcon fontSize="small" /> &nbsp; Download
         </Button>
-
-        <Button
-          size="small"
-          color="primary"
-          sx={{ fontWeight: 'bold' }}
-          onClick={() => dispatch(deletePost(_id, navigate))}
-        >
-          <DeleteIcon fontSize="medium" /> &nbsp;Delete
-        </Button>
+        {(user?.result?.googleId === creator ||
+          user?.result?._id === creator) && (
+          <Button
+            color="primary"
+            sx={{ fontWeight: 'bold' }}
+            onClick={() => dispatch(deletePost(_id, navigate))}
+          >
+            <DeleteIcon fontSize="small" /> &nbsp;Delete
+          </Button>
+        )}
       </>
     );
   };
 
   return (
     <>
-      <Container maxWidth="xl">
-        <Grid container rowSpacing={3} columnSpacing={5}>
+      <Container maxWidth="xl" sx={{ minWidth: { xs: 375 } }}>
+        <Grid container rowSpacing={3}>
           <Grid item xs={12}>
             <ImgOrSkeleton
               isImgLoaded={isImgLoaded}
@@ -168,58 +170,89 @@ const PostDetails = () => {
             />
           </Grid>
 
-          <Grid item xs={8}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                {Array.isArray(tags) > 0 && (
-                  <Typography>{tags.map((tag) => `#${tag} `)}</Typography>
-                )}
-                <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                  {title}
-                </Typography>
-                <Typography>Shared {moment(createdAt).fromNow()}</Typography>
-              </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: 'flex',
+              gap: { xs: '3rem', lg: '2rem' },
+              flexWrap: { xs: 'wrap', lg: 'nowrap' },
+            }}
+          >
+            <Box
+              sx={{
+                flexGrow: {
+                  xs: '1',
+                },
 
-              <Grid item xs={12}>
-                <Divider />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Typography variant="h6">{message}</Typography>
-              </Grid>
-
-              <Grid item xs={12}>
-                <PostDetailActions />
-              </Grid>
-
-              <Grid item>
-                <Box sx={{ ...postDetailStyle.creatorCard }}>
-                  <Box sx={{ mr: '1rem' }}>
-                    <Avatar>{name && name[0]}</Avatar>
-                  </Box>
-                  <Divider orientation="vertical" flexItem />
-                  <Box sx={{ ml: '1rem' }}>
+                // bgcolor: 'red',
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  {Array.isArray(tags) > 0 && (
                     <Typography
-                      sx={{ fontWeight: 'bold', display: 'inline-block' }}
+                      variant="body2"
+                      sx={{ wordBreak: 'break-word' }}
                     >
-                      Created by {name && name}
+                      {tags.map((tag) => `#${tag} `)}
                     </Typography>
+                  )}
+                  <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                    {title}
+                  </Typography>
+                  <Typography variant="body2">
+                    Shared {moment(createdAt).fromNow()}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Divider />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography>{message}</Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <PostDetailActions />
+                </Grid>
+
+                <Grid item>
+                  <Box sx={{ ...postDetailStyle.creatorCard }}>
+                    <Box sx={{ mr: '1rem' }}>
+                      <Avatar>{name && name[0]}</Avatar>
+                    </Box>
+                    <Divider orientation="vertical" flexItem />
+                    <Box sx={{ ml: '1rem' }}>
+                      <Typography
+                        sx={{ fontWeight: 'bold', display: 'inline-block' }}
+                      >
+                        Created by {name && name}
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              </Grid>
+                </Grid>
 
-              <Grid item xs={12} sx={{ mt: '1rem' }}>
-                <Comment
-                  postId={postId}
-                  comments={comments}
-                  isLoadingComments={isLoadingComments}
-                />
+                <Grid item xs={12} sx={{ mt: '1rem' }}>
+                  <Comment
+                    postId={postId}
+                    comments={comments}
+                    isLoadingComments={isLoadingComments}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </Grid>
+            </Box>
 
-          <Grid item xs={4}>
-            <Recommendations tags={tags} title={title} />
+            <Box
+              sx={{
+                width: { width: '100%', sm: '420px' },
+                flexGrow: { xs: '1', lg: '0' },
+                flexShrink: { xs: '1', lg: '0' },
+              }}
+            >
+              <Recommendations tags={tags} title={title} />
+            </Box>
           </Grid>
         </Grid>
       </Container>

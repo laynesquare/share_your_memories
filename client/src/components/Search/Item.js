@@ -1,8 +1,7 @@
 import { Typography, Box, Avatar, Paper } from '@mui/material';
 import { useState } from 'react';
-import { bookmarkPost } from '../../actions/posts';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import decodeAndCutString from '../../utils/decodeAndCutString';
 import moment from 'moment';
 
 const Item = ({ post, idx }) => {
@@ -12,16 +11,12 @@ const Item = ({ post, idx }) => {
   const overallLayout = {
     theMostOuterBox: {
       display: 'flex',
+      flexDirection: { xs: 'column', sm: 'row' },
       gap: '10px',
       position: 'relative',
       p: '10px',
-      '&:hover': {
-        cursor: 'pointer',
-      },
-    },
-
-    itemPaper: {
-      minWidth: '500px',
+      borderRadius: '12px',
+      '&:hover': { cursor: 'pointer' },
     },
 
     mostLeftColumn: {
@@ -83,29 +78,31 @@ const Item = ({ post, idx }) => {
   };
 
   return (
-    <Paper sx={{ ...overallLayout.itemPaper }}>
-      <Box
-        sx={{ ...overallLayout.theMostOuterBox }}
-        onMouseEnter={() => setIsHover(post?._id)}
-        onMouseLeave={() => setIsHover(false)}
-        onClick={() => navigate(`/posts/detail/${post?._id}`)}
-      >
-        <Box sx={{ ...overallLayout.mostLeftColumn }}>
-          <Typography variant="h5" fontWeight="bold">
-            {idx + 1}
-          </Typography>
-        </Box>
-        <Box sx={{ ...overallLayout.item.leftColumn }}>
-          <Avatar
-            src={post?.selectedFile}
-            sx={{ ...overallLayout.item.leftColumn.avatarImg }}
-          ></Avatar>
-        </Box>
-        <Box sx={{ ...overallLayout.item.rightColumn }}>
-          <Typography fontWeight="bold">{post?.title}</Typography>
-          <Typography>{post?.name}</Typography>
-          <Typography sx={{}}>{moment(post?.createdAt).fromNow()}</Typography>
-        </Box>
+    <Paper
+      sx={{ ...overallLayout.theMostOuterBox }}
+      onMouseEnter={() => setIsHover(post?._id)}
+      onMouseLeave={() => setIsHover(false)}
+      onClick={() => navigate(`/posts/detail/${post?._id}`)}
+    >
+      <Box sx={{ ...overallLayout.mostLeftColumn }}>
+        <Typography variant="h5" fontWeight="bold">
+          {idx + 1}
+        </Typography>
+      </Box>
+      <Box sx={{ ...overallLayout.item.leftColumn }}>
+        <Avatar
+          src={post?.selectedFile}
+          sx={{ ...overallLayout.item.leftColumn.avatarImg }}
+        ></Avatar>
+      </Box>
+      <Box sx={{ ...overallLayout.item.rightColumn }}>
+        <Typography fontWeight="bold">
+          {decodeAndCutString(post?.title, 100)}
+        </Typography>
+        <Typography variant="body2">{post?.name}</Typography>
+        <Typography variant="caption">
+          {moment(post?.createdAt).fromNow()}{' '}
+        </Typography>
       </Box>
     </Paper>
   );

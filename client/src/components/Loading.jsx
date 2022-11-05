@@ -16,7 +16,7 @@ const Loading = ({ type, slightTopMargin }) => {
           mt: slightTopMargin ? '1rem' : '',
         }}
       >
-        <CircularProgress size={type === 'big' ? '3rem' : '2rem'} />
+        <CircularProgress size={type === 'big' ? '2rem' : '2rem'} />
       </Box>
     </>
   );

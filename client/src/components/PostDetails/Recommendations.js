@@ -4,22 +4,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getRecommendedVids } from '../../actions/recommendations';
 import { useLocation } from 'react-router-dom';
 import { CLEANUP_RECOMMEND_VIDS } from '../../constants/actionTypes';
+import decodeAndCutString from '../../utils/decodeAndCutString';
 import recVid from './recVid.json';
 import moment from 'moment';
 import Loading from '../Loading';
 import NotFound from '../NotFound';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const recStyle = {
   chipStack: {
     flexWrap: 'wrap',
     bgcolor: 'purle',
-    p: '0 0 0rem 0',
     flexDirection: 'row',
     justifyContent: 'stretch',
+    gap: '1rem',
+    mb: '1rem',
 
     chip: {
       fontWeight: 'bold',
-      m: '0rem 1rem 1rem 0',
       flexGrow: '1',
       overflow: 'hidden',
     },
@@ -29,11 +32,20 @@ const recStyle = {
     mostOuter: {
       display: 'flex',
       cursor: 'pointer',
-      mt: '0.5rem',
+      gap: '8px',
+      flexWrap: {
+        xs: 'wrap',
+        sm: 'nowrap',
+      },
     },
 
     leftColumn: {
-      flex: '0 0 260px',
+      flex: {
+        xs: '0 0 100%',
+        sm: '0 0 300px',
+        lg: '0 0 168px',
+      },
+
       position: 'relative',
     },
 
@@ -54,7 +66,7 @@ const recStyle = {
       position: 'absolute',
       transition: 'ease-in-out 0.3s',
       zIndex: '2',
-      fontSize: '20px',
+      fontSize: '1rem',
       fontWeight: 'bold',
     },
 
@@ -70,8 +82,8 @@ const recStyle = {
 
     imgPerSe: {
       transition: 'ease-in-out 0.3s',
-      width: '250px',
-      maxHeight: '140.63px',
+      width: '100%',
+      height: '100%',
     },
   },
 };
@@ -79,7 +91,6 @@ const recStyle = {
 const ChipForSearch = ({
   chipTitle,
   onClickCallback,
-  nowSelected,
   sequence,
   selectedChip,
 }) => {
@@ -115,6 +126,8 @@ const handleClickRecommendation = (video, channel) => {
 const Recommendations = ({ title, tags }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const theme = useTheme();
+  const mediumSizedWindow = useMediaQuery(theme.breakpoints.down('lg'));
   let { isLoading, vids } = useSelector((state) => state.recommendations);
   const [isHover, setIsHover] = useState(false);
   const [selectedChip, setSelectedChip] = useState(-1);
@@ -126,16 +139,16 @@ const Recommendations = ({ title, tags }) => {
 
   console.log(vids);
 
-  const decodeAndCutString = (type, text) => {
-    let cleanerText = text;
-    if (type === 'title' && text.length > 54) {
-      cleanerText = text.substring(0, 54) + ' ...';
-    } else if (type === 'channel' && text.length > 39) {
-      cleanerText = text.substring(0, 39) + ' ...';
-    }
-    cleanerText = cleanerText.replace(/&#39;/g, "'");
-    return cleanerText;
-  };
+  // const decodeAndCutString = (type, text) => {
+  //   let cleanerText = text.replace(/&#39;/g, "'");
+  //   if (mediumSizedWindow) return cleanerText;
+  //   if (type === 'title') {
+  //     cleanerText = text.substring(0, 50) + ' ...';
+  //   } else if (type === 'channel') {
+  //     cleanerText = text.substring(0, 30) + ' ...';
+  //   }
+  //   return cleanerText;
+  // };
 
   useEffect(() => {
     dispatch(getRecommendedVids(title));
@@ -143,7 +156,7 @@ const Recommendations = ({ title, tags }) => {
   }, [location]);
 
   return (
-    <Box>
+    <Box sx={{}}>
       <Box>
         <Stack sx={{ ...recStyle.chipStack }}>
           <ChipForSearch
@@ -169,14 +182,20 @@ const Recommendations = ({ title, tags }) => {
         </Stack>
       </Box>
 
-      <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: { xs: '2rem', sm: '6px' },
+        }}
+      >
         {isLoading ? (
           <Loading type="small" slightTopMargin />
         ) : (
           <>
             {/* do we have any videos from the api search, if no then its either
             actual no results or quota limit exceeded */}
-            {/* {!recVid.items.length > 0 ?  */}
+            {/* {!recVid.items.length > 0 ? ( */}
             {!vids.length > 0 ? (
               <NotFound
                 text="No videos or search quota limit exceeded."
@@ -219,22 +238,28 @@ const Recommendations = ({ title, tags }) => {
                           src={item.snippet.thumbnails.medium.url}
                           sx={{
                             ...recStyle.imgBox.imgPerSe,
-                            filter: isHover === idx ? 'brightness(50%)' : '',
+                            filter: isHover === idx ? 'brightness(10%)' : '',
                           }}
                         ></Box>
                       </Box>
                     </Box>
 
                     <Box sx={{ ...recStyle.perVideoBox.rightColumn }}>
-                      <Typography sx={{ fontWeight: 'bold' }}>
-                        {decodeAndCutString('title', item.snippet.title)}
+                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                        {decodeAndCutString(
+                          item.snippet.title,
+                          50,
+                          mediumSizedWindow
+                        )}
                       </Typography>
-                      <Typography>
-                        {item.snippet.channelTitle > 40
-                          ? item.snippet.channelTitle.substring(0, 39)
-                          : item.snippet.channelTitle}
+                      <Typography variant="body2">
+                        {decodeAndCutString(
+                          item.snippet.channelTitle,
+                          30,
+                          mediumSizedWindow
+                        )}
                       </Typography>
-                      <Typography>
+                      <Typography variant="body2">
                         {moment(item.snippet.publishedAt).fromNow()}
                       </Typography>
                     </Box>

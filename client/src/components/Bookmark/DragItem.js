@@ -1,15 +1,26 @@
 import { useDrag } from 'react-dnd';
-import { Typography, Box, Paper } from '@mui/material';
+import {
+  Typography,
+  Box,
+  Paper,
+  IconButton,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 import { useState } from 'react';
 import { bookmarkPost } from '../../actions/posts';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import decodeAndCutString from '../../utils/decodeAndCutString';
 import ImgOrSkeleton from '../ImgOrSkeleton';
 import moment from 'moment';
 
 const DragItem = ({ post, idx }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const mediumSizedWindow = useMediaQuery(theme.breakpoints.down('lg'));
   const [isHover, setIsHover] = useState(false);
   const [isImgLoaded, setIsImgLoaded] = useState(false);
   const handleRemoveBookmark = (whatItem) => dispatch(bookmarkPost(whatItem));
@@ -29,28 +40,29 @@ const DragItem = ({ post, idx }) => {
   const overallLayout = {
     theMostOuterBox: {
       display: 'flex',
+      flexDirection: { xs: 'column', sm: 'row' },
       gap: '10px',
       position: 'relative',
       p: '10px',
-      '&:hover': {
-        cursor: 'pointer',
-      },
-    },
-
-    itemPaper: {
-      minWidth: '500px',
+      borderRadius: '12px',
+      '&:hover': { cursor: 'pointer' },
     },
 
     mostLeftColumn: {
+      position: 'relative',
       m: 'auto 0px',
       flexBasis: '30px',
       textAlign: 'center',
       flexShrink: '0',
+      index: {
+        '&::before': { xs: { content: "'- '" }, sm: { content: "''" } },
+        '&::after': { xs: { content: "' -'" }, sm: { content: "''" } },
+      },
     },
 
     item: {
       leftColumn: {
-        flexBasis: '150px',
+        flexBasis: '130px',
         flexShrink: '0',
         aspectRatio: '3/2',
         position: 'relative',
@@ -76,7 +88,7 @@ const DragItem = ({ post, idx }) => {
           position: 'absolute',
           transition: 'ease-in-out 0.3s',
           zIndex: '2',
-          fontSize: '20px',
+          fontSize: '1rem',
           fontWeight: 'bold',
         },
 
@@ -105,37 +117,67 @@ const DragItem = ({ post, idx }) => {
   };
 
   return (
-    <Paper sx={{ ...overallLayout.itemPaper }}>
-      <Box
-        ref={drag}
-        sx={{ ...overallLayout.theMostOuterBox }}
-        onMouseEnter={() => setIsHover(post?._id)}
-        onMouseLeave={() => setIsHover(false)}
-        onClick={() => navigate(`/posts/detail/${post?._id}`)}
-      >
-        <Box sx={{ ...overallLayout.mostLeftColumn }}>
-          <Typography variant="h5" fontWeight="bold">
-            {idx + 1}
-          </Typography>
-        </Box>
-        <Box sx={{ ...overallLayout.item.leftColumn }}>
-          <ImgOrSkeleton
-            isImgLoaded={isImgLoaded}
-            setIsImgLoaded={setIsImgLoaded}
-            selectedFile={post?.selectedFile}
-            skeletonStyle={{ ...overallLayout.item.leftColumn.imgSkeleton }}
-            imgStyle={{
-              ...overallLayout.item.leftColumn.imgAvatar,
-              display: isImgLoaded ? '' : 'none',
-            }}
-          />
-        </Box>
-        <Box sx={{ ...overallLayout.item.rightColumn }}>
-          <Typography fontWeight="bold">{post?.title}</Typography>
-          <Typography>{post?.name}</Typography>
-          <Typography>{moment(post?.createdAt).fromNow()}</Typography>
-        </Box>
+    <Paper
+      ref={drag}
+      sx={{ ...overallLayout.theMostOuterBox }}
+      onMouseEnter={() => setIsHover(post?._id)}
+      onMouseLeave={() => setIsHover(false)}
+      onClick={() => navigate(`/posts/detail/${post?._id}`)}
+    >
+      <Box sx={{ ...overallLayout.mostLeftColumn }}>
+        <Typography
+          fontWeight="bold"
+          variant="h5"
+          sx={{ ...overallLayout.mostLeftColumn.index }}
+        >
+          {idx + 1}
+        </Typography>
       </Box>
+      <Box sx={{ ...overallLayout.item.leftColumn }}>
+        <ImgOrSkeleton
+          isImgLoaded={isImgLoaded}
+          setIsImgLoaded={setIsImgLoaded}
+          selectedFile={post?.selectedFile}
+          skeletonStyle={{ ...overallLayout.item.leftColumn.imgSkeleton }}
+          imgStyle={{
+            ...overallLayout.item.leftColumn.imgAvatar,
+            display: isImgLoaded ? '' : 'none',
+          }}
+        />
+      </Box>
+      <Box sx={{ ...overallLayout.item.rightColumn }}>
+        <Typography fontWeight="bold">
+          {decodeAndCutString(post?.title, 100)}
+        </Typography>
+        <Typography variant="body2">{post?.name}</Typography>
+        <Typography variant="caption">
+          {moment(post?.createdAt).fromNow()}
+        </Typography>
+      </Box>
+
+      {mediumSizedWindow && (
+        <>
+          <Box
+            sx={{
+              display: 'flex',
+              position: { xs: 'absolute', sm: 'relative' },
+              top: '0',
+              right: '0',
+              m: { xs: '8px', sm: '0' },
+            }}
+          >
+            <IconButton
+              color="primary"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              sx={{ m: 'auto' }}
+            >
+              <BookmarkIcon />
+            </IconButton>
+          </Box>
+        </>
+      )}
     </Paper>
   );
 };

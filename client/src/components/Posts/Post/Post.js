@@ -1,12 +1,9 @@
 import {
   Card,
   CardContent,
-  CardMedia,
   Button,
   Typography,
   Grow,
-  Skeleton,
-  Avatar,
   ButtonBase,
   Box,
   Tooltip,
@@ -25,6 +22,10 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import moment from 'moment';
 
 const postStyle = {
+  mostOuterBox: {
+    position: 'relative',
+  },
+
   postBaseBtn: {
     display: 'block',
     width: '100%',
@@ -88,7 +89,7 @@ const postStyle = {
         width: '100%',
         height: '80%',
         background:
-          'linear-gradient(0deg, rgba(46,48,48,1) 0%, rgba(46,48,48,0.9262079831932774) 49%, rgba(46,48,48,0) 100%)',
+          'linear-gradient(0deg, rgba(44,45,49,1) 0%, rgba(46,48,48,0) 100%)',
         left: '0',
         transform: 'translateY(-100%)',
       },
@@ -140,15 +141,17 @@ const Post = ({ post, setCurrentId }) => {
 
   return (
     <Grow in={true}>
-      <Card sx={{ position: 'relative' }}>
+      <Card sx={{ ...postStyle.mostOuterBox }}>
         {user?.result?._id === post.creator && (
-          <Button
-            color="primary"
-            sx={{ ...postStyle.moreBtn }}
-            onClick={() => setCurrentId(post._id)}
-          >
-            <MoreHorizIcon fontSize="medium" />
-          </Button>
+          <Tooltip title="Edit the post">
+            <Button
+              color="primary"
+              sx={{ ...postStyle.moreBtn }}
+              onClick={() => setCurrentId(post._id)}
+            >
+              <MoreHorizIcon fontSize="medium" />
+            </Button>
+          </Tooltip>
         )}
 
         <ButtonBase
@@ -177,11 +180,16 @@ const Post = ({ post, setCurrentId }) => {
           <CardContent sx={{ ...postStyle.cardContent }}>
             <Typography
               color="textSecondary"
-              sx={{ fontSize: '0.8rem', textAlign: 'left' }}
+              variant="caption"
+              sx={{ textAlign: 'left', display: 'block' }}
             >
               {Array.isArray(post.tags) && post.tags.map((tag) => `#${tag} `)}
             </Typography>
-            <Typography gutterBottom variant="h5" sx={{ textAlign: 'left' }}>
+            <Typography
+              gutterBottom
+              variant="h6"
+              sx={{ textAlign: 'left', fontWeight: 'bold' }}
+            >
               {post.title}
             </Typography>
             <Typography color="textSecondary" sx={{ textAlign: 'left' }}>
@@ -242,13 +250,9 @@ const Post = ({ post, setCurrentId }) => {
                   {post?.bookmark?.find(
                     (bookmarkUser) => bookmarkUser === user?.result?._id
                   ) ? (
-                    <>
-                      <BookmarkIcon fontSize="small" />
-                    </>
+                    <BookmarkIcon fontSize="small" />
                   ) : (
-                    <>
-                      <TurnedInNotIcon fontSize="small" />
-                    </>
+                    <TurnedInNotIcon fontSize="small" />
                   )}
                 </Button>
               </Tooltip>

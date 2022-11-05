@@ -15,6 +15,33 @@ export const mainTheme = createTheme({
         },
       },
     },
+
+    MuiSpeedDial: {
+      defaultProps: {
+        FabProps: {
+          sx: {
+            backgroundImage: 'linear-gradient(45deg, #D38312 , #A83279)',
+            borderRadius: '100%',
+            color: '#DDDEE2',
+            width: '50px',
+            height: '50px',
+          },
+        },
+      },
+      styleOverrides: {
+        root: {},
+      },
+    },
+  },
+
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
   },
 
   palette: {

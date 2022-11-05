@@ -17,6 +17,7 @@ const postSchema = mongoose.Schema({
     },
   ],
   createdAt: { type: Date, default: new Date() },
+  img: { data: Buffer, contentType: String },
 });
 
 const PostMessage = mongoose.model('PostMessage', postSchema);

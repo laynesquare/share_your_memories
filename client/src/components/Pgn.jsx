@@ -10,9 +10,7 @@ const Pgn = ({ page }) => {
   const { numberOfPages } = useSelector((state) => state.posts);
 
   useEffect(() => {
-    if (page) {
-      dispatch(getPosts(page)); //! Main method by which we get the posts and of the correct sequence.
-    }
+    if (page) dispatch(getPosts(page)); //! Main method by which we get the posts and of the correct sequence.
   }, [page]);
 
   return (

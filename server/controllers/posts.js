@@ -76,9 +76,10 @@ export const getPostsBySearch = async (req, res) => {
 };
 
 export const createPost = async (req, res) => {
-  const body = req.body; //req equals to "newpost" sent from front-end
+  const body = req.body;
+  console.log(req.userId, 'auth');
   const newPost = new PostMessage({ ...body, creator: req.userId });
-  //body per se is an object.
+
   try {
     await newPost.save();
     res.status(201).json(newPost);
@@ -151,9 +152,17 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   const { id } = req.params;
+  const userId = req.userId;
 
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No post with id: ${id}`);
+
+  const { creator } = await PostMessage.findById(id);
+
+  console.log(userId, creator);
+
+  if (creator !== userId)
+    return res.status(204).json({ msg: 'not the creator of the post' });
 
   await PostMessage.findByIdAndRemove(id);
 

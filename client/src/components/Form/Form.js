@@ -15,24 +15,17 @@ import LoginIcon from './LoginIcon.js';
 import FileBase from 'react-file-base64';
 
 const formStyle = {
-  notLogged: {
-    paper: {
-      p: '1rem',
-      borderRadius: '1rem',
-    },
+  mostOuterPaper: {
+    p: '1.5rem',
+    borderRadius: '1rem',
+    overflowX: 'hidden',
+  },
 
-    outerBox: {
-      justifyContent: 'center',
-      width: '100%',
-      p: '20%',
-    },
-
-    logginPrompt: {
-      textAlign: 'center',
-      letterSpacing: '0.1rem',
-      fontWeight: 'bold',
-      mb: '1rem',
-    },
+  logginPrompt: {
+    textAlign: 'center',
+    letterSpacing: '0.1rem',
+    fontWeight: 'bold',
+    mb: '1rem',
   },
 };
 
@@ -87,19 +80,19 @@ const Form = ({ currentId, setCurrentId }) => {
   if (!user?.result?._id && !user?.result?.googleId) {
     return (
       <Grow in>
-        <Paper sx={{ ...formStyle.notLogged.paper }}>
-          <Box sx={{ ...formStyle.notLogged.outerBox }}>
+        <Paper sx={{ ...formStyle.mostOuterPaper }}>
+          <Box sx={{ p: '20%' }}>
             <LoginIcon />
           </Box>
           <Typography
             variant="h4"
             color="primary"
-            sx={{ ...formStyle.notLogged.logginPrompt }}
+            sx={{ ...formStyle.logginPrompt }}
           >
             START BY LOGIN
           </Typography>
           <Divider sx={{ mb: '1rem' }} />
-          <Typography sx={{ textAlign: 'justify' }}>
+          <Typography variant="body1" sx={{ textAlign: 'justify' }}>
             Log in to share your memories with the world and give a thumbs up to
             your favorite memories.
           </Typography>
@@ -110,7 +103,7 @@ const Form = ({ currentId, setCurrentId }) => {
 
   return (
     <Grow in>
-      <Paper sx={{ p: '1.5rem', borderRadius: '1rem' }}>
+      <Paper sx={{ ...formStyle.mostOuterPaper }}>
         <form autoComplete="off" onSubmit={handleSubmit}>
           <Typography variant="h4" gutterBottom sx={{ textAlign: 'center' }}>
             {currentId ? 'Edit' : 'Create'} a memory
@@ -152,7 +145,7 @@ const Form = ({ currentId, setCurrentId }) => {
               setPostData({ ...postData, tags: e.target.value.split(',') })
             }
           ></TextField>
-          <div>
+          <Box>
             <FileBase
               type="file"
               multiple={false}
@@ -160,8 +153,11 @@ const Form = ({ currentId, setCurrentId }) => {
                 setPostData({ ...postData, selectedFile: base64 })
               }
             ></FileBase>
-          </div>
-          <Typography sx={{ fontSize: '0.5rem', mb: '1rem', mt: '0.2rem' }}>
+          </Box>
+          <Typography
+            variant="caption"
+            sx={{ mb: '1rem', mt: '0.2rem', display: 'block' }}
+          >
             Note:
             <br />
             <li>

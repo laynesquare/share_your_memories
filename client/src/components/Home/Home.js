@@ -19,8 +19,8 @@ const Home = () => {
   const page = query.get('page') || 1;
 
   return (
-    <Container maxWidth="xl" sx={{ mb: '2rem' }}>
-      <div>
+    <Container maxWidth="xl" sx={{ mb: '2rem', minWidth: { xs: 375 } }}>
+      <Box>
         <Grow in>
           <Grid
             container
@@ -32,7 +32,17 @@ const Home = () => {
               <Posts setCurrentId={setCurrentId} page={page} />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              sx={{
+                position: 'sticky',
+                top: '5px',
+                alignSelf: 'flex-start',
+              }}
+            >
               <Box sx={{ mb: '2rem' }}>
                 <Form currentId={currentId} setCurrentId={setCurrentId} />
               </Box>
@@ -42,7 +52,7 @@ const Home = () => {
             </Grid>
           </Grid>
         </Grow>
-      </div>
+      </Box>
     </Container>
   );
 };

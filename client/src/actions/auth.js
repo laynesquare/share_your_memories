@@ -1,9 +1,9 @@
-import * as api from '../api';
 import {
   AUTH,
   LOGIN_ALERT_FAILED,
   SIGNUP_ALERT_FAILED,
 } from '../constants/actionTypes';
+import * as api from '../api';
 
 export const signin = (formData, navigate) => async (dispatch) => {
   try {
