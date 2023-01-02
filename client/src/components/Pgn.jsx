@@ -1,16 +1,15 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Pagination, PaginationItem } from '@mui/material';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { getPosts } from '../actions/posts';
+import { Link } from 'react-router-dom';
 
 const Pgn = ({ page }) => {
   const dispatch = useDispatch();
   const { numberOfPages } = useSelector((state) => state.posts);
 
   useEffect(() => {
-    if (page) dispatch(getPosts(page)); //! Main method by which we get the posts and of the correct sequence.
+    if (page) dispatch(getPosts(page));
   }, [page]);
 
   return (
@@ -20,7 +19,6 @@ const Pgn = ({ page }) => {
         page={Number(page) || 1}
         variant="outlined"
         color="primary"
-        //Create
         renderItem={(item) => {
           return (
             <PaginationItem

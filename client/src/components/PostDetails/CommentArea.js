@@ -1,44 +1,30 @@
-import { useEffect, useState } from 'react';
 import {
-  TextField,
-  Button,
-  Accordion,
   AccordionSummary,
   AccordionDetails,
+  Typography,
+  TextField,
+  Accordion,
+  Button,
+  Avatar,
+  Grid,
+  Box,
 } from '@mui/material';
 import { createPostComment } from '../../actions/posts';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Typography, Box, Grid, Avatar } from '@mui/material';
-import Loading from '../Loading';
-import ForumIcon from '@mui/icons-material/Forum';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import moment from 'moment';
-
 import { useTheme } from '@mui/material/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useMediaQuery from '@mui/material/useMediaQuery';
-
-const commentStyle = {
-  title: {
-    display: 'flex',
-    alignItems: 'center',
-    fontWeight: 'bold',
-    // mb: '1rem',
-  },
-
-  perCommentBox: {
-    display: 'flex',
-    mt: '1rem',
-    flexDirection: 'revert',
-  },
-};
+import ForumIcon from '@mui/icons-material/Forum';
+import Loading from '../Loading';
+import moment from 'moment';
 
 const Comment = ({ postId, comments, isLoadingComments }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const onWiderScreen = useMediaQuery(theme.breakpoints.up('lg'));
-  const user = JSON.parse(localStorage.getItem('profile'));
-  const [openComment, setOpenComment] = useState(onWiderScreen);
   const [commentPackage, setCommentPackage] = useState({ body: '' });
+  const onWiderScreen = useMediaQuery(theme.breakpoints.up('lg'));
+  const [openComment, setOpenComment] = useState(onWiderScreen);
 
   const commentCreator = localStorage?.getItem('profile')
     ? JSON.parse(localStorage.getItem('profile'))?.result
@@ -46,7 +32,7 @@ const Comment = ({ postId, comments, isLoadingComments }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!commentPackage?.body) alert('say something at least');
+    if (!commentPackage?.body) return;
     dispatch(
       createPostComment(postId, { ...commentPackage, creator: commentCreator })
     );
@@ -58,11 +44,6 @@ const Comment = ({ postId, comments, isLoadingComments }) => {
 
   useEffect(() => setOpenComment(onWiderScreen), [onWiderScreen]);
 
-  //
-  //
-  // debounce
-  //
-  //
   return (
     <>
       <Box>
@@ -113,7 +94,7 @@ const Comment = ({ postId, comments, isLoadingComments }) => {
                       variant="contained"
                       color="primary"
                       size="small"
-                      disabled={!user?.result}
+                      disabled={commentPackage.body === ''}
                     >
                       COMMENT
                     </Button>
@@ -127,36 +108,38 @@ const Comment = ({ postId, comments, isLoadingComments }) => {
             ) : (
               <>
                 <Box sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
-                  {comments?.length ? (
-                    comments.map((comment) => {
-                      return (
-                        <Box
-                          key={comment?._id}
-                          sx={{ ...commentStyle.perCommentBox }}
-                        >
-                          <Box sx={{ flexBasis: '50px', flexShrink: '0' }}>
-                            <Avatar>{comment?.creator[0]}</Avatar>
-                          </Box>
-                          <Box sx={{ flexGrow: '1' }}>
-                            <Box sx={{ display: 'flex', flexWrap: 'nowrap' }}>
-                              <Typography sx={{ fontWeight: 'bold' }}>
-                                {comment?.creator || 'Guest'}
-                              </Typography>
-                              &nbsp; &nbsp;
-                              <Typography variant="h8">{`${moment(
-                                comment?.date
-                              ).fromNow()}`}</Typography>
+                  {comments?.length
+                    ? comments.map((comment) => {
+                        return (
+                          <Box
+                            key={comment?._id}
+                            sx={{ ...commentStyle.perCommentBox }}
+                          >
+                            <Box
+                              sx={{ ...commentStyle.perCommentBox.leftColumn }}
+                            >
+                              <Avatar>{comment?.creator[0]}</Avatar>
                             </Box>
-                            <Typography sx={{ maxWidth: '100%' }}>
-                              {comment?.body}
-                            </Typography>
+                            <Box
+                              sx={{ ...commentStyle.perCommentBox.rightColumn }}
+                            >
+                              <Box sx={{ ...commentStyle.creator }}>
+                                <Typography sx={{ fontWeight: 'bold' }}>
+                                  {comment?.creator || 'Guest'}
+                                </Typography>
+                                <Typography variant="h8">
+                                  &nbsp; &nbsp;
+                                  {`${moment(comment?.date).fromNow()}`}
+                                </Typography>
+                              </Box>
+                              <Typography sx={{ maxWidth: '100%' }}>
+                                {comment?.body}
+                              </Typography>
+                            </Box>
                           </Box>
-                        </Box>
-                      );
-                    })
-                  ) : (
-                    <></>
-                  )}
+                        );
+                      })
+                    : null}
                 </Box>
               </>
             )}
@@ -165,6 +148,34 @@ const Comment = ({ postId, comments, isLoadingComments }) => {
       </Box>
     </>
   );
+};
+
+const commentStyle = {
+  title: {
+    display: 'flex',
+    alignItems: 'center',
+    fontWeight: 'bold',
+  },
+
+  perCommentBox: {
+    display: 'flex',
+    mt: '1rem',
+    flexDirection: 'revert',
+
+    leftColumn: {
+      flexBasis: '50px',
+      flexShrink: '0',
+    },
+
+    rightColumn: {
+      flexGrow: '1',
+    },
+  },
+
+  creator: {
+    display: 'flex',
+    flexWrap: 'nowrap',
+  },
 };
 
 export default Comment;

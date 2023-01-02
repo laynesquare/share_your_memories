@@ -1,19 +1,20 @@
-import { useDrag } from 'react-dnd';
 import {
+  useMediaQuery,
   Typography,
-  Box,
-  Paper,
   IconButton,
   useTheme,
-  useMediaQuery,
+  Tooltip,
+  Paper,
+  Box,
 } from '@mui/material';
-import { useState } from 'react';
 import { bookmarkPost } from '../../actions/posts';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { useNavigate } from 'react-router-dom';
+import { useDrag } from 'react-dnd';
+import { useState } from 'react';
 import decodeAndCutString from '../../utils/decodeAndCutString';
 import ImgOrSkeleton from '../ImgOrSkeleton';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import moment from 'moment';
 
 const DragItem = ({ post, idx }) => {
@@ -37,85 +38,6 @@ const DragItem = ({ post, idx }) => {
     }),
   }));
 
-  const overallLayout = {
-    theMostOuterBox: {
-      display: 'flex',
-      flexDirection: { xs: 'column', sm: 'row' },
-      gap: '10px',
-      position: 'relative',
-      p: '10px',
-      borderRadius: '12px',
-      '&:hover': { cursor: 'pointer' },
-    },
-
-    mostLeftColumn: {
-      position: 'relative',
-      m: 'auto 0px',
-      flexBasis: '30px',
-      textAlign: 'center',
-      flexShrink: '0',
-      index: {
-        '&::before': { xs: { content: "'- '" }, sm: { content: "''" } },
-        '&::after': { xs: { content: "' -'" }, sm: { content: "''" } },
-      },
-    },
-
-    item: {
-      leftColumn: {
-        flexBasis: '130px',
-        flexShrink: '0',
-        aspectRatio: '3/2',
-        position: 'relative',
-
-        '&::before': {
-          left: '0',
-          width: isHover === post._id ? '3px' : '0px',
-          height: '100%',
-          content: "''",
-          bgcolor: 'primary.main',
-          position: 'absolute',
-          transition: 'ease-in-out 0.1s',
-          zIndex: '2',
-        },
-
-        '&::after': {
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%,-50%)',
-          whiteSpace: 'nowrap',
-          content: "'MORE'",
-          opacity: isHover === post._id ? '100%' : '0%',
-          position: 'absolute',
-          transition: 'ease-in-out 0.3s',
-          zIndex: '2',
-          fontSize: '1rem',
-          fontWeight: 'bold',
-        },
-
-        imgSkeleton: {
-          width: '100%',
-          height: '100%',
-        },
-
-        imgAvatar: {
-          borderRadius: '0',
-          width: '100%',
-          height: '100%',
-          aspectRatio: '3/2',
-          filter: isHover === post._id ? 'brightness(10%)' : '',
-          zIndex: '0',
-        },
-      },
-
-      rightColumn: {
-        flexGrow: '1',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      },
-    },
-  };
-
   return (
     <Paper
       ref={drag}
@@ -133,7 +55,19 @@ const DragItem = ({ post, idx }) => {
           {idx + 1}
         </Typography>
       </Box>
-      <Box sx={{ ...overallLayout.item.leftColumn }}>
+      <Box
+        sx={{
+          ...overallLayout.item.leftColumn,
+          '&::before': {
+            ...overallLayout.item.leftColumn['&::before'],
+            width: isHover === post._id ? '3px' : '0px',
+          },
+          '&::after': {
+            ...overallLayout.item.leftColumn['&::after'],
+            opacity: isHover === post._id ? '100%' : '0%',
+          },
+        }}
+      >
         <ImgOrSkeleton
           isImgLoaded={isImgLoaded}
           setIsImgLoaded={setIsImgLoaded}
@@ -142,6 +76,7 @@ const DragItem = ({ post, idx }) => {
           imgStyle={{
             ...overallLayout.item.leftColumn.imgAvatar,
             display: isImgLoaded ? '' : 'none',
+            filter: isHover === post._id ? 'brightness(10%)' : '',
           }}
         />
       </Box>
@@ -157,29 +92,108 @@ const DragItem = ({ post, idx }) => {
 
       {mediumSizedWindow && (
         <>
-          <Box
-            sx={{
-              display: 'flex',
-              position: { xs: 'absolute', sm: 'relative' },
-              top: '0',
-              right: '0',
-              m: { xs: '8px', sm: '0' },
-            }}
-          >
-            <IconButton
-              color="primary"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              sx={{ m: 'auto' }}
-            >
-              <BookmarkIcon />
-            </IconButton>
+          <Box sx={{ ...overallLayout.item.responsiveMostRightColumn }}>
+            <Tooltip title="Remove Bookmark">
+              <IconButton
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(bookmarkPost(post._id));
+                }}
+                sx={{ m: 'auto' }}
+              >
+                <BookmarkIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
         </>
       )}
     </Paper>
   );
+};
+
+const overallLayout = {
+  theMostOuterBox: {
+    position: 'relative',
+    borderRadius: '12px',
+    display: 'flex',
+    gap: '10px',
+    p: '10px',
+    flexDirection: { xs: 'column', sm: 'row' },
+    '&:hover': { cursor: 'pointer' },
+  },
+
+  mostLeftColumn: {
+    m: 'auto 0px',
+    flexBasis: '30px',
+    flexShrink: '0',
+    textAlign: 'center',
+    position: 'relative',
+    index: {
+      '&::before': { xs: { content: "'- '" }, sm: { content: "''" } },
+      '&::after': { xs: { content: "' -'" }, sm: { content: "''" } },
+    },
+  },
+
+  item: {
+    leftColumn: {
+      flexBasis: '130px',
+      flexShrink: '0',
+      aspectRatio: '3/2',
+      position: 'relative',
+
+      '&::before': {
+        left: '0',
+        height: '100%',
+        content: "''",
+        bgcolor: 'primary.main',
+        position: 'absolute',
+        transition: 'ease-in-out 0.1s',
+        zIndex: '2',
+      },
+
+      '&::after': {
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        whiteSpace: 'nowrap',
+        content: "'MORE'",
+        position: 'absolute',
+        transition: 'ease-in-out 0.3s',
+        zIndex: '2',
+        fontSize: '1rem',
+        fontWeight: 'bold',
+      },
+
+      imgSkeleton: {
+        width: '100%',
+        height: '100%',
+      },
+
+      imgAvatar: {
+        borderRadius: '0',
+        width: '100%',
+        height: '100%',
+        aspectRatio: '3/2',
+        zIndex: '0',
+      },
+    },
+
+    rightColumn: {
+      flexGrow: '1',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+    },
+
+    responsiveMostRightColumn: {
+      display: 'flex',
+      position: { xs: 'absolute', sm: 'relative' },
+      top: '0',
+      right: '0',
+      m: { xs: '8px', sm: '0' },
+    },
+  },
 };
 
 export default DragItem;

@@ -1,20 +1,20 @@
-import * as api from '../api';
 import {
+  FETCH_POST_BY_BOOKMARK,
+  FETCH_POST_BY_SEARCH,
   FETCH_ALL,
   FETCH_ONE,
-  FETCH_POST_BY_SEARCH,
-  FETCH_POST_BY_BOOKMARK,
   CREATE,
+  CREATE_POST_COMMENT,
   DELETE,
   LIKEPOST,
   BOOKMARK_POST,
   UPDATE,
-  CREATE_POST_COMMENT,
   START_LOADING,
   END_LOADING,
   START_LOADING_COMMENTS,
   END_LOADING_COMMENTS,
 } from '../constants/actionTypes';
+import * as api from '../api';
 
 export const getPost = (postId, navigate) => async (dispatch) => {
   try {
@@ -100,8 +100,10 @@ export const deletePost = (id, navigate) => async (dispatch) => {
 
 export const likePost = (id) => async (dispatch) => {
   try {
+    dispatch({ type: START_LOADING });
     const { data } = await api.likePost(id);
     dispatch({ type: LIKEPOST, payload: data });
+    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }

@@ -1,15 +1,10 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Container, Grow, Grid, Box } from '@mui/material';
-import Form from '../Form/Form';
-import Posts from '../Posts/Posts';
+import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import Pagination from '../Pgn';
-
-//Function searching the query params within the current url.
-//This is why when the user enters the url, the page will be directed to the correct page automatically.
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
+import AutoLogin from './AutoLogin';
+import Posts from '../Posts/Posts';
+import Form from '../Form/Form';
 
 const Home = () => {
   const [currentId, setCurrentId] = useState(null);
@@ -19,7 +14,7 @@ const Home = () => {
   const page = query.get('page') || 1;
 
   return (
-    <Container maxWidth="xl" sx={{ mb: '2rem', minWidth: { xs: 375 } }}>
+    <Container maxWidth="xl" sx={{ ...homeStyle.mostOuterBox }}>
       <Box>
         <Grow in>
           <Grid
@@ -37,11 +32,7 @@ const Home = () => {
               xs={12}
               sm={6}
               md={3}
-              sx={{
-                position: 'sticky',
-                top: '5px',
-                alignSelf: 'flex-start',
-              }}
+              sx={{ ...homeStyle.formAndPagination }}
             >
               <Box sx={{ mb: '2rem' }}>
                 <Form currentId={currentId} setCurrentId={setCurrentId} />
@@ -55,6 +46,25 @@ const Home = () => {
       </Box>
     </Container>
   );
+};
+
+//Function searching the query params within the current url.
+//This is why when the user enters the url, the page will be directed to the correct page automatically.
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+const homeStyle = {
+  mostOuterBox: {
+    mb: '2rem',
+    minWidth: { xs: 360 },
+  },
+
+  formAndPagination: {
+    position: 'sticky',
+    top: '5px',
+    alignSelf: 'flex-start',
+  },
 };
 
 export default Home;

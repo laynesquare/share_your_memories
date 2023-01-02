@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Box, Typography, Container, Divider, Grow } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostsBySearch } from '../../actions/posts';
-import { Box, Typography, Container, Divider } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import NotFound from '../NotFound';
-import Item from './Item';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import Loading from '../Loading';
+import Item from './Item';
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -18,18 +17,12 @@ const Search = () => {
     dispatch(getPostsBySearch(keyword, page));
   }, [searchParams]);
 
-  const searchStyle = {
-    noSearchResultIcon: {
-      fontSize: '20rem',
-    },
-  };
-
   if (isLoading) return <Loading type="big" />;
 
   return (
-    <>
-      <Container maxWidth="md" sx={{ minWidth: '375px' }}>
-        {posts.length ? (
+    <Container maxWidth="md" sx={{ minWidth: '360px' }}>
+      {posts.length ? (
+        <Grow in>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <Typography variant="h5" fontWeight="bold">
               Search Results
@@ -37,19 +30,19 @@ const Search = () => {
 
             <Divider />
 
-            {posts.map((post, idx) => {
-              return <Item post={post} idx={idx} />;
-            })}
+            {posts.map((post, idx) => (
+              <Item post={post} idx={idx} />
+            ))}
           </Box>
-        ) : (
-          <NotFound
-            text="Can’t find any posts."
-            iconSize="10rem"
-            textVariant="h6"
-          />
-        )}
-      </Container>
-    </>
+        </Grow>
+      ) : (
+        <NotFound
+          text="Can't find any posts."
+          iconSize="10rem"
+          textVariant="h4"
+        />
+      )}
+    </Container>
   );
 };
 

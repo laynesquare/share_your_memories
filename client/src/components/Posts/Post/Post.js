@@ -1,101 +1,25 @@
 import {
-  Card,
   CardContent,
-  Button,
   Typography,
-  Grow,
   ButtonBase,
-  Box,
   Tooltip,
+  Button,
+  Card,
+  Grow,
+  Box,
 } from '@mui/material';
-import { useDispatch } from 'react-redux';
 import { deletePost, likePost, bookmarkPost } from '../../../actions/posts';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ImgOrSkeleton from '../../ImgOrSkeleton';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ImgOrSkeleton from '../../ImgOrSkeleton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
-
-const postStyle = {
-  mostOuterBox: {
-    position: 'relative',
-  },
-
-  postBaseBtn: {
-    display: 'block',
-    width: '100%',
-    '&:hover': {
-      backgroundColor: 'rgba(4, 0, 0, 0.08)',
-    },
-  },
-
-  imgAvatar: {
-    width: '100%',
-    height: '200px',
-    borderRadius: '0%',
-    pointerEvents: 'none',
-    filter: 'brightness(0.5)',
-  },
-
-  imgSkeleton: {
-    height: '200px',
-  },
-
-  name: {
-    position: 'absolute',
-    top: '0.5rem',
-    left: '1rem',
-  },
-
-  createdAt: {
-    position: 'absolute',
-    top: '2.5rem',
-    left: '1rem',
-    fontSize: '0.8rem',
-  },
-
-  moreBtn: {
-    position: 'absolute',
-    top: '0.7rem',
-    right: '0rem',
-    transition: 'all 0.3s',
-    zIndex: '2',
-    '&:hover': {
-      backgroundColor: 'transparent',
-      transform: 'translate(0, -0.25em)',
-    },
-  },
-
-  cardContent: {
-    maxHeight: '300px',
-    overflow: 'hidden',
-  },
-
-  cardAction: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    p: '0.6rem',
-    position: 'relative',
-
-    shadowBox: {
-      '&:before': {
-        content: "''",
-        position: 'absolute',
-        width: '100%',
-        height: '80%',
-        background:
-          'linear-gradient(0deg, rgba(44,45,49,1) 0%, rgba(46,48,48,0) 100%)',
-        left: '0',
-        transform: 'translateY(-100%)',
-      },
-    },
-  },
-};
 
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
@@ -236,7 +160,9 @@ const Post = ({ post, setCurrentId }) => {
               <Tooltip
                 title={
                   post?.bookmark?.find(
-                    (bookmarkUser) => bookmarkUser === user?.result?._id
+                    (bookmarkUser) =>
+                      bookmarkUser ===
+                      (user?.result?._id || user?.result?.googleId)
                   )
                     ? 'Remove Bookmark'
                     : 'Bookmark'
@@ -248,7 +174,9 @@ const Post = ({ post, setCurrentId }) => {
                   onClick={() => dispatch(bookmarkPost(post._id))}
                 >
                   {post?.bookmark?.find(
-                    (bookmarkUser) => bookmarkUser === user?.result?._id
+                    (bookmarkUser) =>
+                      bookmarkUser ===
+                      (user?.result?._id || user?.result?.googleId)
                   ) ? (
                     <BookmarkIcon fontSize="small" />
                   ) : (
@@ -262,6 +190,83 @@ const Post = ({ post, setCurrentId }) => {
       </Card>
     </Grow>
   );
+};
+
+const postStyle = {
+  mostOuterBox: {
+    position: 'relative',
+  },
+
+  postBaseBtn: {
+    display: 'block',
+    width: '100%',
+    '&:hover': {
+      backgroundColor: 'rgba(4, 0, 0, 0.08)',
+    },
+  },
+
+  imgAvatar: {
+    width: '100%',
+    height: '200px',
+    borderRadius: '0%',
+    pointerEvents: 'none',
+    filter: 'brightness(0.5)',
+  },
+
+  imgSkeleton: {
+    height: '200px',
+  },
+
+  name: {
+    position: 'absolute',
+    top: '0.5rem',
+    left: '1rem',
+    whiteSpace: 'nowrap',
+  },
+
+  createdAt: {
+    position: 'absolute',
+    top: '2.5rem',
+    left: '1rem',
+    fontSize: '0.8rem',
+  },
+
+  moreBtn: {
+    position: 'absolute',
+    top: '0.7rem',
+    right: '0rem',
+    transition: 'all 0.3s',
+    zIndex: '2',
+    '&:hover': {
+      backgroundColor: 'transparent',
+      transform: 'translate(0, -0.25em)',
+    },
+  },
+
+  cardContent: {
+    maxHeight: '300px',
+    overflow: 'hidden',
+  },
+
+  cardAction: {
+    display: 'flex',
+    flexWrap: 'nowrap',
+    p: '0.6rem',
+    position: 'relative',
+
+    shadowBox: {
+      '&:before': {
+        content: "''",
+        position: 'absolute',
+        width: '100%',
+        height: '80%',
+        background:
+          'linear-gradient(0deg, rgba(44,45,49,1) 0%, rgba(46,48,48,0) 100%)',
+        left: '0',
+        transform: 'translateY(-100%)',
+      },
+    },
+  },
 };
 
 export default Post;

@@ -4,13 +4,13 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 
 const Input = ({
-  name,
-  handleChange,
-  label,
-  half,
-  autoFocus,
-  type,
   handleShowPassword,
+  handleChange,
+  autoFocus,
+  label,
+  name,
+  half,
+  type,
 }) => {
   return (
     <Grid item xs={12} sm={half ? 6 : 12}>

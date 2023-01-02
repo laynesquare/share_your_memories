@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -9,13 +8,13 @@ import {
   Snackbar,
   Alert,
 } from '@mui/material';
-import { GoogleLogin } from 'react-google-login';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { signin, signup } from '../../actions/auth';
+import { useState, useEffect } from 'react';
 import { LOGIN_ALERT_CLEAR } from '../../constants/actionTypes';
+import { signin, signup } from '../../actions/auth';
+import { GoogleLogin } from 'react-google-login';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Input from './Input';
 import Icon from './icon';
 
@@ -33,7 +32,6 @@ const Auth = () => {
   const [formData, setFormData] = useState(false);
   const authFailedAlert = useSelector((state) => state.alert);
   const location = useLocation();
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -47,14 +45,17 @@ const Auth = () => {
       dispatch(signin(formData, navigate));
     }
   };
+
   const handleLazyLogin = () => {
     dispatch(
       signin({ email: 'johndoe@gmail.com', password: 'johndoe123' }, navigate)
     );
   };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleShowPassword = () =>
     setShowPassword((preShowPassword) => !preShowPassword);
 
@@ -75,6 +76,7 @@ const Auth = () => {
       console.log(error);
     }
   };
+
   const googleFailure = (error) => {
     console.log(error);
     console.log('google sign in was unseccessful try again later');
@@ -86,7 +88,7 @@ const Auth = () => {
 
   return (
     <Grow in>
-      <Container component="main" maxWidth="xs" sx={{ minWidth: { xs: 375 } }}>
+      <Container component="main" maxWidth="xs" sx={{ minWidth: { xs: 360 } }}>
         <Snackbar open={authFailedAlert?.state}>
           <Alert severity="error" sx={{ width: '100%' }}>
             {authFailedAlert.msg}

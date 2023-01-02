@@ -1,16 +1,7 @@
 import { useDrop } from 'react-dnd';
 import { Box } from '@material-ui/core';
-import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
-const outerBoxStyle = {
-  width: '100%',
-  height: '100%',
-  icon: {
-    width: '100%',
-    height: '100%',
-  },
-};
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const DropDustbin = ({ posts, isLoading }) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
@@ -34,6 +25,15 @@ const DropDustbin = ({ posts, isLoading }) => {
       )}
     </Box>
   );
+};
+
+const outerBoxStyle = {
+  width: '100%',
+  height: '100%',
+  icon: {
+    width: '100%',
+    height: '100%',
+  },
 };
 
 export default DropDustbin;

@@ -1,28 +1,34 @@
-import { useEffect } from 'react';
+import {
+  useMediaQuery,
+  Typography,
+  Container,
+  useTheme,
+  Divider,
+  Grow,
+  Grid,
+  Box,
+} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getPostsByBookmark } from '../../actions/posts';
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  Divider,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
+import { useEffect } from 'react';
+import DropDustbin from './DropDustbin';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragItem from './DragItem';
-import DropDustbin from './DropDustbin';
-import Loading from '../Loading';
 import NotFound from '../NotFound';
+import Loading from '../Loading';
+import { Tooltip } from '@material-ui/core';
 
 const Bookmark = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
+  const location = useLocation();
   const mediumSizedWindow = useMediaQuery(theme.breakpoints.down('lg'));
-  const user = JSON.parse(localStorage.getItem('profile'))?.result._id;
+  const user =
+    JSON.parse(localStorage.getItem('profile'))?.result._id ||
+    JSON.parse(localStorage.getItem('profile'))?.result.googleId;
+
   let { isLoading, posts } = useSelector((state) => {
     const [dirtyPosts, isLoading] = [state.posts.posts, state.posts.isLoading];
     const posts = dirtyPosts.filter((dirtyPost) =>
@@ -31,28 +37,10 @@ const Bookmark = () => {
     return { isLoading, posts };
   });
 
-  const location = useLocation();
-
   useEffect(() => {
     if (!user) return navigate('/auth');
-
     dispatch(getPostsByBookmark());
   }, [location, user]);
-
-  const bookmarkStyle = {
-    leftGridItems: {
-      position: 'relative',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1rem',
-      minWidth: '375px',
-
-      noBookmarkDisplay: {
-        textAlign: 'center',
-        m: 'auto auto',
-      },
-    },
-  };
 
   const BookmarkItems = () => {
     if (isLoading) return <Loading type="small" />;
@@ -77,9 +65,11 @@ const Bookmark = () => {
             if (!doesUserBookmarkThis) return null;
 
             return (
-              <Box key={idx}>
-                <DragItem post={post} isLoading={isLoading} idx={idx} />
-              </Box>
+              <Grow in>
+                <Box key={idx}>
+                  <DragItem post={post} isLoading={isLoading} idx={idx} />
+                </Box>
+              </Grow>
             );
           })}
         </>
@@ -90,7 +80,7 @@ const Bookmark = () => {
   return (
     <>
       <Container maxWidth={mediumSizedWindow ? 'md' : 'lg'}>
-        <Grid container columnSpacing={7}>
+        <Grid container columnSpacing={7} sx={{ position: 'relative' }}>
           <Grid
             item
             xs={mediumSizedWindow ? 12 : 7}
@@ -104,12 +94,20 @@ const Bookmark = () => {
           </Grid>
 
           {!mediumSizedWindow && (
-            <Grid item xs={5}>
+            <Grid
+              item
+              xs={5}
+              sx={{
+                alignSelf: 'flex-start',
+                position: 'sticky',
+                top: '1rem',
+              }}
+            >
               <Typography variant="h5" fontWeight="bold">
                 Dustbin
               </Typography>
               <Divider sx={{ mt: '1rem' }} />
-              <Box sx={{}}>
+              <Box>
                 {!isLoading ? (
                   <DropDustbin posts={posts} />
                 ) : (
@@ -131,6 +129,21 @@ const Bookmark = () => {
       </Container>
     </>
   );
+};
+
+const bookmarkStyle = {
+  leftGridItems: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+    minWidth: '360px',
+
+    noBookmarkDisplay: {
+      textAlign: 'center',
+      m: 'auto auto',
+    },
+  },
 };
 
 export default Bookmark;

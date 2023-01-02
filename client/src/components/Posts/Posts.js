@@ -7,9 +7,7 @@ import NotFound from '../NotFound';
 
 const Posts = ({ setCurrentId, page }) => {
   const navigate = useNavigate();
-  const { posts, isLoading } = useSelector((state) => {
-    return state.posts;
-  });
+  const { posts, isLoading } = useSelector((state) => state.posts);
 
   if (!posts.length && !isLoading) {
     if (Number(page) !== 1) return navigate(`/posts?page=${Number(page) - 1}`);

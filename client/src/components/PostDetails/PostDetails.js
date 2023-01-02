@@ -23,30 +23,6 @@ import Loading from '../Loading';
 import ImgOrSkeleton from '../ImgOrSkeleton';
 import moment from 'moment';
 
-const postDetailStyle = {
-  imgSkeleton: {
-    borderRadius: '1rem',
-    height: '100%',
-    width: '100%',
-    aspectRatio: '1/1',
-  },
-
-  imgAvatar: {
-    width: '100%',
-    borderRadius: '1rem',
-    height: '100%',
-  },
-
-  creatorCard: {
-    display: 'flex',
-    alignItems: 'center',
-    mr: '1rem',
-    border: '0.5px solid #DDDEE2',
-    borderRadius: '5px',
-    p: '1rem',
-  },
-};
-
 const PostDetails = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
   const dispatch = useDispatch();
@@ -81,10 +57,7 @@ const PostDetails = () => {
 
   useEffect(() => {
     dispatch(getPost(postId, navigate));
-
-    return () => {
-      dispatch({ type: CLEANUP_FETCH_ONE });
-    };
+    return () => dispatch({ type: CLEANUP_FETCH_ONE });
   }, [postId]);
 
   const Likes = () => {
@@ -155,7 +128,7 @@ const PostDetails = () => {
 
   return (
     <>
-      <Container maxWidth="xl" sx={{ minWidth: { xs: 375 } }}>
+      <Container maxWidth="xl" sx={{ minWidth: { xs: 360 } }}>
         <Grid container rowSpacing={3}>
           <Grid item xs={12}>
             <ImgOrSkeleton
@@ -170,24 +143,8 @@ const PostDetails = () => {
             />
           </Grid>
 
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: 'flex',
-              gap: { xs: '3rem', lg: '2rem' },
-              flexWrap: { xs: 'wrap', lg: 'nowrap' },
-            }}
-          >
-            <Box
-              sx={{
-                flexGrow: {
-                  xs: '1',
-                },
-
-                // bgcolor: 'red',
-              }}
-            >
+          <Grid item xs={12} sx={{ ...postDetailStyle.bottomPanel.outer }}>
+            <Box sx={{ ...postDetailStyle.bottomPanel.content }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   {Array.isArray(tags) > 0 && (
@@ -244,13 +201,7 @@ const PostDetails = () => {
               </Grid>
             </Box>
 
-            <Box
-              sx={{
-                width: { width: '100%', sm: '420px' },
-                flexGrow: { xs: '1', lg: '0' },
-                flexShrink: { xs: '1', lg: '0' },
-              }}
-            >
+            <Box sx={{ ...postDetailStyle.bottomPanel.recommend }}>
               <Recommendations tags={tags} title={title} />
             </Box>
           </Grid>
@@ -258,6 +209,48 @@ const PostDetails = () => {
       </Container>
     </>
   );
+};
+
+const postDetailStyle = {
+  imgSkeleton: {
+    borderRadius: '1rem',
+    height: '100%',
+    width: '100%',
+    aspectRatio: '1/1',
+  },
+
+  imgAvatar: {
+    width: '100%',
+    borderRadius: '1rem',
+    height: '100%',
+  },
+
+  bottomPanel: {
+    outer: {
+      display: 'flex',
+      gap: { xs: '3rem', lg: '2rem' },
+      flexWrap: { xs: 'wrap', lg: 'nowrap' },
+    },
+
+    content: {
+      flexGrow: { xs: '1' },
+    },
+
+    recommend: {
+      width: { width: '100%', sm: '420px' },
+      flexGrow: { xs: '1', lg: '0' },
+      flexShrink: { xs: '1', lg: '0' },
+    },
+  },
+
+  creatorCard: {
+    display: 'flex',
+    alignItems: 'center',
+    mr: '1rem',
+    border: '0.5px solid #DDDEE2',
+    borderRadius: '5px',
+    p: '1rem',
+  },
 };
 
 export default PostDetails;

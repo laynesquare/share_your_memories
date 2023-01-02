@@ -38,7 +38,7 @@ const auth = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-    res.status(401).json({ msg: 'no token' });
+    res.status(401).json({ msg: 'no token or token expired' });
   }
 };
 

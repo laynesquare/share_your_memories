@@ -1,7 +1,7 @@
 import {
-  AUTH,
-  LOGIN_ALERT_FAILED,
   SIGNUP_ALERT_FAILED,
+  LOGIN_ALERT_FAILED,
+  AUTH,
 } from '../constants/actionTypes';
 import * as api from '../api';
 

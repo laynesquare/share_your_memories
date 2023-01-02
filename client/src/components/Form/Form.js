@@ -1,33 +1,18 @@
 import {
-  TextField,
-  Button,
   Typography,
+  TextField,
+  Divider,
+  Button,
   Paper,
   Grow,
-  Divider,
+  Box,
 } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import { createPost, updatePost } from '../../actions/posts';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box } from '@mui/system';
 import LoginIcon from './LoginIcon.js';
 import FileBase from 'react-file-base64';
-
-const formStyle = {
-  mostOuterPaper: {
-    p: '1.5rem',
-    borderRadius: '1rem',
-    overflowX: 'hidden',
-  },
-
-  logginPrompt: {
-    textAlign: 'center',
-    letterSpacing: '0.1rem',
-    fontWeight: 'bold',
-    mb: '1rem',
-  },
-};
 
 const Form = ({ currentId, setCurrentId }) => {
   const dispatch = useDispatch();
@@ -37,18 +22,6 @@ const Form = ({ currentId, setCurrentId }) => {
   const post = useSelector((state) =>
     currentId ? state.posts.posts.find((p) => p._id === currentId) : null
   );
-
-  useEffect(() => {
-    if (post) setPostData(post);
-  }, [post]);
-
-  const [postData, setPostData] = useState({
-    creator: '',
-    title: '',
-    message: '',
-    tags: '',
-    selectedFile: '',
-  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,6 +39,14 @@ const Form = ({ currentId, setCurrentId }) => {
     }
   };
 
+  const [postData, setPostData] = useState({
+    creator: '',
+    title: '',
+    message: '',
+    tags: '',
+    selectedFile: '',
+  });
+
   const clear = () => {
     setCurrentId(null);
     setPostData({
@@ -76,6 +57,10 @@ const Form = ({ currentId, setCurrentId }) => {
       selectedFile: '',
     });
   };
+
+  useEffect(() => {
+    if (post) setPostData(post);
+  }, [post]);
 
   if (!user?.result?._id && !user?.result?.googleId) {
     return (
@@ -160,11 +145,14 @@ const Form = ({ currentId, setCurrentId }) => {
           >
             Note:
             <br />
-            <li>
-              If not specified, the system will automatically select an img for
-              you via Unsplash API {`(subject to change upon page refreshed)`}.
-            </li>
-            <li>The max. size is 30MB.</li>
+            <span>
+              {' '}
+              1. If not specified, the system will automatically select an img
+              for you via Unsplash API{' '}
+              {`(subject to change upon page refreshed)`}.
+            </span>
+            <br />
+            <span>2. The max. size is 30MB.</span>
           </Typography>
           <Button
             variant="contained"
@@ -189,6 +177,21 @@ const Form = ({ currentId, setCurrentId }) => {
       </Paper>
     </Grow>
   );
+};
+
+const formStyle = {
+  mostOuterPaper: {
+    p: '1.5rem',
+    borderRadius: '1rem',
+    overflowX: 'hidden',
+  },
+
+  logginPrompt: {
+    textAlign: 'center',
+    letterSpacing: '0.1rem',
+    fontWeight: 'bold',
+    mb: '1rem',
+  },
 };
 
 export default Form;
