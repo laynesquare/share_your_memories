@@ -1,100 +1,52 @@
 import {
-  Container,
   Typography,
-  Grid,
+  Snackbar,
   Button,
+  Alert,
+  Grid,
   Grow,
   Box,
-  Snackbar,
-  Alert,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { LOGIN_ALERT_CLEAR, AUTH } from '../../constants/actionTypes';
 import { useState, useEffect } from 'react';
-import { LOGIN_ALERT_CLEAR } from '../../constants/actionTypes';
 import { signin, signup } from '../../actions/auth';
-import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Input from './Input';
-import Icon from './icon';
-
-const initialState = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-};
+import decode from 'jwt-decode';
 
 const Auth = () => {
+  const user = JSON.parse(localStorage.getItem('profile'));
+  const authFailedAlert = useSelector((state) => state.alert);
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState(false);
-  const authFailedAlert = useSelector((state) => state.alert);
-  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLazyLogin = () => dispatch(signin(lazyLoginInfo, navigate));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(initialState);
-
-    if (isSignup) {
-      dispatch(signup(formData, navigate));
-    } else {
-      dispatch(signin(formData, navigate));
-    }
+    if (isSignup) return dispatch(signup(formData, navigate));
+    dispatch(signin(formData, navigate));
   };
 
-  const handleLazyLogin = () => {
-    dispatch(
-      signin({ email: 'johndoe@gmail.com', password: 'johndoe123' }, navigate)
-    );
-  };
-
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleShowPassword = () =>
-    setShowPassword((preShowPassword) => !preShowPassword);
-
-  const switchMode = () => {
-    dispatch({ type: LOGIN_ALERT_CLEAR });
-    setIsSignup((prevIsSignup) => !prevIsSignup);
-    setShowPassword(false);
-  };
-
-  const googleSuccess = async (res) => {
-    const result = res?.profileObj;
-    const token = res?.tokenId;
-
-    try {
-      dispatch({ type: 'AUTH', data: { result, token } });
-      navigate('/');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const googleFailure = (error) => {
-    console.log(error);
-    console.log('google sign in was unseccessful try again later');
-  };
 
   useEffect(() => {
     dispatch({ type: LOGIN_ALERT_CLEAR });
-  }, [location]);
+    setShowPassword(false);
+  }, [location, isSignup]);
+
+  if (user) return navigate(-1);
 
   return (
     <Grow in>
-      <Container component="main" maxWidth="xs" sx={{ minWidth: { xs: 360 } }}>
-        <Snackbar open={authFailedAlert?.state}>
-          <Alert severity="error" sx={{ width: '100%' }}>
-            {authFailedAlert.msg}
-          </Alert>
-        </Snackbar>
-
+      <Box sx={{ width: { xs: 360 }, m: 'auto' }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: '1rem' }}>
           <LockOutlinedIcon
             color={authFailedAlert?.state ? 'error' : 'primary'}
@@ -112,10 +64,9 @@ const Auth = () => {
                   name="firstName"
                   label="First Name"
                   handleChange={handleChange}
-                  autoFocus={true}
+                  autoFocus
                   half
                 />
-
                 <Input
                   name="lastName"
                   label="Last Name"
@@ -135,7 +86,7 @@ const Auth = () => {
               label="Password"
               handleChange={handleChange}
               type={showPassword ? 'text' : 'password'}
-              handleShowPassword={handleShowPassword}
+              handleShowPassword={() => setShowPassword((pre) => !pre)}
             />
             {isSignup && (
               <Input
@@ -155,7 +106,7 @@ const Auth = () => {
               color="primary"
               sx={{ mb: '1rem', fontSize: '1.5rem' }}
             >
-              I'm kinda busy, so just log me in to a test account.
+              I'm busy, so log me into a test account.
             </Button>
           )}
 
@@ -169,28 +120,12 @@ const Auth = () => {
             {isSignup ? 'Sign up' : 'Sign in'}
           </Button>
 
-          <GoogleLogin
-            clientId="71023974194-dh2gfs56pj3r57lepmlbditonpuplqgg.apps.googleusercontent.com"
-            render={(renderProps) => (
-              <Button
-                color="secondary"
-                fullWidth
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-                startIcon={<Icon />}
-                variant="contained"
-              >
-                Google log in
-              </Button>
-            )}
-            onSuccess={googleSuccess}
-            onFailure={googleFailure}
-            cookiePolicy="single_host_origin"
-          />
+          {!isSignup && <GoogleAuth />}
+
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button
-                onClick={switchMode}
+                onClick={() => setIsSignup((pre) => !pre)}
                 sx={{ '&:hover': { background: 'transparent' } }}
               >
                 {isSignup
@@ -200,9 +135,46 @@ const Auth = () => {
             </Grid>
           </Grid>
         </form>
-      </Container>
+
+        <Snackbar open={authFailedAlert?.state}>
+          <Alert severity="error" sx={{ width: '100%' }}>
+            {authFailedAlert.msg}
+          </Alert>
+        </Snackbar>
+      </Box>
     </Grow>
   );
 };
+
+const GoogleAuth = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function handleCallbackRes(res) {
+    const token = res.credential;
+    const { sub: googleId, ...otherProps } = decode(res.credential);
+    const result = { googleId, ...otherProps };
+    dispatch({ type: AUTH, data: { result, token } });
+    navigate('/');
+  }
+
+  useEffect(() => {
+    /* global google*/
+    google.accounts.id.initialize({
+      client_id:
+        '71023974194-dh2gfs56pj3r57lepmlbditonpuplqgg.apps.googleusercontent.com',
+      callback: handleCallbackRes,
+    });
+    google.accounts.id.prompt();
+    google.accounts.id.renderButton(document.getElementById('signInDiv'), {
+      text: 'signin_with',
+      width: document.getElementById('signInDiv').offsetWidth,
+    });
+  }, []);
+
+  return <Box id="signInDiv" sx={{ height: 40 }}></Box>;
+};
+
+const lazyLoginInfo = { email: 'johndoe@gmail.com', password: 'johndoe123' };
 
 export default Auth;

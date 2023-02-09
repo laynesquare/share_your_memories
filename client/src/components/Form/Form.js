@@ -17,74 +17,32 @@ import FileBase from 'react-file-base64';
 const Form = ({ currentId, setCurrentId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [postData, setPostData] = useState({ ...initialPostData });
   const user = JSON.parse(localStorage.getItem('profile'));
-
   const post = useSelector((state) =>
     currentId ? state.posts.posts.find((p) => p._id === currentId) : null
   );
 
-  const handleSubmit = async (e) => {
+  const clear = () => {
+    setCurrentId(null);
+    setPostData({ ...initialPostData });
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (currentId) {
-      dispatch(
-        updatePost(currentId, {
-          ...postData,
-          name: user?.result?.name,
-          bookmark: post.bookmark,
-        })
-      );
+      dispatch(updatePost(currentId, { ...postData }));
       clear();
     } else {
       dispatch(createPost({ ...postData, name: user?.result?.name }, navigate));
     }
   };
 
-  const [postData, setPostData] = useState({
-    creator: '',
-    title: '',
-    message: '',
-    tags: '',
-    selectedFile: '',
-  });
-
-  const clear = () => {
-    setCurrentId(null);
-    setPostData({
-      creator: '',
-      title: '',
-      message: '',
-      tags: '',
-      selectedFile: '',
-    });
-  };
-
   useEffect(() => {
     if (post) setPostData(post);
   }, [post]);
 
-  if (!user?.result?._id && !user?.result?.googleId) {
-    return (
-      <Grow in>
-        <Paper sx={{ ...formStyle.mostOuterPaper }}>
-          <Box sx={{ p: '20%' }}>
-            <LoginIcon />
-          </Box>
-          <Typography
-            variant="h4"
-            color="primary"
-            sx={{ ...formStyle.logginPrompt }}
-          >
-            START BY LOGIN
-          </Typography>
-          <Divider sx={{ mb: '1rem' }} />
-          <Typography variant="body1" sx={{ textAlign: 'justify' }}>
-            Log in to share your memories with the world and give a thumbs up to
-            your favorite memories.
-          </Typography>
-        </Paper>
-      </Grow>
-    );
-  }
+  if (!user?.result?._id && !user?.result?.googleId) return <StartByLogin />;
 
   return (
     <Grow in>
@@ -179,17 +137,52 @@ const Form = ({ currentId, setCurrentId }) => {
   );
 };
 
+const StartByLogin = () => {
+  return (
+    <>
+      <Grow in>
+        <Paper sx={{ ...formStyle.mostOuterPaper }}>
+          <Box sx={{ p: '20%' }}>
+            <LoginIcon />
+          </Box>
+          <Typography
+            variant="h4"
+            color="primary"
+            sx={{ ...formStyle.logginPrompt }}
+          >
+            START BY LOGIN
+          </Typography>
+          <Divider sx={{ mb: '1rem' }} />
+          <Typography variant="body1" sx={{ textAlign: 'justify' }}>
+            Log in to share your memories with the world and give a thumbs up to
+            your favorite memories.
+          </Typography>
+        </Paper>
+      </Grow>
+    </>
+  );
+};
+
+const initialPostData = {
+  title: '',
+  message: '',
+  tags: '',
+  selectedFile: '',
+};
+
 const formStyle = {
   mostOuterPaper: {
-    p: '1.5rem',
     borderRadius: '1rem',
+    overflowY: 'scroll',
     overflowX: 'hidden',
+    maxHeight: '90vh',
+    p: '1.5rem',
   },
 
   logginPrompt: {
-    textAlign: 'center',
     letterSpacing: '0.1rem',
     fontWeight: 'bold',
+    textAlign: 'center',
     mb: '1rem',
   },
 };

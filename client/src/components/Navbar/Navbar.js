@@ -16,6 +16,7 @@ import {
 } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { LOGOUT } from '../../constants/actionTypes';
 import MemoryRoundedIcon from '@mui/icons-material/MemoryRounded';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import IconButton from '@mui/material/IconButton';
@@ -32,16 +33,13 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleGoToFav = () => navigate('/posts/bookmark');
-
   const logout = () => {
-    dispatch({ type: 'LOGOUT' });
+    dispatch({ type: LOGOUT });
     navigate('/auth');
-    setUser(null);
   };
 
   const handleSearchPostByKeyword = (e) => {
-    if (e.key === 'Enter' || e.type === 'click') {
+    if (e.keyCode === 13 || e.type === 'click') {
       if (!keywordForPostSearch) return;
       navigate({
         pathname: 'posts/search/',
@@ -57,12 +55,10 @@ const Navbar = () => {
     const token = user?.token;
     if (token) {
       const decodedToken = decode(token);
-      if (decodedToken.exp * 1000 < new Date().getTime()) {
-        logout();
-      }
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
     }
     setUser(JSON.parse(localStorage.getItem('profile')));
-  }, [location]);
+  }, [location, user]);
 
   return (
     <Box sx={{ ...navBarStyle.mostOuterBox }}>
@@ -91,25 +87,18 @@ const Navbar = () => {
               sx={{ display: 'flex', borderRadius: '10px' }}
             >
               <InputBase
-                size="small"
                 autoComplete="off"
                 placeholder="Search something..."
-                onKeyDown={handleSearchPostByKeyword}
+                size="small"
                 value={keywordForPostSearch}
+                onKeyDown={handleSearchPostByKeyword}
                 onChange={(e) => setKeywordForPostSearch(e.target.value)}
-                sx={{
-                  ...navBarStyle.textField,
-                  opacity: searchInputShow ? '1' : '0',
-                  transform: searchInputShow ? '0' : 'translateX(20%)',
-                }}
+                sx={{ ...navBarStyle.textField(searchInputShow) }}
               />
               <Tooltip title="Search">
                 <IconButton
                   onClick={handleSearchPostByKeyword}
-                  sx={{
-                    ...navBarStyle.searchIcon,
-                    borderRadius: searchInputShow ? '0px 10px 10px 0' : '10px',
-                  }}
+                  sx={{ ...navBarStyle.searchIcon(searchInputShow) }}
                 >
                   <SearchIcon fontSize="small" />
                 </IconButton>
@@ -119,7 +108,7 @@ const Navbar = () => {
             {user?.result && (
               <Tooltip title="Check your favorite posts">
                 <IconButton
-                  onClick={handleGoToFav}
+                  onClick={() => navigate('/posts/bookmark')}
                   sx={{ ...navBarStyle.bookmarkIcon }}
                 >
                   <Badge badgeContent={0} color="primary">
@@ -135,7 +124,7 @@ const Navbar = () => {
               sx={{ display: { xs: 'none', md: 'block' } }}
             />
 
-            {user?.result ? ( //does user has result?
+            {user?.result ? (
               <>
                 <Avatar
                   alt={user.result.name}
@@ -160,17 +149,15 @@ const Navbar = () => {
                 </Button>
               </>
             ) : (
-              <>
-                <Button
-                  component={Link}
-                  to="/auth"
-                  variant="contained"
-                  color="primary"
-                  sx={{ ...navBarStyle.logInLogOutBtn }}
-                >
-                  Log in
-                </Button>
-              </>
+              <Button
+                component={Link}
+                variant="contained"
+                color="primary"
+                to="/auth"
+                sx={{ ...navBarStyle.logInLogOutBtn }}
+              >
+                Log in
+              </Button>
             )}
           </Box>
         </Toolbar>
@@ -181,83 +168,87 @@ const Navbar = () => {
 
 const navBarStyle = {
   mostOuterBox: {
+    minWidth: { xs: 360 },
     flexGrow: 1,
     mb: '2rem',
-    minWidth: { xs: 360 },
   },
 
   toolbar: {
-    borderBottom: '3px solid #36383F',
     backgroundColor: '#232529',
+    borderBottom: '3px solid #36383F',
   },
 
   siteNameWithLogo: {
-    flexGrow: 1,
     textDecoration: 'none',
-    fontWeight: 'bold',
     letterSpacing: '0.1rem',
-    display: 'flex',
     alignItems: 'center',
-    icon: { mr: '1rem' },
+    fontWeight: 'bold',
+    flexGrow: 1,
+    display: 'flex',
     fontBox: { display: { xs: 'none', md: 'block' } },
+    icon: { mr: '1rem' },
   },
 
   menuBox: {
-    display: 'flex',
     alignItems: 'center',
     columnGap: '10px',
+    display: 'flex',
   },
 
-  textField: {
-    transition: 'all 0.5s',
-    borderWidth: '1px 0px 1px 1px',
-    borderStyle: 'solid',
-    borderColor: '#757575',
-    borderRadius: '10px 0px 0px 10px',
-    fontSize: '0.8rem',
-    p: '0 10px',
+  textField(searchInputShow) {
+    return {
+      borderRadius: '10px 0px 0px 10px',
+      borderWidth: '1px 0px 1px 1px',
+      borderStyle: 'solid',
+      borderColor: '#757575',
+      transition: 'all 0.5s',
+      transform: searchInputShow ? '0' : 'translateX(20%)',
+      fontSize: '0.8rem',
+      opacity: searchInputShow ? '1' : '0',
+      p: '0 10px',
+    };
   },
 
-  searchIcon: {
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: '#757575',
-    transition: 'all 0.5s',
+  searchIcon(searchInputShow) {
+    return {
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: '#757575',
+      borderRadius: searchInputShow ? '0px 10px 10px 0' : '10px',
+      transition: 'all 0.5s',
+    };
   },
 
   bookmarkIcon: {
-    border: '1px solid #757575',
     borderRadius: '10px',
+    border: '1px solid #757575',
   },
 
   userAvatar: {
-    width: '1.5rem',
-    height: '1.5rem',
     fontSize: '0.8rem',
     display: { xs: 'none', md: 'flex' },
+    width: '1.5rem',
+    height: '1.5rem',
   },
 
   userName: {
+    letterSpacing: '0.1rem',
     fontWeight: 'bold',
     whiteSpace: 'nowrap',
-    letterSpacing: '0.1rem',
     display: { xs: 'none', md: 'flex' },
   },
 
   logInLogOutBtn: {
     backgroundImage: 'linear-gradient(45deg, #D38312 , #A83279)',
-    flexShrink: '0',
-    borderRadius: '16px',
-    color: '#DDDEE2',
-    fontSize: '0.8rem',
-    transition: 'all 0.3s',
     letterSpacing: '0.1rem',
+    borderRadius: '16px',
     fontWeight: 'bold',
+    transition: 'all 0.3s',
+    flexShrink: '0',
     whiteSpace: 'nowrap',
-
-    '&:hover': {
-      transform: 'translate(0, -0.25em)',
-    },
+    fontSize: '0.8rem',
+    color: '#DDDEE2',
+    '&:hover': { transform: 'translate(0, -0.25em)' },
   },
 };
 

@@ -5,13 +5,13 @@ const NotFound = ({ text, iconSize, fontWeight, textVariant }) => {
   return (
     <Box sx={{ textAlign: 'center', m: 'auto auto' }}>
       <SentimentVeryDissatisfiedIcon
-        sx={{ fontSize: iconSize, textAlign: 'center' }}
+        sx={{ fontSize: iconSize ? iconSize : '10rem', textAlign: 'center' }}
       />
       <Typography
-        variant={textVariant}
+        variant={textVariant ? textVariant : 'h4'}
         sx={{ fontWeight: fontWeight ? '' : '' }}
       >
-        {text}
+        {text ? text : '404 Page Not Found'}
       </Typography>
     </Box>
   );

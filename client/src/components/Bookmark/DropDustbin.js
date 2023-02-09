@@ -13,26 +13,23 @@ const DropDustbin = ({ posts, isLoading }) => {
   }));
 
   return (
-    <Box ref={drop} sx={{ ...outerBoxStyle }}>
+    <Box ref={drop}>
       {canDrop ? (
-        <DeleteOutlineIcon
-          sx={{ ...outerBoxStyle.icon, color: isOver ? 'primary.main' : '' }}
-        />
+        <DeleteOutlineIcon sx={{ ...outerBoxStyle.icon(isOver) }} />
       ) : (
-        <DeleteIcon
-          sx={{ ...outerBoxStyle.icon, color: isOver ? 'primary.main' : '' }}
-        />
+        <DeleteIcon sx={{ ...outerBoxStyle.icon(isOver) }} />
       )}
     </Box>
   );
 };
 
 const outerBoxStyle = {
-  width: '100%',
-  height: '100%',
-  icon: {
-    width: '100%',
-    height: '100%',
+  icon(isOver) {
+    return {
+      height: '100%',
+      width: '100%',
+      color: isOver ? 'primary.main' : '',
+    };
   },
 };
 

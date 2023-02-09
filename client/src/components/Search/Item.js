@@ -20,28 +20,13 @@ const Item = ({ post, idx }) => {
           {idx + 1}
         </Typography>
       </Box>
-      <Box
-        sx={{
-          ...overallLayout.item.leftColumn,
-          '&::before': {
-            ...overallLayout.item.leftColumn['&::before'],
-            width: isHover === post._id ? '3px' : '0px',
-          },
-          '&::after': {
-            ...overallLayout.item.leftColumn['&::after'],
-            opacity: isHover === post._id ? '100%' : '0%',
-          },
-        }}
-      >
+      <Box sx={{ ...overallLayout.leftItem(isHover, post._id) }}>
         <Avatar
           src={post?.selectedFile}
-          sx={{
-            ...overallLayout.item.leftColumn.avatarImg,
-            filter: isHover === post._id ? 'brightness(10%)' : '',
-          }}
+          sx={{ ...overallLayout.avatarImg(isHover, post._id) }}
         ></Avatar>
       </Box>
-      <Box sx={{ ...overallLayout.item.rightColumn }}>
+      <Box sx={{ ...overallLayout.rightItem }}>
         <Typography fontWeight="bold">
           {decodeAndCutString(post?.title, 100)}
         </Typography>
@@ -56,68 +41,69 @@ const Item = ({ post, idx }) => {
 
 const overallLayout = {
   theMostOuterBox: {
-    display: 'flex',
     flexDirection: { xs: 'column', sm: 'row' },
-    gap: '10px',
-    position: 'relative',
-    p: '10px',
     borderRadius: '12px',
+    position: 'relative',
+    display: 'flex',
+    gap: '10px',
+    p: '10px',
     '&:hover': { cursor: 'pointer' },
   },
 
   mostLeftColumn: {
-    m: 'auto 0px',
-    flexBasis: '30px',
-    textAlign: 'center',
     flexShrink: '0',
+    textAlign: 'center',
+    flexBasis: '30px',
+    m: 'auto 0px',
   },
 
-  item: {
-    leftColumn: {
-      flexBasis: '150px',
-      flexShrink: '0',
-      aspectRatio: '3/2',
-      position: 'relative',
+  leftItem: (isHover, postId) => ({
+    aspectRatio: '3/2',
+    flexShrink: '0',
+    flexBasis: '150px',
+    position: 'relative',
 
-      '&::before': {
-        left: '0',
-        height: '100%',
-        content: "''",
-        bgcolor: 'primary.main',
-        position: 'absolute',
-        transition: 'ease-in-out 0.1s',
-        zIndex: '2',
-      },
-
-      '&::after': {
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
-        whiteSpace: 'nowrap',
-        content: "'MORE'",
-        position: 'absolute',
-        transition: 'ease-in-out 0.3s',
-        zIndex: '2',
-        fontSize: '20px',
-        fontWeight: 'bold',
-      },
-
-      avatarImg: {
-        borderRadius: '0',
-        width: '100%',
-        height: '100%',
-        aspectRatio: '3/2',
-        zIndex: '0',
-      },
+    '&::before': {
+      transition: 'ease-in-out 0.1s',
+      position: 'absolute',
+      content: "''",
+      bgcolor: 'primary.main',
+      height: '100%',
+      zIndex: '2',
+      width: isHover === postId ? '3px' : '0px',
+      left: '0',
     },
 
-    rightColumn: {
-      flexGrow: '1',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
+    '&::after': {
+      transition: 'ease-in-out 0.3s',
+      whiteSpace: 'nowrap',
+      fontWeight: 'bold',
+      transform: 'translate(-50%,-50%)',
+      position: 'absolute',
+      fontSize: '20px',
+      content: "'MORE'",
+      opacity: isHover === postId ? '100%' : '0%',
+      zIndex: '2',
+      left: '50%',
+      top: '50%',
     },
+  }),
+
+  rightItem: {
+    justifyContent: 'space-between',
+    flexDirection: 'column',
+    flexGrow: '1',
+    display: 'flex',
   },
+
+  avatarImg: (isHover, postId) => ({
+    borderRadius: '0',
+    aspectRatio: '3/2',
+    height: '100%',
+    zIndex: '0',
+    filter: isHover === postId ? 'brightness(10%)' : '',
+    width: '100%',
+  }),
 };
 
 export default Item;

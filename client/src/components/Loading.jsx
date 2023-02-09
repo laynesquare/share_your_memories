@@ -4,14 +4,14 @@ const Loading = ({ type, slightTopMargin }) => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        alignItems: 'center',
         justifyContent: 'center',
-        height: '100%',
-        position: type === 'big' ? 'absolute' : '',
-        top: type === 'big' ? '50vh' : '',
-        left: type === 'big' ? '50vw' : '',
+        alignItems: 'center',
         transform: type === 'big' ? 'translate(-50%,-50%)' : '',
+        position: type === 'big' ? 'absolute' : '',
+        display: 'flex',
+        height: '100%',
+        left: type === 'big' ? '50vw' : '',
+        top: type === 'big' ? '50vh' : '',
         mt: slightTopMargin ? '1rem' : '',
       }}
     >

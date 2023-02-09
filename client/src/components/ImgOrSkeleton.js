@@ -1,11 +1,11 @@
 import { Avatar, Skeleton } from '@mui/material';
 
 const ImgOrSkeleton = ({
-  isImgLoaded,
   setIsImgLoaded,
   skeletonStyle,
-  imgStyle,
   selectedFile,
+  isImgLoaded,
+  imgStyle,
 }) => {
   return (
     <>

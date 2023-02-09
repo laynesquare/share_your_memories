@@ -6,11 +6,6 @@ const decodeAndCutString = (text, limit, mediumSizedWindow) => {
     cleanerText = text.substring(0, limit) + ' ...';
   }
 
-  // if (type === 'title' && text.length > 50) {
-  //   cleanerText = text.substring(0, 50) + ' ...';
-  // } else if (type === 'channel' && text.length > 30) {
-  //   cleanerText = text.substring(0, 30) + ' ...';
-  // }
   return cleanerText;
 };
 

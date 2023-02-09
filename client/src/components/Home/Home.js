@@ -2,13 +2,11 @@ import { Container, Grow, Grid, Box } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import Pagination from '../Pgn';
-import AutoLogin from './AutoLogin';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 
 const Home = () => {
   const [currentId, setCurrentId] = useState(null);
-
   //Get the url query params regarding the page number.
   const query = useQuery();
   const page = query.get('page') || 1;
@@ -56,14 +54,14 @@ function useQuery() {
 
 const homeStyle = {
   mostOuterBox: {
-    mb: '2rem',
     minWidth: { xs: 360 },
+    mb: '2rem',
   },
 
   formAndPagination: {
+    alignSelf: 'flex-start',
     position: 'sticky',
     top: '5px',
-    alignSelf: 'flex-start',
   },
 };
 

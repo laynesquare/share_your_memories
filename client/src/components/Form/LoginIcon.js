@@ -4,8 +4,8 @@ import icon from '../../assets/login_animated_icon.json';
 const LoginIcon = () => {
   const options = {
     animationData: icon,
-    loop: true,
     autoplay: true,
+    loop: true,
   };
 
   const { View } = useLottie(options);

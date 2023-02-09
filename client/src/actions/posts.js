@@ -3,8 +3,8 @@ import {
   FETCH_POST_BY_SEARCH,
   FETCH_ALL,
   FETCH_ONE,
-  CREATE,
   CREATE_POST_COMMENT,
+  CREATE,
   DELETE,
   LIKEPOST,
   BOOKMARK_POST,
@@ -23,7 +23,7 @@ export const getPost = (postId, navigate) => async (dispatch) => {
     dispatch({ type: FETCH_ONE, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {
-    navigate(-1);
+    navigate('/', { replace: true });
     console.log(error);
   }
 };
@@ -54,7 +54,6 @@ export const getPostsByBookmark = () => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.fetchPostsByBookmark();
-    console.log('fetch implemented');
     dispatch({ type: FETCH_POST_BY_BOOKMARK, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {
@@ -77,8 +76,6 @@ export const updatePost = (id, post) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.updatePost(id, post);
-
-    console.log(data);
     dispatch({ type: UPDATE, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {
@@ -92,7 +89,7 @@ export const deletePost = (id, navigate) => async (dispatch) => {
     await api.deletePost(id);
     dispatch({ type: DELETE, payload: id });
     dispatch({ type: END_LOADING });
-    navigate('/posts/deleteRedirect');
+    navigate('/', { replace: true });
   } catch (error) {
     console.log(error);
   }
@@ -100,10 +97,8 @@ export const deletePost = (id, navigate) => async (dispatch) => {
 
 export const likePost = (id) => async (dispatch) => {
   try {
-    dispatch({ type: START_LOADING });
     const { data } = await api.likePost(id);
     dispatch({ type: LIKEPOST, payload: data });
-    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
@@ -111,10 +106,8 @@ export const likePost = (id) => async (dispatch) => {
 
 export const bookmarkPost = (id) => async (dispatch) => {
   try {
-    dispatch({ type: START_LOADING });
     const { data } = await api.bookmarkPost(id);
     dispatch({ type: BOOKMARK_POST, payload: data });
-    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }

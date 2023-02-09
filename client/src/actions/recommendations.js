@@ -1,8 +1,8 @@
 import * as api from '../api/recommendations';
 import {
-  GET_RECOMMEND_VIDS,
   START_LOADING_RECOMMENDATIONS,
   END_LOADING_RECOMMENDATIONS,
+  GET_RECOMMEND_VIDS,
 } from '../constants/actionTypes';
 
 export const getRecommendedVids = (tagName) => async (dispatch) => {

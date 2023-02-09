@@ -17,23 +17,20 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DragItem from './DragItem';
 import NotFound from '../NotFound';
 import Loading from '../Loading';
-import { Tooltip } from '@material-ui/core';
 
 const Bookmark = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const theme = useTheme();
   const location = useLocation();
-  const mediumSizedWindow = useMediaQuery(theme.breakpoints.down('lg'));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const user =
     JSON.parse(localStorage.getItem('profile'))?.result._id ||
     JSON.parse(localStorage.getItem('profile'))?.result.googleId;
 
-  let { isLoading, posts } = useSelector((state) => {
+  const { isLoading, posts } = useSelector((state) => {
     const [dirtyPosts, isLoading] = [state.posts.posts, state.posts.isLoading];
-    const posts = dirtyPosts.filter((dirtyPost) =>
-      dirtyPost.bookmark.find((el) => el === user)
-    );
+    const posts = dirtyPostsCleaUp(dirtyPosts, user);
     return { isLoading, posts };
   });
 
@@ -45,7 +42,7 @@ const Bookmark = () => {
   const BookmarkItems = () => {
     if (isLoading) return <Loading type="small" />;
 
-    if (posts?.length === 0)
+    if (!posts?.length)
       return (
         <NotFound
           text="You don't have any bookmarks."
@@ -54,38 +51,25 @@ const Bookmark = () => {
         />
       );
 
-    if (posts?.length > 0) {
+    if (posts?.length)
       return (
         <>
-          {posts.map((post, idx) => {
-            const doesUserBookmarkThis = post.bookmark.find(
-              (eachUser) => eachUser === user
-            );
-
-            if (!doesUserBookmarkThis) return null;
-
-            return (
-              <Grow in>
-                <Box key={idx}>
-                  <DragItem post={post} isLoading={isLoading} idx={idx} />
-                </Box>
-              </Grow>
-            );
-          })}
+          {posts.map((post, idx) => (
+            <Grow in key={idx}>
+              <Box>
+                <DragItem post={post} isLoading={isLoading} idx={idx} />
+              </Box>
+            </Grow>
+          ))}
         </>
       );
-    }
   };
 
   return (
     <>
-      <Container maxWidth={mediumSizedWindow ? 'md' : 'lg'}>
+      <Container maxWidth={isMobile ? 'md' : 'lg'}>
         <Grid container columnSpacing={7} sx={{ position: 'relative' }}>
-          <Grid
-            item
-            xs={mediumSizedWindow ? 12 : 7}
-            sx={{ ...bookmarkStyle.leftGridItems }}
-          >
+          <Grid item xs={isMobile ? 12 : 7} sx={{ ...bookmarkStyle.leftGrid }}>
             <Typography variant="h5" fontWeight="bold">
               Your Bookmarks
             </Typography>
@@ -93,36 +77,21 @@ const Bookmark = () => {
             <BookmarkItems />
           </Grid>
 
-          {!mediumSizedWindow && (
-            <Grid
-              item
-              xs={5}
-              sx={{
-                alignSelf: 'flex-start',
-                position: 'sticky',
-                top: '1rem',
-              }}
-            >
+          {!isMobile && (
+            <Grid item xs={5} sx={{ ...bookmarkStyle.rightGrid }}>
               <Typography variant="h5" fontWeight="bold">
                 Dustbin
               </Typography>
               <Divider sx={{ mt: '1rem' }} />
-              <Box>
-                {!isLoading ? (
-                  <DropDustbin posts={posts} />
-                ) : (
-                  <Box sx={{ width: '100%', height: '100%' }}>
-                    <DeleteIcon sx={{ width: '100%', height: '100%' }} />
-                  </Box>
-                )}
-              </Box>
-              <Box>
-                <Divider sx={{ mb: '1rem' }} />
-                <Typography textAlign="">
-                  To unbookmark a post, drag the item, and throw it into the
-                  dustbin.
-                </Typography>
-              </Box>
+              {isLoading && (
+                <DeleteIcon sx={{ ...bookmarkStyle.rightGrid.deleteIcon }} />
+              )}
+              {!isLoading && <DropDustbin posts={posts} />}
+              <Divider sx={{ mb: '1rem' }} />
+              <Typography>
+                To unbookmark a post, drag the item, and throw it into the
+                dustbin.
+              </Typography>
             </Grid>
           )}
         </Grid>
@@ -131,17 +100,31 @@ const Bookmark = () => {
   );
 };
 
+const dirtyPostsCleaUp = (posts, user) =>
+  posts.filter((post) => post.bookmark.find((el) => el === user));
+
 const bookmarkStyle = {
-  leftGridItems: {
-    position: 'relative',
-    display: 'flex',
+  leftGrid: {
     flexDirection: 'column',
-    gap: '1rem',
+    position: 'relative',
     minWidth: '360px',
+    display: 'flex',
+    gap: '1rem',
 
     noBookmarkDisplay: {
       textAlign: 'center',
       m: 'auto auto',
+    },
+  },
+
+  rightGrid: {
+    alignSelf: 'flex-start',
+    position: 'sticky',
+    top: '1rem',
+
+    deleteIcon: {
+      height: '100%',
+      width: '100%',
     },
   },
 };

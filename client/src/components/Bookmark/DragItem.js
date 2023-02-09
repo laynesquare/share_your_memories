@@ -21,21 +21,18 @@ const DragItem = ({ post, idx }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
-  const mediumSizedWindow = useMediaQuery(theme.breakpoints.down('lg'));
-  const [isHover, setIsHover] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const [isImgLoaded, setIsImgLoaded] = useState(false);
+  const [isHover, setIsHover] = useState(false);
   const handleRemoveBookmark = (whatItem) => dispatch(bookmarkPost(whatItem));
 
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [_, drag] = useDrag(() => ({
     type: post._id,
     end: (item, monitor) => {
       const itemDropped = monitor.didDrop();
       const whatItem = monitor.getItemType();
       if (itemDropped) handleRemoveBookmark(whatItem);
     },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
   }));
 
   return (
@@ -55,28 +52,14 @@ const DragItem = ({ post, idx }) => {
           {idx + 1}
         </Typography>
       </Box>
-      <Box
-        sx={{
-          ...overallLayout.item.leftColumn,
-          '&::before': {
-            ...overallLayout.item.leftColumn['&::before'],
-            width: isHover === post._id ? '3px' : '0px',
-          },
-          '&::after': {
-            ...overallLayout.item.leftColumn['&::after'],
-            opacity: isHover === post._id ? '100%' : '0%',
-          },
-        }}
-      >
+      <Box sx={{ ...overallLayout.item.leftColumn(isHover, post._id) }}>
         <ImgOrSkeleton
           isImgLoaded={isImgLoaded}
           setIsImgLoaded={setIsImgLoaded}
           selectedFile={post?.selectedFile}
           skeletonStyle={{ ...overallLayout.item.leftColumn.imgSkeleton }}
           imgStyle={{
-            ...overallLayout.item.leftColumn.imgAvatar,
-            display: isImgLoaded ? '' : 'none',
-            filter: isHover === post._id ? 'brightness(10%)' : '',
+            ...overallLayout.item.imgAvatar(isHover, post._id, isImgLoaded),
           }}
         />
       </Box>
@@ -90,7 +73,7 @@ const DragItem = ({ post, idx }) => {
         </Typography>
       </Box>
 
-      {mediumSizedWindow && (
+      {isMobile && (
         <>
           <Box sx={{ ...overallLayout.item.responsiveMostRightColumn }}>
             <Tooltip title="Remove Bookmark">
@@ -114,21 +97,21 @@ const DragItem = ({ post, idx }) => {
 
 const overallLayout = {
   theMostOuterBox: {
-    position: 'relative',
+    flexDirection: { xs: 'column', sm: 'row' },
     borderRadius: '12px',
+    position: 'relative',
     display: 'flex',
     gap: '10px',
     p: '10px',
-    flexDirection: { xs: 'column', sm: 'row' },
     '&:hover': { cursor: 'pointer' },
   },
 
   mostLeftColumn: {
-    m: 'auto 0px',
-    flexBasis: '30px',
     flexShrink: '0',
     textAlign: 'center',
+    flexBasis: '30px',
     position: 'relative',
+    m: 'auto 0px',
     index: {
       '&::before': { xs: { content: "'- '" }, sm: { content: "''" } },
       '&::after': { xs: { content: "' -'" }, sm: { content: "''" } },
@@ -136,61 +119,69 @@ const overallLayout = {
   },
 
   item: {
-    leftColumn: {
-      flexBasis: '130px',
-      flexShrink: '0',
-      aspectRatio: '3/2',
-      position: 'relative',
-
-      '&::before': {
-        left: '0',
-        height: '100%',
-        content: "''",
-        bgcolor: 'primary.main',
-        position: 'absolute',
-        transition: 'ease-in-out 0.1s',
-        zIndex: '2',
-      },
-
-      '&::after': {
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
-        whiteSpace: 'nowrap',
-        content: "'MORE'",
-        position: 'absolute',
-        transition: 'ease-in-out 0.3s',
-        zIndex: '2',
-        fontSize: '1rem',
-        fontWeight: 'bold',
-      },
-
-      imgSkeleton: {
-        width: '100%',
-        height: '100%',
-      },
-
-      imgAvatar: {
-        borderRadius: '0',
-        width: '100%',
-        height: '100%',
+    leftColumn(isHover, postId) {
+      return {
         aspectRatio: '3/2',
+        flexShrink: '0',
+        flexBasis: '130px',
+        position: 'relative',
+
+        '&::before': {
+          transition: 'ease-in-out 0.1s',
+          position: 'absolute',
+          bgcolor: 'primary.main',
+          content: "''",
+          zIndex: '2',
+          height: '100%',
+          width: isHover === postId ? '3px' : '0px',
+          left: '0',
+        },
+
+        '&::after': {
+          transition: 'ease-in-out 0.3s',
+          whiteSpace: 'nowrap',
+          fontWeight: 'bold',
+          transform: 'translate(-50%,-50%)',
+          position: 'absolute',
+          fontSize: '1rem',
+          opacity: isHover === postId ? '100%' : '0%',
+          content: "'MORE'",
+          zIndex: '2',
+          left: '50%',
+          top: '50%',
+        },
+      };
+    },
+
+    imgSkeleton: {
+      height: '100%',
+      width: '100%',
+    },
+
+    imgAvatar(isHover, postId, isImgLoaded) {
+      return {
+        borderRadius: '0',
+        aspectRatio: '3/2',
+        display: isImgLoaded ? '' : 'none',
+        filter: isHover === postId ? 'brightness(10%)' : '',
+        height: '100%',
         zIndex: '0',
-      },
+        width: '100%',
+      };
     },
 
     rightColumn: {
+      justifyContent: 'space-between',
+      flexDirection: 'column',
       flexGrow: '1',
       display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
     },
 
     responsiveMostRightColumn: {
-      display: 'flex',
       position: { xs: 'absolute', sm: 'relative' },
-      top: '0',
+      display: 'flex',
       right: '0',
+      top: '0',
       m: { xs: '8px', sm: '0' },
     },
   },

@@ -25,48 +25,14 @@ const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('profile'));
+  const currentUser = user?.result?._id || user?.result?.googleId;
   const [isImgLoaded, setIsImgLoaded] = useState(false);
-  const goToPostDetails = (postId) => navigate(`/posts/detail/${post._id}`);
-
-  const Likes = () => {
-    const lengthOfLikes = post?.likes?.length;
-    if (lengthOfLikes > 0) {
-      return post.likes.includes(
-        user?.result?._id || user?.result?.googleId
-      ) ? (
-        <>
-          <ThumbUpAltIcon fontSize="small" />
-          &nbsp;
-          {lengthOfLikes > 2
-            ? `You, and ${lengthOfLikes - 1} others`
-            : //only ONE or TWO people liked the post
-              //ONE: the user (only showing you)
-              //TWO: the user and one other person (showing you and one other person)
-              `You${lengthOfLikes - 1 === 0 ? '' : ', and 1 other'}`}
-        </>
-      ) : (
-        <>
-          <ThumbUpAltOutlinedIcon fontSize="small" />
-          &nbsp;
-          {lengthOfLikes === 1
-            ? `${lengthOfLikes} Like`
-            : `${lengthOfLikes} Likes`}
-        </>
-      );
-    }
-
-    return (
-      <>
-        <ThumbUpAltOutlinedIcon fontSize="small" /> &nbsp;
-        {lengthOfLikes} Like
-      </>
-    );
-  };
+  const goToPostDetails = () => navigate(`/posts/detail/${post._id}`);
 
   return (
-    <Grow in={true}>
+    <Grow in>
       <Card sx={{ ...postStyle.mostOuterBox }}>
-        {user?.result?._id === post.creator && (
+        {currentUser === post.creator && (
           <Tooltip title="Edit the post">
             <Button
               color="primary"
@@ -79,7 +45,7 @@ const Post = ({ post, setCurrentId }) => {
         )}
 
         <ButtonBase
-          onClick={() => goToPostDetails(post._id)}
+          onClick={() => goToPostDetails()}
           sx={{ ...postStyle.postBaseBtn }}
         >
           <ImgOrSkeleton
@@ -87,10 +53,7 @@ const Post = ({ post, setCurrentId }) => {
             setIsImgLoaded={setIsImgLoaded}
             selectedFile={post?.selectedFile}
             skeletonStyle={{ ...postStyle.imgSkeleton }}
-            imgStyle={{
-              ...postStyle.imgAvatar,
-              display: isImgLoaded ? '' : 'none',
-            }}
+            imgStyle={{ ...postStyle.imgAvatar(isImgLoaded) }}
           />
           <div>
             <Typography variant="h6" sx={{ ...postStyle.name }}>
@@ -107,7 +70,7 @@ const Post = ({ post, setCurrentId }) => {
               variant="caption"
               sx={{ textAlign: 'left', display: 'block' }}
             >
-              {Array.isArray(post.tags) && post.tags.map((tag) => `#${tag} `)}
+              {post?.tags?.length && post.tags.map((tag) => `#${tag} `)}
             </Typography>
             <Typography
               gutterBottom
@@ -125,26 +88,19 @@ const Post = ({ post, setCurrentId }) => {
         <Box sx={{ ...postStyle.cardAction }}>
           <Box sx={{ ...postStyle.cardAction.shadowBox }}>
             <Tooltip
-              title={
-                post.likes.includes(user?.result?._id || user?.result?.googleId)
-                  ? 'Unlike it'
-                  : 'Like it'
-              }
+              title={post.likes.includes(currentUser) ? 'Unlike it' : 'Like it'}
             >
-              <span>
-                <Button
-                  size="small"
-                  color="primary"
-                  onClick={() => dispatch(likePost(post._id))}
-                  disabled={!user?.result}
-                >
-                  <Likes />
-                </Button>
-              </span>
+              <Button
+                size="small"
+                color="primary"
+                onClick={() => dispatch(likePost(post._id))}
+                disabled={!currentUser}
+              >
+                <Likes likes={post?.likes} />
+              </Button>
             </Tooltip>
 
-            {(user?.result?.googleId === post.creator ||
-              user?.result?._id === post.creator) && (
+            {currentUser === post.creator && (
               <Tooltip title="Delete">
                 <Button
                   size="small"
@@ -156,14 +112,10 @@ const Post = ({ post, setCurrentId }) => {
               </Tooltip>
             )}
 
-            {user?.result && (
+            {currentUser && (
               <Tooltip
                 title={
-                  post?.bookmark?.find(
-                    (bookmarkUser) =>
-                      bookmarkUser ===
-                      (user?.result?._id || user?.result?.googleId)
-                  )
+                  post?.bookmark?.includes(currentUser)
                     ? 'Remove Bookmark'
                     : 'Bookmark'
                 }
@@ -173,11 +125,7 @@ const Post = ({ post, setCurrentId }) => {
                   color="primary"
                   onClick={() => dispatch(bookmarkPost(post._id))}
                 >
-                  {post?.bookmark?.find(
-                    (bookmarkUser) =>
-                      bookmarkUser ===
-                      (user?.result?._id || user?.result?.googleId)
-                  ) ? (
+                  {post?.bookmark?.includes(currentUser) ? (
                     <BookmarkIcon fontSize="small" />
                   ) : (
                     <TurnedInNotIcon fontSize="small" />
@@ -192,6 +140,39 @@ const Post = ({ post, setCurrentId }) => {
   );
 };
 
+const Likes = ({ likes }) => {
+  const likeCount = likes?.length;
+  const user = JSON.parse(localStorage.getItem('profile'));
+  const currentUser = user?.result?._id || user?.result?.googleId;
+
+  if (!likeCount)
+    return (
+      <>
+        <ThumbUpAltOutlinedIcon fontSize="small" />
+        &nbsp; 0 Like
+      </>
+    );
+
+  if (likes.includes(currentUser))
+    return (
+      <>
+        <ThumbUpAltIcon fontSize="small" />
+        &nbsp;
+        {likeCount > 2
+          ? `You & ${likeCount - 1} others`
+          : `You${likeCount - 1 === 0 ? '' : ' & 1 other'}`}
+      </>
+    );
+
+  return (
+    <>
+      <ThumbUpAltOutlinedIcon fontSize="small" />
+      &nbsp;
+      {likeCount === 1 ? `${likeCount} Like` : `${likeCount} Likes`}
+    </>
+  );
+};
+
 const postStyle = {
   mostOuterBox: {
     position: 'relative',
@@ -200,17 +181,18 @@ const postStyle = {
   postBaseBtn: {
     display: 'block',
     width: '100%',
-    '&:hover': {
-      backgroundColor: 'rgba(4, 0, 0, 0.08)',
-    },
+    '&:hover': { backgroundColor: 'rgba(4, 0, 0, 0.08)' },
   },
 
-  imgAvatar: {
-    width: '100%',
-    height: '200px',
-    borderRadius: '0%',
-    pointerEvents: 'none',
-    filter: 'brightness(0.5)',
+  imgAvatar(isImgLoaded) {
+    return {
+      pointerEvents: 'none',
+      borderRadius: '0%',
+      display: isImgLoaded ? '' : 'none',
+      filter: 'brightness(0.5)',
+      height: '200px',
+      width: '100%',
+    };
   },
 
   imgSkeleton: {
@@ -218,24 +200,24 @@ const postStyle = {
   },
 
   name: {
+    whiteSpace: 'nowrap',
     position: 'absolute',
     top: '0.5rem',
     left: '1rem',
-    whiteSpace: 'nowrap',
   },
 
   createdAt: {
     position: 'absolute',
-    top: '2.5rem',
-    left: '1rem',
     fontSize: '0.8rem',
+    left: '1rem',
+    top: '2.5rem',
   },
 
   moreBtn: {
+    transition: 'all 0.3s',
     position: 'absolute',
     top: '0.7rem',
     right: '0rem',
-    transition: 'all 0.3s',
     zIndex: '2',
     '&:hover': {
       backgroundColor: 'transparent',
@@ -249,21 +231,21 @@ const postStyle = {
   },
 
   cardAction: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    p: '0.6rem',
     position: 'relative',
+    p: '0.6rem',
 
     shadowBox: {
+      flexWrap: 'noWrap',
+      display: 'flex',
       '&:before': {
-        content: "''",
+        transform: 'translateY(-100%)',
         position: 'absolute',
-        width: '100%',
+        content: "''",
         height: '80%',
+        width: '100%',
+        left: '0',
         background:
           'linear-gradient(0deg, rgba(44,45,49,1) 0%, rgba(46,48,48,0) 100%)',
-        left: '0',
-        transform: 'translateY(-100%)',
       },
     },
   },

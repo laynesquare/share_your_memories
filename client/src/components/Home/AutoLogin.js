@@ -1,61 +1,50 @@
-import { useState } from 'react';
 import { Typography, Divider } from '@mui/material';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { signin } from '../../actions/auth';
+import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useDispatch } from 'react-redux';
-import { signin } from '../../actions/auth';
-import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 
-const AutoLogin = ({ user }) => {
+const AutoLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('profile'));
   const [open, setOpen] = useState(!user);
 
   const handleClose = () => {
     setOpen(false);
-    dispatch(
-      signin({ email: 'johndoe@gmail.com', password: 'johndoe123' }, navigate)
-    );
+    dispatch(signin(lazyLoginInfo, navigate));
   };
-
-  console.log(user, 'auto');
 
   return (
     <>
       <Dialog
         open={open}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="Auto-logged-into-an-test-account"
+        aria-describedby="you'll-be-logged-into-as-John-Doe-automatically"
         sx={{ minWidth: '360px' }}
       >
         <DialogTitle
-          id="alert-dialog-title"
-          sx={{
-            fontWeight: 'bold',
-          }}
+          id="Auto-logged-into-an-test-account"
+          sx={{ fontWeight: 'bold' }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 'bold',
-              width: '100%',
-            }}
-          >
-            <>You'll be auto-logged in as a test account</>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', width: '100%' }}>
+            <>You'll be auto-logged into a test account</>
           </Typography>
         </DialogTitle>
         <Divider />
         <DialogContent>
           <DialogContentText
-            id="alert-dialog-description"
+            id="you'll-be-logged-into-as-John-Doe-automatically"
             sx={{ textAlign: 'justify', color: 'text.primary' }}
           >
             To facilitate exploring the full functionality of the site, you'll
-            be logged in as <b>John Doe</b> automatically,{' '}
+            be logged into as <b>John Doe</b> automatically,{' '}
             <b>since it's a try-it and shared one without exclusivity</b>.
             <br />
             <br />
@@ -78,5 +67,7 @@ const AutoLogin = ({ user }) => {
     </>
   );
 };
+
+const lazyLoginInfo = { email: 'johndoe@gmail.com', password: 'johndoe123' };
 
 export default AutoLogin;

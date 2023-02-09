@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
 import PostMessage from '../models/postMessage.js';
+import mongoose from 'mongoose';
 
 export const getPost = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   try {
     const post = await PostMessage.findById(id);
@@ -14,7 +13,7 @@ export const getPost = async (req, res) => {
 };
 
 export const getPosts = async (req, res) => {
-  const { page } = req.query; //It's a string.
+  const { page } = req.query;
 
   try {
     const LIMIT = 8;
@@ -23,7 +22,6 @@ export const getPosts = async (req, res) => {
     const startIndex = (Number(page) - 1) * LIMIT;
     //Count all the posts in the database.
     const total = await PostMessage.countDocuments();
-
     const posts = await PostMessage.find()
       .sort({ _id: -1 })
       .limit(LIMIT)
@@ -32,7 +30,6 @@ export const getPosts = async (req, res) => {
     res.status(200).json({
       data: posts,
       currentPage: page,
-      //Unconditional roundup.
       numberOfPages: Math.ceil(total / LIMIT),
     });
   } catch (error) {
@@ -42,10 +39,9 @@ export const getPosts = async (req, res) => {
 
 export const getPostsByBookmark = async (req, res) => {
   const user = req.userId;
+
   try {
     const postsBookmarkedByTheUser = await PostMessage.find({ bookmark: user });
-
-    console.log(postsBookmarkedByTheUser, 'result');
     res.status(200).json(postsBookmarkedByTheUser);
   } catch (error) {
     console.log(error);
@@ -53,7 +49,7 @@ export const getPostsByBookmark = async (req, res) => {
 };
 
 export const getPostsBySearch = async (req, res) => {
-  const { page, keyword } = req.query;
+  const { keyword } = req.query;
   const rgx = (pattern) => new RegExp(`.*${pattern}.*`);
   const keywordInRegExpForm = rgx(keyword);
 
@@ -68,8 +64,6 @@ export const getPostsBySearch = async (req, res) => {
     });
 
     res.status(200).json(matchPosts);
-
-    // res.status(200).json({ msg: 'reaching BE success' });
   } catch (error) {
     res.status(404).json({ msg: error.message });
   }
@@ -77,7 +71,6 @@ export const getPostsBySearch = async (req, res) => {
 
 export const createPost = async (req, res) => {
   const body = req.body;
-  console.log(req.userId, 'auth');
   const newPost = new PostMessage({ ...body, creator: req.userId });
 
   try {
@@ -90,62 +83,40 @@ export const createPost = async (req, res) => {
 
 export const createPostComment = async (req, res) => {
   const { id } = req.params;
+  const { body, creator } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).json({ msg: 'Post cannot be found.' });
 
-  const { body, creator } = req.body;
-  // const holder = await PostMessage.findByIdAndUpdate(id, {comments:})
+  const post = await PostMessage.findById(id);
 
-  const postToBeAddedComment = await PostMessage.findById(id);
-  postToBeAddedComment.comments.push({
+  post.comments.push({
     body,
     creator: creator.name,
     date: new Date(),
   });
 
-  const postUpdatedWithRenewedComments = await PostMessage.findByIdAndUpdate(
+  const commentedPost = await PostMessage.findByIdAndUpdate(
     id,
-    {
-      comments: postToBeAddedComment.comments,
-    },
+    { comments: post.comments },
     { new: true }
   );
 
-  console.log(postUpdatedWithRenewedComments);
-  res.json(postUpdatedWithRenewedComments);
+  res.json(commentedPost);
 };
 
 export const updatePost = async (req, res) => {
   const { id } = req.params;
-  const {
-    title,
-    message,
-    creator,
-    selectedFile,
-    tags,
-    likes,
-    name,
-    _id,
-    bookmark,
-  } = req.body;
+  const { selectedFile, message, title, tags } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No post with id: ${id}`);
 
-  const updatedPost = {
-    creator,
-    title,
-    message,
-    tags,
-    selectedFile,
-    likes,
-    name,
-    bookmark,
-    _id: id,
-  };
-
-  await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
+  const updatedPost = await PostMessage.findByIdAndUpdate(
+    id,
+    { selectedFile, message, title, tags },
+    { new: true }
+  );
 
   res.json(updatedPost);
 };
@@ -158,8 +129,6 @@ export const deletePost = async (req, res) => {
     return res.status(404).send(`No post with id: ${id}`);
 
   const { creator } = await PostMessage.findById(id);
-
-  console.log(userId, creator);
 
   if (creator !== userId)
     return res.status(204).json({ msg: 'not the creator of the post' });
@@ -175,51 +144,44 @@ export const likePost = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No post with id: ${id}`);
 
-  //checking if the user has already liked the post
-  const post = await PostMessage.findById(id);
-  const alreadyLiked = post.likes.find((user) => {
-    return user === req.userId;
-  });
+  const post = await PostMessage.findById(id).select({ _id: 1, likes: 1 });
+  const alreadyLiked = post.likes.indexOf(req.userId);
 
-  if (alreadyLiked) {
-    post.likes = post.likes.filter((user) => {
-      return user !== req.userId;
-    });
+  if (alreadyLiked + 1) {
+    post.likes.splice(alreadyLiked, 1);
   } else {
     post.likes.push(req.userId);
   }
 
   const updatedPost = await PostMessage.findByIdAndUpdate(id, post, {
     new: true,
-  });
+  }).select({ _id: 1, likes: 1 });
 
-  res.json(updatedPost);
+  const { _id, likes } = updatedPost;
+
+  res.json({ _id, likes });
 };
 
 export const bookmarkPost = async (req, res) => {
   const { id } = req.params;
-  const userId = req.userId;
 
-  try {
-    let { bookmark } = await PostMessage.findById(id);
-    const checkIfBookmarkBefore = bookmark.find((user) => user === userId);
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send(`No post with id: ${id}`);
 
-    if (checkIfBookmarkBefore) {
-      bookmark = bookmark.filter((user) => user !== userId);
-    } else {
-      bookmark.push(userId);
-    }
+  const { bookmark } = await PostMessage.findById(id).select({ bookmark: 1 });
+  const alreadyBookmarked = bookmark.indexOf(req.userId);
 
-    const postAfterBookmarkHandling = await PostMessage.findByIdAndUpdate(
-      id,
-      {
-        bookmark: bookmark,
-      },
-      { new: true }
-    );
-
-    res.json(postAfterBookmarkHandling);
-  } catch (error) {
-    console.log(error);
+  if (alreadyBookmarked + 1) {
+    bookmark.splice(alreadyBookmarked, 1);
+  } else {
+    bookmark.push(req.userId);
   }
+
+  const updatedPost = await PostMessage.findByIdAndUpdate(
+    id,
+    { bookmark: bookmark },
+    { new: true }
+  ).select({ _id: 1, bookmark: 1 });
+
+  res.json(updatedPost);
 };

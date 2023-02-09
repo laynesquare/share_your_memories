@@ -21,150 +21,131 @@ import moment from 'moment';
 
 const Comment = ({ postId, comments, isLoadingComments }) => {
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem('profile'));
+  const creator = user ? user.result : guest;
   const theme = useTheme();
-  const [commentPackage, setCommentPackage] = useState({ body: '' });
   const onWiderScreen = useMediaQuery(theme.breakpoints.up('lg'));
+  const [comment, setComment] = useState({ body: '' });
   const [openComment, setOpenComment] = useState(onWiderScreen);
 
-  const commentCreator = localStorage?.getItem('profile')
-    ? JSON.parse(localStorage.getItem('profile'))?.result
-    : { name: 'Guest', email: 'Guest@gmail.com' };
+  const handleCommentChange = (e) => setComment({ body: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!commentPackage?.body) return;
-    dispatch(
-      createPostComment(postId, { ...commentPackage, creator: commentCreator })
-    );
-    setCommentPackage({ body: '' });
+    if (!comment?.body) return;
+    dispatch(createPostComment(postId, { ...comment, creator: creator }));
+    setComment({ body: '' });
   };
 
-  const handleCommentContentChange = (e) =>
-    setCommentPackage({ body: e.target.value });
-
-  useEffect(() => setOpenComment(onWiderScreen), [onWiderScreen]);
+  useEffect(() => {
+    setOpenComment(onWiderScreen);
+  }, [onWiderScreen]);
 
   return (
-    <>
-      <Box>
-        <Accordion
-          expanded={openComment}
-          onChange={() => setOpenComment((pre) => !pre)}
+    <Box>
+      <Accordion
+        expanded={openComment}
+        onChange={() => setOpenComment((p) => !p)}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="expand-comment-section"
+          id="comment-section"
         >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography variant="h6" sx={{ ...commentStyle.title }}>
-              <ForumIcon fontSize="medium" /> &nbsp;
-              {comments && comments.length > 1 ? (
-                <>{comments.length}&nbsp;Comments</>
-              ) : (
-                <>{comments?.length}&nbsp;Comment</>
-              )}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <form autoComplete="off" onSubmit={handleSubmit}>
-              <Grid container sx={{ display: 'flex', flexWrap: 'nowrap' }}>
-                <Grid item sx={{ mr: '1rem' }}>
-                  <Avatar />
-                </Grid>
-                <Grid item sx={{ flexGrow: 1 }}>
-                  <TextField
-                    type="text"
-                    variant="standard"
-                    placeholder="Add a comment"
-                    fullWidth
-                    value={commentPackage.body}
-                    onChange={handleCommentContentChange}
-                    sx={{ mb: '1rem' }}
-                  />
-                  <Box sx={{ display: 'flex', justifyContent: 'right' }}>
-                    <Button
-                      size="small"
-                      sx={{ mr: '1rem' }}
-                      onClick={() => setCommentPackage({ body: '' })}
-                    >
-                      CANCEL
-                    </Button>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      disabled={commentPackage.body === ''}
-                    >
-                      COMMENT
-                    </Button>
-                  </Box>
-                </Grid>
-              </Grid>
-            </form>
-
-            {isLoadingComments ? (
-              <Loading type="small" slightTopMargin />
+          <Typography variant="h6" sx={{ ...commentStyle.title }}>
+            <ForumIcon fontSize="medium" /> &nbsp;
+            {comments && comments?.length > 1 ? (
+              <>{comments?.length}&nbsp;Comments</>
             ) : (
-              <>
-                <Box sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
-                  {comments?.length
-                    ? comments.map((comment) => {
-                        return (
-                          <Box
-                            key={comment?._id}
-                            sx={{ ...commentStyle.perCommentBox }}
-                          >
-                            <Box
-                              sx={{ ...commentStyle.perCommentBox.leftColumn }}
-                            >
-                              <Avatar>{comment?.creator[0]}</Avatar>
-                            </Box>
-                            <Box
-                              sx={{ ...commentStyle.perCommentBox.rightColumn }}
-                            >
-                              <Box sx={{ ...commentStyle.creator }}>
-                                <Typography sx={{ fontWeight: 'bold' }}>
-                                  {comment?.creator || 'Guest'}
-                                </Typography>
-                                <Typography variant="h8">
-                                  &nbsp; &nbsp;
-                                  {`${moment(comment?.date).fromNow()}`}
-                                </Typography>
-                              </Box>
-                              <Typography sx={{ maxWidth: '100%' }}>
-                                {comment?.body}
-                              </Typography>
-                            </Box>
-                          </Box>
-                        );
-                      })
-                    : null}
-                </Box>
-              </>
+              <>{comments?.length}&nbsp;Comment</>
             )}
-          </AccordionDetails>
-        </Accordion>
-      </Box>
-    </>
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <form autoComplete="off" onSubmit={handleSubmit}>
+            <Grid container sx={{ display: 'flex', flexWrap: 'nowrap' }}>
+              <Grid item sx={{ mr: '1rem' }}>
+                <Avatar />
+              </Grid>
+              <Grid item sx={{ flexGrow: 1 }}>
+                <TextField
+                  type="text"
+                  variant="standard"
+                  placeholder="Add a comment"
+                  fullWidth
+                  value={comment.body}
+                  onChange={handleCommentChange}
+                  sx={{ mb: '1rem' }}
+                />
+                <Box sx={{ display: 'flex', justifyContent: 'right' }}>
+                  <Button
+                    size="small"
+                    sx={{ mr: '1rem' }}
+                    onClick={() => setComment({ body: '' })}
+                  >
+                    CANCEL
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    disabled={!comment.body}
+                  >
+                    COMMENT
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          </form>
+
+          {isLoadingComments && <Loading type="small" slightTopMargin />}
+
+          {comments?.length > 0 &&
+            comments.map((comment) => (
+              <Box key={comment?._id} sx={{ ...commentStyle.perCommentBox }}>
+                <Box sx={{ ...commentStyle.perCommentBox.leftColumn }}>
+                  <Avatar>{comment?.creator[0]}</Avatar>
+                </Box>
+                <Box sx={{ ...commentStyle.perCommentBox.rightColumn }}>
+                  <Box sx={{ ...commentStyle.creator }}>
+                    <Typography sx={{ fontWeight: 'bold' }}>
+                      {comment?.creator || 'Guest'}
+                    </Typography>
+                    <Typography variant="h8">
+                      &nbsp; &nbsp;
+                      {`${moment(comment?.date).fromNow()}`}
+                    </Typography>
+                  </Box>
+                  <Typography sx={{ maxWidth: '100%' }}>
+                    {comment?.body}
+                  </Typography>
+                </Box>
+              </Box>
+            ))}
+        </AccordionDetails>
+      </Accordion>
+    </Box>
   );
 };
 
+const guest = { name: 'Guest', email: 'Guest@gmail.com' };
+
 const commentStyle = {
   title: {
-    display: 'flex',
-    alignItems: 'center',
     fontWeight: 'bold',
+    alignItems: 'center',
+    display: 'flex',
   },
 
   perCommentBox: {
+    flexDirection: 'revert',
     display: 'flex',
     mt: '1rem',
-    flexDirection: 'revert',
 
     leftColumn: {
-      flexBasis: '50px',
       flexShrink: '0',
+      flexBasis: '50px',
     },
 
     rightColumn: {
@@ -173,8 +154,8 @@ const commentStyle = {
   },
 
   creator: {
-    display: 'flex',
     flexWrap: 'nowrap',
+    display: 'flex',
   },
 };
 
