@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:8080' });
+const API = axios.create({ baseURL: process.env.REACT_APP_SHARE_MEMORIES_API });
 
 API.interceptors.request.use(
   (req) => {

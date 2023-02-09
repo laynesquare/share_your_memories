@@ -12,7 +12,7 @@ const app = express();
 
 app.use(express.json({ limit: '30mb', extended: true })); //allow access to the request body: body parser now is deprecated, use express instead
 app.use(express.urlencoded({ limit: '30mb', extended: true })); //allow access to the request body: body parser now is deprecated, use express instead
-app.use(cors());
+app.use(cors({ origin: process.env.CORS_ORIGIN, optionsSuccessStatus: 200 }));
 
 app.get('/', (req, res) => res.send('Welcome to Share Your Memories API.'));
 
