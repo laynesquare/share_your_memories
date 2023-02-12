@@ -34,7 +34,7 @@ const AutoLogin = () => {
           sx={{ fontWeight: 'bold' }}
         >
           <Typography variant="h6" sx={{ fontWeight: 'bold', width: '100%' }}>
-            <>You'll be auto-logged into a test account</>
+            <>Welcome! Just a heads-up before you go ...</>
           </Typography>
         </DialogTitle>
         <Divider />
@@ -43,6 +43,10 @@ const AutoLogin = () => {
             id="you'll-be-logged-into-as-John-Doe-automatically"
             sx={{ textAlign: 'justify', color: 'text.primary' }}
           >
+            <b>Slow loading</b> will occur because the back-end server is
+            deployed on a free hosting service.
+            <br />
+            <br />
             To facilitate exploring the full functionality of the site, you'll
             be logged into as <b>John Doe</b> automatically,{' '}
             <b>since it's a try-it and shared one without exclusivity</b>.
@@ -51,6 +55,11 @@ const AutoLogin = () => {
             That being said, you can still log out and{' '}
             <b>create your own unique account</b> to separate yourself from
             other visitors.
+            <br />
+            <br />
+            Server inactivity for 15 mins will cause it to be auto-spun down. It
+            usually takes about <b>30 secs</b> to refresh back on, which is why
+            the first search might feel like taking forever.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

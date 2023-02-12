@@ -62,6 +62,7 @@ const footerStyle = {
       transform: !whetherTop ? 'translateY(0px)' : 'translateY(100px)',
       position: 'fixed',
       bottom: 16,
+      zIndex: 9,
       right: 16,
     };
   },

@@ -1,7 +1,8 @@
 {
-  "name": "client",
+  "name": "share-your-memories-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://laynesquare.github.io/share_your_memories",
   "dependencies": {
     "@material-ui/core": "^5.0.0-beta.5",
     "@material-ui/icons": "^4.11.3",
@@ -19,7 +20,6 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.0.0",
     "react-file-base64": "^1.0.3",
-    "react-lottie": "^1.2.3",
     "react-redux": "^7.2.8",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
@@ -27,6 +27,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -49,5 +51,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }

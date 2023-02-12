@@ -1,15 +1,20 @@
 import { Container, Grow, Grid, Box } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useState } from 'react';
+import { SIGNING } from '../../constants/actionTypes';
 import Pagination from '../Pgn';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 
 const Home = () => {
+  const isSigning = useSelector((state) => state.auth.authData);
   const [currentId, setCurrentId] = useState(null);
   //Get the url query params regarding the page number.
   const query = useQuery();
   const page = query.get('page') || 1;
+
+  if (isSigning === SIGNING) return null;
 
   return (
     <Container maxWidth="xl" sx={{ ...homeStyle.mostOuterBox }}>

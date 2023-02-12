@@ -1,4 +1,4 @@
-import { AUTH, LOGOUT } from '../constants/actionTypes';
+import { AUTH, LOGOUT, SIGNING } from '../constants/actionTypes';
 
 export const auth = (state = { authData: null }, action) => {
   switch (action.type) {
@@ -9,6 +9,9 @@ export const auth = (state = { authData: null }, action) => {
     case LOGOUT:
       localStorage.clear();
       return { ...state, authData: null };
+
+    case SIGNING:
+      return { ...state, authData: SIGNING };
 
     default:
       return state;

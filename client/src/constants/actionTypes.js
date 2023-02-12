@@ -17,11 +17,12 @@ export const FETCH_ONE = 'FETCH_ONE';
 export const FETCH_POST_BY_SEARCH = 'FETCH_POST_BY_SEARCH';
 export const FETCH_POST_BY_BOOKMARK = 'FETCH_POST_BY_BOOKMARK';
 export const CLEANUP_FETCH_ONE = 'CLEANUP_FETCH_ONE';
+export const CREATE_POST_COMMENT = 'CREATE_POST_COMMENT';
 
 //Authentication actions
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
-export const CREATE_POST_COMMENT = 'CREATE_POST_COMMENT';
+export const SIGNING = 'SIGNING';
 
 //Auth failures actions
 export const LOGIN_ALERT_FAILED = 'LOGIN_ALERT_FAILED';

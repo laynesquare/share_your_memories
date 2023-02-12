@@ -1,12 +1,14 @@
 import {
   SIGNUP_ALERT_FAILED,
   LOGIN_ALERT_FAILED,
+  SIGNING,
   AUTH,
 } from '../constants/actionTypes';
 import * as api from '../api';
 
 export const signin = (formData, navigate) => async (dispatch) => {
   try {
+    dispatch({ type: SIGNING });
     const { data } = await api.signin(formData);
     dispatch({ type: AUTH, data });
     navigate('/');
@@ -18,6 +20,7 @@ export const signin = (formData, navigate) => async (dispatch) => {
 
 export const signup = (formData, navigate) => async (dispatch) => {
   try {
+    dispatch({ type: SIGNING });
     const { data } = await api.signup(formData);
     dispatch({ type: AUTH, data });
     navigate('/');
