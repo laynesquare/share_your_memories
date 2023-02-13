@@ -8,8 +8,8 @@ const Signing = () => {
   return (
     <Backdrop sx={{ ...style }} open={isSigning === SIGNING}>
       <CircularProgress />
-      <br />
-      <Typography variant="BUTTON TEXT" sx={{ fontWeight: 'bold' }}>
+
+      <Typography variant="BUTTON TEXT" sx={{ ...style.text }}>
         Loggin in or signing up. Might take 2 mins due to free hosting service
         ...
       </Typography>
@@ -19,8 +19,17 @@ const Signing = () => {
 
 const style = {
   flexDirection: 'column',
+  minWidth: '360px',
   bgcolor: 'rgba(0, 0, 0, 0.82)',
   zIndex: 10,
   color: '#fff',
+  p: '1rem',
+
+  text: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    mt: '2rem',
+  },
 };
+
 export default Signing;

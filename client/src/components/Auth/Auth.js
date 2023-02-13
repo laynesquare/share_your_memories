@@ -161,8 +161,7 @@ const GoogleAuth = () => {
   useEffect(() => {
     /* global google*/
     google.accounts.id.initialize({
-      client_id:
-        '71023974194-dh2gfs56pj3r57lepmlbditonpuplqgg.apps.googleusercontent.com',
+      client_id: process.env.REACT_APP_GOOGLE_LOGIN_CLIENT_ID,
       callback: handleCallbackRes,
     });
     google.accounts.id.prompt();
