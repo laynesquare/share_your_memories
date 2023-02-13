@@ -216,9 +216,10 @@ const postStyle = {
   moreBtn: {
     transition: 'all 0.3s',
     position: 'absolute',
+    zIndex: '5',
+    right: '0',
     top: '0.7rem',
-    right: '0rem',
-    zIndex: '2',
+
     '&:hover': {
       backgroundColor: 'transparent',
       transform: 'translate(0, -0.25em)',

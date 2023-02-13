@@ -137,7 +137,7 @@ const Auth = () => {
         </form>
 
         <Snackbar open={authFailedAlert?.state}>
-          <Alert severity="error" sx={{ width: '100%' }}>
+          <Alert severity="error" sx={{ width: '100%', fontWeight: 'bold' }}>
             {authFailedAlert.msg}
           </Alert>
         </Snackbar>

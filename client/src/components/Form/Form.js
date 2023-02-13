@@ -12,7 +12,7 @@ import { createPost, updatePost } from '../../actions/posts';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginIcon from './LoginIcon.js';
-import FileBase from 'react-file-base64';
+import ImgUpload from './ImgUpload';
 
 const Form = ({ currentId, setCurrentId }) => {
   const dispatch = useDispatch();
@@ -83,20 +83,12 @@ const Form = ({ currentId, setCurrentId }) => {
             fullWidth
             value={postData.tags}
             helperText="Note: Separate tags with commas without spaces. E.g.: tag1,tag2,tag3"
-            sx={{ mb: '2rem' }}
+            sx={{ mb: '0.8rem' }}
             onChange={(e) =>
               setPostData({ ...postData, tags: e.target.value.split(',') })
             }
           ></TextField>
-          <Box>
-            <FileBase
-              type="file"
-              multiple={false}
-              onDone={({ base64 }) =>
-                setPostData({ ...postData, selectedFile: base64 })
-              }
-            ></FileBase>
-          </Box>
+          <ImgUpload setPostData={setPostData} postData={postData} />
           <Typography
             variant="caption"
             sx={{ mb: '1rem', mt: '0.2rem', display: 'block' }}
@@ -110,7 +102,7 @@ const Form = ({ currentId, setCurrentId }) => {
               {`(subject to change upon page refreshed)`}.
             </span>
             <br />
-            <span>2. The max. size is 30MB.</span>
+            <span>2. The max. size is 10MB.</span>
           </Typography>
           <Button
             variant="contained"

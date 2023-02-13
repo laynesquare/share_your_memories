@@ -58,7 +58,7 @@ const AutoLogin = () => {
             <br />
             <br />
             Server inactivity for 15 mins will cause it to be auto-spun down. It
-            usually takes about <b>30 secs</b> to refresh back on, which is why
+            usually takes about <b>2 mins</b> to refresh back on, which is why
             the first search might feel like taking forever.
           </DialogContentText>
         </DialogContent>

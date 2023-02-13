@@ -6,23 +6,21 @@ const Signing = () => {
   const isSigning = useSelector((state) => state.auth.authData);
 
   return (
-    <div>
-      <Backdrop
-        sx={{
-          flexDirection: 'column',
-          bgcolor: 'rgba(0, 0, 0, 0.82)',
-          zIndex: 10,
-          color: '#fff',
-        }}
-        open={isSigning === SIGNING}
-      >
-        <CircularProgress />
-        <br />
-        <Typography variant="BUTTON TEXT" sx={{ fontWeight: 'bold' }}>
-          Loggin in or signing up. Might be slow due to free hosting service ...
-        </Typography>
-      </Backdrop>
-    </div>
+    <Backdrop sx={{ ...style }} open={isSigning === SIGNING}>
+      <CircularProgress />
+      <br />
+      <Typography variant="BUTTON TEXT" sx={{ fontWeight: 'bold' }}>
+        Loggin in or signing up. Might take 2 mins due to free hosting service
+        ...
+      </Typography>
+    </Backdrop>
   );
+};
+
+const style = {
+  flexDirection: 'column',
+  bgcolor: 'rgba(0, 0, 0, 0.82)',
+  zIndex: 10,
+  color: '#fff',
 };
 export default Signing;
